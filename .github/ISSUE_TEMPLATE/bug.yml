@@ -1,0 +1,46 @@
+name: Bug report
+description: Report a reproducible game, UI, API or verification problem.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include private keys, seed phrases or security exploit details.
+        Report security issues through the Security tab instead.
+  - type: input
+    id: url
+    attributes:
+      label: URL or command
+      placeholder: https://tapefly.xyz/build or npm run replay -- 2026-10-24 --check
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: UTC date or circuit
+      placeholder: 2026-10-24, or processor + circuit ID
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      placeholder: Include the smallest brain, URL or record that demonstrates the problem.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: macOS 15, Chrome 142, Node 22.22.0

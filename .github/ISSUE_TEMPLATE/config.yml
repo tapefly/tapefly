@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: TapeFly live product
+    url: https://tapefly.xyz
+    about: Play a day or inspect the current on-chain circuit.
+  - name: Security report
+    url: https://github.com/tapefly/tapefly/security/advisories/new
+    about: Report vulnerabilities privately; do not open a public issue.

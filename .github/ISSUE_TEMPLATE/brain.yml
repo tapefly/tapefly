@@ -1,0 +1,35 @@
+name: Brain submission
+description: Propose a brain for the public season board.
+title: "[brain] "
+labels: ["brain"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Export the entry from `/build`. Do not type a score by hand; CI recomputes it.
+  - type: input
+    id: handle
+    attributes:
+      label: GitHub handle
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Brain name
+    validations:
+      required: true
+  - type: textarea
+    id: entry
+    attributes:
+      label: Exported entry JSON
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: strategy
+    attributes:
+      label: Strategy
+      description: Explain how the brain trades food, danger and exploration.
+    validations:
+      required: true

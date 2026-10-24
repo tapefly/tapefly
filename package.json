@@ -15,6 +15,8 @@
     "record": "tsx scripts/make-record.ts",
     "verify-record": "tsx scripts/verify-record.ts",
     "calibrate": "tsx scripts/calibrate.ts",
+    "verify:onchain": "npm run tapeout -- verify --processor 0x6Ac12D578e29D340f178E18eB2C297C7915E011C --id 1",
+    "judge:check": "npm run typecheck && npm test && npm run lineage -- --check && npm run board -- --check && npm run anchor -- --check && npm run verify:onchain && npm run build",
     "check": "npm run typecheck && npm test && npm run lineage -- --check && npm run board -- --check && npm run anchor -- --check && npm run tapeout -- bytes > /dev/null && npm run build",
     "board": "tsx scripts/board.ts",
     "tapeout": "tsx scripts/tapeout.ts",

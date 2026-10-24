@@ -1,0 +1,39 @@
+name: Feature proposal
+description: Propose a product, circuit, agent or verification improvement.
+title: "[idea] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the player, builder, agent or verifier need.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: proof
+    attributes:
+      label: How can it be verified?
+      description: Include tests, replay rules, chain checks or user evidence.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Game or simulation
+        - Brain builder or compiler
+        - TapeOut integration
+        - X Layer integration
+        - Agent API
+        - Documentation or accessibility
+        - Other
+    validations:
+      required: true
