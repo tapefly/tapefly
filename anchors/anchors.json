@@ -1,0 +1,6 @@
+{
+ "version": "TAPEFLY-ANCHOR/1",
+ "chainId": 56,
+ "note": "Each entry is a BNB Chain transaction whose data is 'TAPEFLY-ANCHOR/1 <date> <head>'. The head commits to every day of the lineage up to that date. npm run anchor -- --check recomputes the heads; --chain also reads each transaction.",
+ "entries": []
+}

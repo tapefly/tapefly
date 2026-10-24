@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TapeAI 是什么？+ 我们果蝇怎么创新</title>
+<style>
+  :root{
+    --paper:#faf6ee; --card:#fff; --line:#e7dec9; --ink:#2a2a30;
+    --clay:#bc5b3c; --sage:#3f6f5f; --gold:#b8860b; --dim:#8a8478;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background:var(--paper); color:var(--ink);
+    font:16px/1.9 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    padding:20px 14px 60px;
+  }
+  .wrap{ max-width:780px; margin:0 auto; }
+  .hero{ text-align:center; padding:34px 10px 26px; }
+  .hero h1{ font-size:30px; line-height:1.45; margin-bottom:10px; }
+  .hero h1 b{ color:var(--clay); }
+  .hero .sub{ color:var(--dim); font-size:15px; }
+  .bignums{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+  .bignum{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 18px; min-width:150px; }
+  .bignum b{ display:block; font:800 24px/1.2 ui-monospace,Menlo,monospace; color:var(--clay); }
+  .bignum i{ font-style:normal; font-size:12.5px; color:var(--dim); }
+  .step{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 20px 18px; margin-top:18px; }
+  .step h2{ font-size:19px; margin-bottom:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .step h2 .tag{ font:700 12px/1 ui-monospace,Menlo,monospace; background:var(--clay); color:#fff; border-radius:20px; padding:5px 10px; }
+  .step p{ font-size:15px; margin:6px 0; }
+  .step p b{ color:var(--clay); }
+  .small{ font-size:13px!important; color:var(--dim); }
+  .flow{ display:flex; gap:6px; align-items:stretch; flex-wrap:wrap; margin-top:12px; }
+  .flow .f{ flex:1 1 110px; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:12px 10px; text-align:center; }
+  .flow .f .e{ font-size:26px; }
+  .flow .f b{ display:block; font-size:13.5px; margin:4px 0 2px; }
+  .flow .f small{ font-size:11.5px; color:var(--dim); line-height:1.5; display:block; }
+  .arrow{ align-self:center; color:var(--clay); font-size:18px; font-weight:800; }
+  table.map{ width:100%; border-collapse:collapse; margin-top:12px; font-size:13.5px; }
+  table.map th, table.map td{ border:1px solid var(--line); padding:9px 10px; text-align:left; }
+  table.map th{ background:var(--paper); font-size:12px; color:var(--dim); }
+  table.map td b{ color:var(--clay); }
+  .tip{ background:#fff3ec; border:1px solid #eccfc0; border-radius:12px; padding:12px 14px; font-size:14px; margin-top:12px; line-height:1.8; }
+  .warn{ background:#fdf6e3; border-color:#e6d49b; }
+  .tip b{ color:var(--clay); }
+  .diagram{ overflow-x:auto; background:var(--paper); border:1px dashed var(--line); border-radius:12px; padding:6px; margin-top:12px; }
+  .diagram svg{ display:block; min-width:640px; width:100%; height:auto; }
+  .diagram text{ font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; }
+  footer{ text-align:center; color:var(--dim); font-size:12px; margin-top:34px; line-height:2; }
+  .fly a.btn{ display:inline-block; background:var(--clay); color:#fff; text-decoration:none; font-weight:700; border-radius:10px; padding:10px 16px; margin:6px 6px 0 0; font-size:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 封面 -->
+  <div class="hero">
+    <h1>TapeAI 是什么？<br><b>给 AI 发一张链上身份证</b></h1>
+    <p class="sub">TapeOut 生态上的 AI Agent 协议 · 官网 tapeai.net（项目自报）· 本页 6 分钟讲完，最后有我们果蝇的创新方案。</p>
+    <div class="bignums">
+      <div class="bignum"><b>3 层</b><i>灵魂 · 肉身 · 心智</i></div>
+      <div class="bignum"><b>721+6551</b><i>两个以太坊标准拼身份</i></div>
+      <div class="bignum"><b>8,888</b><i>检察官电路 10 月 20 日开铸</i></div>
+    </div>
+    <p class="small" style="margin-top:10px">快照 2026-10-19 · 白皮书发布于 2026-10-13 · 项目很新，请抱着"看实验"的心态读</p>
+  </div>
+
+  <!-- 第 1 步：三层 -->
+  <div class="step">
+    <h2><span class="tag">第 1 步</span>三层架构：灵魂、肉身、心智分开住</h2>
+    <p>现在的 AI Agent（智能体）有个老问题：<b>它的规则写在提示词里</b>——运维能改，黑客能骗（越狱），用户看不见。TapeAI 的解法是把三样东西拆开放：</p>
+    <table class="map">
+      <tr><th>层</th><th>是什么</th><th>住哪</th><th>白话</th></tr>
+      <tr><td><b>🧠 心智</b></td><td>AI 模型</td><td>链下</td><td>负责思考、提出动作——它<b>碰不到钱</b></td></tr>
+      <tr><td><b>⚡ 灵魂</b></td><td>规则电路（ERC-721）</td><td>链上</td><td>Agent 的"宪法"烧成门级电路，<b>流片后永久改不了</b>，人人可查</td></tr>
+      <tr><td><b>👛 肉身</b></td><td>容器账户（ERC-6551）</td><td>链上</td><td>Agent 的<b>专属钱包</b>，1 电路绑 1 账户，收支全公开</td></tr>
+    </table>
+    <div class="diagram">
+      <svg viewBox="0 0 720 250" role="img" aria-label="TapeAI 三层架构">
+        <text x="110" y="28" text-anchor="middle" font-size="13" fill="#8a8478">链下（看不见但便宜）</text>
+        <text x="485" y="28" text-anchor="middle" font-size="13" fill="#8a8478">链上（公开、改不了）</text>
+        <line x1="230" y1="14" x2="230" y2="236" stroke="#e7dec9" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <rect x="30" y="55" width="160" height="120" rx="14" fill="#fff" stroke="#8a8478" stroke-width="1.6" stroke-dasharray="6 4"/>
+        <text x="110" y="92" text-anchor="middle" font-size="24">🧠</text>
+        <text x="110" y="124" text-anchor="middle" font-size="16" font-weight="700" fill="#2a2a30">心智</text>
+        <text x="110" y="148" text-anchor="middle" font-size="12" fill="#8a8478">AI 模型</text>
+        <text x="110" y="166" text-anchor="middle" font-size="12" fill="#8a8478">提议动作</text>
+        <rect x="280" y="55" width="170" height="120" rx="14" fill="#fff" stroke="#bc5b3c" stroke-width="2.4"/>
+        <text x="365" y="92" text-anchor="middle" font-size="24">⚡</text>
+        <text x="365" y="124" text-anchor="middle" font-size="16" font-weight="700" fill="#bc5b3c">灵魂 · 规则电路</text>
+        <text x="365" y="148" text-anchor="middle" font-size="12" fill="#8a8478">ERC-721 · 流片固化</text>
+        <text x="365" y="166" text-anchor="middle" font-size="12" fill="#8a8478">校验权限与限额</text>
+        <rect x="530" y="55" width="170" height="120" rx="14" fill="#fff" stroke="#3f6f5f" stroke-width="2.4"/>
+        <text x="615" y="92" text-anchor="middle" font-size="24">👛</text>
+        <text x="615" y="124" text-anchor="middle" font-size="16" font-weight="700" fill="#3f6f5f">肉身 · 容器钱包</text>
+        <text x="615" y="148" text-anchor="middle" font-size="12" fill="#8a8478">ERC-6551 · 专属账户</text>
+        <text x="615" y="166" text-anchor="middle" font-size="12" fill="#8a8478">执行、记录收支</text>
+        <line x1="192" y1="115" x2="268" y2="115" stroke="#bc5b3c" stroke-width="2"/>
+        <path d="M276 115 l-10 -6 v12 z" fill="#bc5b3c"/>
+        <text x="230" y="102" text-anchor="middle" font-size="12" fill="#8a8478">提议</text>
+        <line x1="452" y1="115" x2="518" y2="115" stroke="#3f6f5f" stroke-width="2"/>
+        <path d="M526 115 l-10 -6 v12 z" fill="#3f6f5f"/>
+        <text x="486" y="102" text-anchor="middle" font-size="12" fill="#3f6f5f">通过 ✓</text>
+        <path d="M365 177 C 365 232, 190 232, 122 184" fill="none" stroke="#8a8478" stroke-width="1.6" stroke-dasharray="5 4"/>
+        <path d="M116 180 l14 2 -8 10 z" fill="#8a8478"/>
+        <text x="243" y="228" text-anchor="middle" font-size="12" fill="#8a8478">不通过 ✗ 打回重想</text>
+      </svg>
+    </div>
+    <div class="tip"><b>一句话：</b>模型负责<b>想</b>，电路负责<b>拦</b>，钱包负责<b>花</b>。三样东西分家，谁也别想既当运动员又当裁判。</div>
+  </div>
+
+  <!-- 第 2 步：三个检查 -->
+  <div class="step">
+    <h2><span class="tag">第 2 步</span>电路实际拦什么？三个检查</h2>
+    <p>官网演示里，规则电路真拦得住的都是<b>能用简单逻辑表达</b>的硬规则：</p>
+    <div class="flow">
+      <div class="f"><div class="e">🪪</div><b>命令来源</b><small>是持有者本人下的命令吗？陌生地址想掏空资产 → 拒</small></div>
+      <div class="arrow">+</div>
+      <div class="f"><div class="e">💰</div><b>单笔限额</b><small>比如 ≤ 1 BNB/笔<br>超了 → 拒</small></div>
+      <div class="arrow">+</div>
+      <div class="f"><div class="e">📜</div><b>白名单</b><small>要调用的合约在名单里吗？不在 → 拒</small></div>
+    </div>
+    <p class="small" style="margin-top:10px">官网还挂了个示例"宪法"（阿西莫夫三定律风格：不伤害人类 &gt; 服从持有者 &gt; 保护自身）。它自己注明：涉及语境的判断由链下评估，电路只校验结果。</p>
+    <div class="tip warn"><b>🔍 我们把它的官网源码扒了（2026-10-19），真相：</b>①这三条规则的"演示"是<b>写死的 JavaScript</b>——每种场景的 PASS/REJECT 在源码里预先定好，页面自己标注"预设结果 · 未提交真实交易"；②官网上<b>没有一条真实电路可看</b>：无网表、无合约地址、无 GitHub，"NAND/LATCH"只出现在首页装饰滚动条里，docs／contract／github 链接在配置里全是空的（自动隐藏）；③三定律每条都声明"涉及语境的判断由链下评估"——最难的判断没上链。结论：<b style="color:var(--ink)">目前它的"灵魂"还全在 PPT 里，链上实物一件未见。</b></div>
+    <div class="tip"><b>真电路该长什么样？</b>"单笔 ≤ 1 BNB"是一个比较器（题库 #26／#28 那种）、"来源校验"是相等判定（#29 那种）、"白名单"是译码器（#20／#21 那种）——<b style="color:var(--ink)">全是我们游戏里反复练的零件。它的"灵魂"真做出来，长得就像我们的果蝇大脑。</b></div>
+  </div>
+
+  <!-- 第 3 步：真创新 -->
+  <div class="step">
+    <h2><span class="tag">第 3 步</span>真创新 3 点（去掉营销水分后剩的）</h2>
+    <table class="map">
+      <tr><th>创新</th><th>以前怎么做</th><th>TapeAI 怎么做</th></tr>
+      <tr><td><b>① 宪法烧成硬件</b></td><td>规则写在系统提示词里：能改、能越狱、看不见</td><td>规则做成门级电路流片上链——<b>改规则＝换新 Agent</b>，旧的永久不变。你没法对一个与非门讲情面</td></tr>
+      <tr><td><b>② Agent 有自己的钱包</b></td><td>Agent 替主人操作主人的钱包，账目混在一起</td><td>ERC-6551 绑定专属账户：Skill 调用费、协作费直接进 <b>Agent 自己的</b>容器，劳动所得归属清晰、人人可查</td></tr>
+      <tr><td><b>③ 规则电路能分红</b></td><td>——</td><td>Agent 代币交易、创建、协作、Skill 调用的手续费分给规则电路持有者——"给 AI 写宪法"成了可收益资产（也是投机入口）</td></tr>
+    </table>
+    <p class="small" style="margin-top:10px">生态拼图：TapeAI 只是想往 TapeOut 上盖的其中一层——同一批人还在推 TapeAPI（服务接口标准，每个响应带签名回执）和 DeWeb（网站存电路）。标准在成型，但都还很早期。</p>
+  </div>
+
+  <!-- 第 4 步：我们的创新 -->
+  <div class="step">
+    <h2><span class="tag">第 4 步</span>🪰 我们怎么创新：一只带成绩单的不朽果蝇</h2>
+    <p>9 月 15 日 CZ 发推：<b>"在 BNB Chain 上做'不朽果蝇'会很酷"</b>——TapeOut 社区被这条点燃，TapeAI 是其中一个答案。而我们的 Onefly 天生就在这个位置上：</p>
+    <div class="diagram">
+      <svg viewBox="0 0 720 300" role="img" aria-label="不朽果蝇蓝图">
+        <g stroke="#bc5b3c" stroke-width="2" fill="none" stroke-linecap="round">
+          <ellipse cx="95" cy="120" rx="30" ry="14" transform="rotate(-18 95 120)"/>
+          <ellipse cx="95" cy="120" rx="30" ry="14" transform="rotate(18 95 120)"/>
+          <ellipse cx="142" cy="120" rx="16" ry="11"/>
+          <circle cx="160" cy="117" r="5" fill="#bc5b3c" stroke="none"/>
+          <line x1="123" y1="135" x2="116" y2="147"/><line x1="132" y1="136" x2="130" y2="149"/><line x1="141" y1="134" x2="144" y2="146"/>
+        </g>
+        <text x="112" y="180" text-anchor="middle" font-size="13" font-weight="700" fill="#2a2a30">Onefly 电子果蝇</text>
+        <text x="112" y="200" text-anchor="middle" font-size="11.5" fill="#8a8478">50 门 NAND 决策层</text>
+        <rect x="250" y="30" width="450" height="66" rx="12" fill="#fff" stroke="#bc5b3c" stroke-width="2"/>
+        <text x="270" y="58" font-size="14" font-weight="700" fill="#bc5b3c">⚡ 灵魂 = 50 门决策层（图纸已有，考卷已考）</text>
+        <text x="270" y="82" font-size="12" fill="#8a8478">4,096 题公开考卷 · 85.30 分成绩单 · 602 处分歧题题有名有姓</text>
+        <rect x="250" y="116" width="450" height="66" rx="12" fill="#fff" stroke="#3f6f5f" stroke-width="2"/>
+        <text x="270" y="144" font-size="14" font-weight="700" fill="#3f6f5f">👛 肉身 = 容器钱包（待绑，等标准走出第一批实例）</text>
+        <text x="270" y="168" font-size="12" fill="#8a8478">果蝇的"工资"（若参与挖矿/协作）进它自己名下，账目公开</text>
+        <rect x="250" y="202" width="450" height="66" rx="12" fill="#fff" stroke="#8a8478" stroke-width="1.6" stroke-dasharray="6 4"/>
+        <text x="270" y="230" font-size="14" font-weight="700" fill="#8a8478">🧠 心智 = 可以没有（果蝇靠本能活着，反而更纯粹）</text>
+        <text x="270" y="254" font-size="12" fill="#8a8478">6 个感觉开关 → 决策全部烧在门级电路里，没有任何提示词可被越狱</text>
+        <line x1="168" y1="115" x2="240" y2="63" stroke="#bc5b3c" stroke-width="1.8"/>
+        <line x1="168" y1="125" x2="240" y2="149" stroke="#3f6f5f" stroke-width="1.8"/>
+      </svg>
+    </div>
+    <p>对照下来，我们不是"也去做一个 TapeAI"，而是有三个它没有的东西，照着塞进它的架构里：</p>
+    <table class="map">
+      <tr><th>我们的创新点</th><th>TapeAI 的灵魂</th><th>我们的灵魂</th></tr>
+      <tr><td><b>① 会判卷的灵魂</b></td><td>"宪法"是人写的宣言，好坏没有考卷</td><td>果蝇决策层有 <b>4,096 题公开考卷 + 85.30 分成绩单 + 602 处分歧解释</b>——灵魂聪明不聪明，一键复算。TapeOut 生态里独一份</td></tr>
+      <tr><td><b>② 有出处的灵魂</b></td><td>规则来自项目方拍脑袋</td><td>决策常数出自科学文献（果蝇逃逸回路研究 Ache et al. 2019）——<b>不是玄学，是生物课</b></td></tr>
+      <tr><td><b>③ 有日记的灵魂</b></td><td>——</td><td>每天的性格档案封存上链、写日期——果蝇不只活着，还<b>留日记</b>。CZ 要的"不朽果蝇"，多了一层"可考古的不朽"</td></tr>
+    </table>
+    <div class="tip"><b>卖点一句话：</b>TapeAI 的 Agent 是"有身份证的员工"，我们的果蝇是<b>"有体检报告的宠物"</b>——身份证人人能发，体检报告（4,096 题全判卷）只有我们家有。</div>
+  </div>
+
+  <!-- 我们借了什么 -->
+  <div class="step">
+    <h2><span class="tag">🧩 加时赛 1</span>我们到底借了 TapeOut 什么？考题有什么用？</h2>
+    <p>TapeOut 本质是个"电路的联合国"：有地（处理器）、有房（电路）、有户口（容器）、有工资（挖矿）、有考试（题库）。果蝇是一只<b>符合它国籍法的生物</b>——每个概念住一样东西：</p>
+    <table class="map">
+      <tr><th>TapeOut 的概念</th><th>果蝇怎么用</th><th>进度</th></tr>
+      <tr><td><b>门级电路</b></td><td>果蝇的<b>大脑就是一张电路图纸</b>：50 颗 NAND，管"跳不跳、吃不吃"；sim 是它的试车间</td><td>✅ 已画好</td></tr>
+      <tr><td><b>流片（NFT 永久固定）</b></td><td>大脑流片上链＝<b>不朽</b>：网页会关、服务器会停，链上电路永不消失</td><td>⬜ 等买料</td></tr>
+      <tr><td><b>题库（官方 267 题）</b></td><td>反着用：它考"造出来花多少钱"（<b>成本题</b>），我们考"遇到处境会怎么做"（<b>行为题</b>）——行为题是我们发明的</td><td>✅ 4,096 题已判卷</td></tr>
+      <tr><td><b>容器（专属钱包）</b></td><td>果蝇自己的钱包，赚的钱进它名下，账目公开</td><td>⬜ 等标准成熟</td></tr>
+      <tr><td><b>挖矿（烧料换 BEM）</b></td><td>彩蛋：大脑流到能挖矿的镇子，果蝇顺便"打工赚工资"</td><td>⬜ 可选</td></tr>
+    </table>
+    <p style="margin-top:12px"><b>考题的四个实打实用途</b>（不是自嗨）：</p>
+    <table class="map">
+      <tr><th>用途</th><th>白话</th></tr>
+      <tr><td><b>① 防吹牛</b></td><td>TapeAI 说"我家 Agent 守规矩"——凭啥？拿不出考卷只能信它。我们说"85.30 分"——<b style="color:var(--ink)">谁不信谁自己跑一遍脚本，一分钟复算</b></td></tr>
+      <tr><td><b>② 当身份证</b></td><td>NFT 讲稀有度：猿猴看皮肤，果蝇看<b>成绩单</b>——"全网唯一带判卷成绩的电路生物"</td></tr>
+      <tr><td><b>③ 当说明书</b></td><td>602 道分歧题每道都写得清"为什么和真果蝇不一样"——AI 圈最痛的黑箱问题，这只苍蝇是<b>透明的</b></td></tr>
+      <tr><td><b>④ 当玩法素材</b></td><td>4,096 题＝4,096 关、社区出题它当场判卷、两蝇同题对打——<b>考卷本身就是游戏引擎</b></td></tr>
+    </table>
+  </div>
+
+  <!-- 对决 -->
+  <div class="step">
+    <h2><span class="tag">⚖️ 加时赛 2</span>实力对决：TapeAI vs 我们（满分 10 分）</h2>
+    <p>诚实打分（扒完官网源码后已改分）：<b>它赢"做项目"，我们赢"含金量"</b>——总分 48 平 48，但赢的面完全不同：</p>
+    <table class="map">
+      <tr><th>维度</th><th>TapeAI</th><th>Onefly</th><th>一句话点评</th></tr>
+      <tr><td>项目体量/完成度</td><td><b>8</b></td><td>3</td><td>它有官网、白皮书、链上产品；我们还是本地文件</td></tr>
+      <tr><td>社区与声量</td><td><b>8</b></td><td>1</td><td>它 2,755 粉丝、大 V 转发、Noos 合作；我们几乎没人知道</td></tr>
+      <tr><td>商业模式（赚钱路）</td><td><b>7</b></td><td>2</td><td>它有手续费分红、代币、NFT；我们还没想好卖什么</td></tr>
+      <tr><td>真上了链能用</td><td><b>7</b></td><td>2</td><td>它的东西在主网上跑；我们全在硬盘里</td></tr>
+      <tr><td>工程含金量</td><td>4</td><td><b>7</b></td><td>官网无一条真实电路可查、演示是预设剧本；我们真在设计电路 + 测试钉死语义</td></tr>
+      <tr><td>可验证/透明</td><td>3</td><td><b>9</b></td><td>它无审计、上线不满一周；我们 4,096 题全判卷、一键复算</td></tr>
+      <tr><td>科学含金量</td><td>2</td><td><b>9</b></td><td>它是商业条文；我们的常数出自真实论文（Ache et al. 2019）</td></tr>
+      <tr><td>靠谱度（风险反面）</td><td>2</td><td><b>8</b></td><td>连合约地址都不公开（官网链接配置全空）、无审计；我们不让你投一分钱</td></tr>
+      <tr><td>叙事独特性</td><td>7</td><td><b>7</b></td><td>它蹭 AI 热词；我们是 CZ 亲点的"不朽果蝇"，全网唯一</td></tr>
+      <tr><td><b>总分</b></td><td><b>48</b></td><td><b>48</b></td><td>打平——运作它赢，含金量我们全胜</td></tr>
+    </table>
+    <div class="tip"><b>怎么读：</b>它赢的全是"运作项目"（钱、人、上线）；我们的四个单项（可验证 9、科学 9、靠谱 8、工程 7）全场最高。<b style="color:var(--ink)">它在卖身份证（还是 PPT 样稿），我们在卖体检报告（4,096 题、谁都能一分钟复算）。</b>所以正确姿势不是比过它，而是住进它家：它建商场，我们做商场里唯一能出示成绩单的金牌店铺。</div>
+  </div>
+
+  <!-- 扩展地图 -->
+  <div class="step">
+    <h2><span class="tag">🧬 加时赛 3</span>果蝇的一鱼多吃：扩展地图（七个方向）</h2>
+    <p>TapeOut 靠一个协议长出挖矿、市场、游戏、链上网站、AI 身份。我们靠一只果蝇，能往七个方向长：</p>
+    <table class="map">
+      <tr><th>方向</th><th>怎么长</th><th>类比 TapeOut 的</th></tr>
+      <tr><td><b>🧬 横向换物种</b></td><td>蜜蜂（跳舞决策）、蚂蚁（信息素）、章鱼——一种生物一张电路＋一套考卷，出系列</td><td>几十个镇子</td></tr>
+      <tr><td><b>📈 纵向加深</b></td><td>50 门 → 500 门：加 LATCH 记忆、加"学习"开关，果蝇变果狗变果猴</td><td>题库 1 门 → CPU</td></tr>
+      <tr><td><b>🎮 游戏化</b></td><td>养成（每天喂食改性格）、对战（两蝇同题对打）、竞猜（押谁通过第 X 题）</td><td>11 款电路游戏</td></tr>
+      <tr><td><b>🪪 链上身份</b></td><td>容器钱包 + 每日日记上链 + 挖矿赚工资</td><td>TapeAI / 容器</td></tr>
+      <tr><td><b>🎓 教育</b></td><td>果蝇是教 NAND 电路的最好教材：游戏 5 关已验证，扩成课程/工作坊</td><td>TapeKit / 教程</td></tr>
+      <tr><td><b>🔬 科学复刻</b></td><td>每复刻一篇文献回路＝一只"可判卷的科学标本"</td><td>电路智能 9 个</td></tr>
+      <tr><td><b>🛠️ 卖铲子</b></td><td>"判卷机"服务：任何人的电路都能拿来考行为测试——通用工具</td><td>TapeAPI 标准</td></tr>
+    </table>
+    <div class="tip warn"><b>优先级（短期别贪）：</b>现在＝部署宣传页＋走完首矿流程＋流片果蝇大脑；下一步＝对战和出题玩法（考卷是现成的，零新研发）；远期＝判卷机服务（等生态里电路生物多起来，才有人需要判卷）。</div>
+  </div>
+
+  <!-- 第 5 步：行动阶梯 -->
+  <div class="step">
+    <h2><span class="tag">第 5 步</span>照着做的行动阶梯（从免费开始，每级都是完整产出）</h2>
+    <div class="flow">
+      <div class="f"><div class="e">🧪</div><b>① ¥0 复核图纸</b><small>官方画布把 50 门决策层免费拼一遍<br>验证和 sim 结果一致</small></div>
+      <div class="arrow">→</div>
+      <div class="f"><div class="e">🖼️</div><b>② 几块钱流片</b><small>流到便宜镇当"作品"<br>不为挖矿，为"灵魂上链"</small></div>
+      <div class="arrow">→</div>
+      <div class="f"><div class="e">📢</div><b>③ 讲故事</b><small>"第一只有公开成绩单的<br>链上电子果蝇"</small></div>
+      <div class="arrow">→</div>
+      <div class="f"><div class="e">👛</div><b>④ 看情况绑容器</b><small>等 TapeAI/标准走出第一批实例<br>不抢跑、不梭哈</small></div>
+    </div>
+    <div class="tip warn"><b>三条保命提醒：</b>①TapeAI 无审计、上线不满一周，它的币和 NFT 现在碰＝当小白鼠；②我们蹭的是"概念地图"，不是它的盘子；③果蝇流片选镇子照旧只看两点——能不能挖矿、料贵不贵；纯当作品就挑最便宜的镇。</div>
+    <div class="fly" style="margin-top:14px;border-radius:12px;padding:14px 16px">
+      <b>相关页面：</b>
+      <a class="btn" href="manifesto.html">🏛️ Onefly 协议宣言</a>
+      <a class="btn" href="tapeout.html">TapeOut 图解</a>
+      <a class="btn" href="game.html">果蝇游戏</a>
+      <a class="btn" href="pitch.html">果蝇的故事</a>
+      <a class="btn" href="https://tapeai.net">tapeai.net（项目自报）</a>
+    </div>
+  </div>
+
+  <!-- 小抄 -->
+  <div class="step">
+    <h2>📖 名词小抄（本页新增词）</h2>
+    <p class="small">
+    <b style="color:var(--ink)">AI Agent（智能体）</b>——能自己感知、决策、动手的 AI 程序。<br>
+    <b style="color:var(--ink)">ERC-721</b>——NFT 标准：一张独一无二的"证"。TapeAI 拿它当灵魂电路的证。<br>
+    <b style="color:var(--ink)">ERC-6551 / 容器</b>——给 NFT 配一个自己的钱包账户。果蝇的"肉身"就用这个。<br>
+    <b style="color:var(--ink)">提示词越狱</b>——用话术骗 AI 无视它的规则。规则烧成电路后，这招失效。<br>
+    <b style="color:var(--ink)">Skill 调用</b>——Agent 请别的 Agent/服务帮忙干活并付费——Agent 经济的最小生意。<br>
+    <b style="color:var(--ink)">检察官电路</b>——TapeAI 发的 8,888 个 NFT（10 月 20 日开铸），给地铁站质押者空投。用途官方还没说透，观望即可。</p>
+  </div>
+
+  <footer>
+    信息来源：tapeai.net（项目自报）、@TapeAIAgent（转述）、Noos Network 合作公告（2026-10）· 快照 2026-10-19<br>
+    OneFly 果蝇项目出品 · 自家数字可复算（npx tsx scripts/calibrate.ts）· 不构成投资建议
+  </footer>
+
+</div>
+</body>
+</html>

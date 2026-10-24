@@ -1,0 +1,46 @@
+{
+ "version": "TAPEFLY-SEASONS/1",
+ "epoch": "2026-10-12",
+ "seasons": [
+  {
+   "n": 1,
+   "from": "2026-10-12",
+   "through": "2026-10-18",
+   "entrants": [
+    "house/Greedy",
+    "house/Official FFW-NAND/1",
+    "house/Wanderer"
+   ],
+   "table": [
+    {
+     "id": "house/Greedy",
+     "survived": 5,
+     "lived": 767,
+     "meals": 73,
+     "cost": 48,
+     "official": false,
+     "house": true
+    },
+    {
+     "id": "house/Wanderer",
+     "survived": 2,
+     "lived": 650,
+     "meals": 55,
+     "cost": 216,
+     "official": false,
+     "house": true
+    },
+    {
+     "id": "house/Official FFW-NAND/1",
+     "survived": 1,
+     "lived": 864,
+     "meals": 15,
+     "cost": 36450,
+     "official": false,
+     "house": true
+    }
+   ],
+   "champion": ""
+  }
+ ]
+}

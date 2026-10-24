@@ -1,0 +1,662 @@
+{
+ "hungry": {
+  "rules": [
+   {
+    "when": {
+     "novelty": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   }
+  ],
+  "otherwise": {
+   "then": 0
+  }
+ },
+ "trap": {
+  "rules": [
+   {
+    "when": {},
+    "then": 0,
+    "prev": [
+     0
+    ],
+    "gf": true
+   },
+   {
+    "when": {
+     "novelty": [
+      2,
+      3
+     ]
+    },
+    "then": 2,
+    "gf": true,
+    "label": "curious"
+   },
+   {
+    "when": {
+     "novelty": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "food": [
+      0,
+      0
+     ],
+     "hunger": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "light": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "food": [
+      0,
+      0
+     ],
+     "light": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "food": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "hunger": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {},
+    "then": 0,
+    "prev": [
+     0
+    ]
+   }
+  ],
+  "otherwise": {
+   "then": 0
+  }
+ },
+ "standoff": {
+  "rules": [
+   {
+    "when": {
+     "novelty": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "novelty": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "novelty": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ],
+    "gf": true
+   },
+   {
+    "when": {
+     "novelty": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "light": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "novelty": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   }
+  ],
+  "otherwise": {
+   "then": 0
+  }
+ },
+ "jump": {
+  "rules": [
+   {
+    "when": {
+     "threat": [
+      2,
+      3
+     ]
+    },
+    "then": 1,
+    "gf": true,
+    "label": "escape"
+   },
+   {
+    "when": {
+     "threat": [
+      1,
+      3
+     ]
+    },
+    "then": 1,
+    "prev": [
+     1
+    ],
+    "label": "danger (was avoiding)"
+   },
+   {
+    "when": {
+     "threat": [
+      1,
+      3
+     ],
+     "hunger": [
+      0,
+      1
+     ]
+    },
+    "then": 1,
+    "label": "danger (not starving)"
+   },
+   {
+    "when": {
+     "food": [
+      1,
+      3
+     ],
+     "hunger": [
+      3,
+      3
+     ]
+    },
+    "then": 0,
+    "label": "feed"
+   },
+   {
+    "when": {
+     "food": [
+      3,
+      3
+     ]
+    },
+    "then": 0,
+    "label": "lure"
+   },
+   {
+    "when": {
+     "food": [
+      2,
+      3
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ],
+    "label": "pursue"
+   },
+   {
+    "when": {
+     "hunger": [
+      0,
+      2
+     ]
+    },
+    "then": 3,
+    "prev": [
+     3
+    ],
+    "label": "rest"
+   },
+   {
+    "when": {
+     "light": [
+      1,
+      3
+     ]
+    },
+    "then": 2,
+    "label": "explore in the light"
+   }
+  ],
+  "otherwise": {
+   "then": 3
+  }
+ },
+ "small": {
+  "rules": [
+   {
+    "when": {
+     "food": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "threat": [
+      0,
+      0
+     ],
+     "light": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "hunger": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "hunger": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   }
+  ],
+  "otherwise": {
+   "then": 0
+  }
+ },
+ "reference": {
+  "rules": [
+   {
+    "when": {
+     "threat": [
+      2,
+      3
+     ]
+    },
+    "then": 1,
+    "gf": true
+   },
+   {
+    "when": {
+     "threat": [
+      1,
+      1
+     ]
+    },
+    "then": 1
+   },
+   {
+    "when": {
+     "food": [
+      1,
+      1
+     ],
+     "hunger": [
+      3,
+      3
+     ]
+    },
+    "then": 0
+   },
+   {
+    "when": {
+     "food": [
+      2,
+      2
+     ],
+     "hunger": [
+      2,
+      3
+     ]
+    },
+    "then": 0
+   },
+   {
+    "when": {
+     "food": [
+      3,
+      3
+     ],
+     "hunger": [
+      1,
+      3
+     ]
+    },
+    "then": 0
+   },
+   {
+    "when": {
+     "novelty": [
+      2,
+      3
+     ],
+     "light": [
+      1,
+      3
+     ]
+    },
+    "then": 2
+   },
+   {
+    "when": {},
+    "prev": [
+     3
+    ],
+    "then": 3
+   },
+   {
+    "when": {
+     "light": [
+      1,
+      3
+     ]
+    },
+    "then": 2
+   }
+  ],
+  "otherwise": {
+   "then": 3
+  }
+ },
+ "week": {
+  "rules": [
+   {
+    "when": {
+     "threat": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ],
+    "gf": true
+   },
+   {
+    "when": {
+     "threat": [
+      1,
+      3
+     ],
+     "hunger": [
+      0,
+      1
+     ]
+    },
+    "then": 1,
+    "label": "danger (not starving)"
+   },
+   {
+    "when": {
+     "light": [
+      0,
+      0
+     ]
+    },
+    "then": 0
+   },
+   {
+    "when": {
+     "food": [
+      1,
+      3
+     ],
+     "hunger": [
+      3,
+      3
+     ]
+    },
+    "then": 0,
+    "label": "feed"
+   },
+   {
+    "when": {
+     "food": [
+      3,
+      3
+     ],
+     "threat": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "label": "lure"
+   },
+   {
+    "when": {},
+    "then": 2,
+    "gf": true,
+    "label": "explore in the light"
+   },
+   {
+    "when": {
+     "novelty": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "hunger": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ],
+    "gf": true
+   },
+   {
+    "when": {},
+    "then": 0,
+    "prev": [
+     0
+    ],
+    "gf": true
+   },
+   {
+    "when": {
+     "threat": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   }
+  ],
+  "otherwise": {
+   "then": 0
+  }
+ },
+ "clutch": {
+  "rules": [
+   {
+    "when": {},
+    "then": 0,
+    "prev": [
+     0
+    ],
+    "gf": true
+   },
+   {
+    "when": {
+     "food": [
+      3,
+      3
+     ]
+    },
+    "then": 0,
+    "label": "lure"
+   },
+   {
+    "when": {},
+    "then": 2,
+    "label": "explore in the light"
+   },
+   {
+    "when": {
+     "light": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ]
+   },
+   {
+    "when": {
+     "hunger": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ],
+    "gf": true
+   },
+   {
+    "when": {
+     "novelty": [
+      0,
+      0
+     ]
+    },
+    "then": 0,
+    "prev": [
+     0
+    ],
+    "gf": true
+   }
+  ],
+  "otherwise": {
+   "then": 0
+  }
+ }
+}

@@ -1,0 +1,133 @@
+{
+  "v": "FLY-FIDELITY/1",
+  "status": "seed",
+  "circuit": {
+    "version": "FFW-NAND/1",
+    "nIn": 12,
+    "nOut": 3,
+    "gates": 50,
+    "latches": 0,
+    "netlist": "c1d4142ae84693f99c7c991a1178b9ba38e337e05cdb50f7d014f57d1fe264e7"
+  },
+  "reference": {
+    "version": "FLY-LIF/0",
+    "status": "draft",
+    "params": {
+      "LOOM": [
+        0,
+        6,
+        22,
+        60
+      ],
+      "TH_GF": 20,
+      "TH_FEED": 4,
+      "TH_N": 2
+    },
+    "sha256": "8caa53059b06eb7ea7dc88c927b84b718bc3471ebe789b9e4bdfa9909641d4f6"
+  },
+  "suite": {
+    "name": "t1-full",
+    "encoding": "FFW-NAND/1 12-bit word layout",
+    "rows": 4096
+  },
+  "result": {
+    "agreement": "0.8530",
+    "agree": 3494,
+    "disagree": 602,
+    "gf": {
+      "tp": 2048,
+      "fp": 0,
+      "fn": 0,
+      "tn": 2048,
+      "recall": "1.0000",
+      "precision": "1.0000"
+    },
+    "behaviour_only": {
+      "agree": 3494,
+      "of": 4096
+    },
+    "by_brain_rule": {
+      "escape": {
+        "rows": 2048,
+        "disagree": 0
+      },
+      "danger": {
+        "rows": 640,
+        "disagree": 0
+      },
+      "feed": {
+        "rows": 336,
+        "disagree": 144
+      },
+      "lure": {
+        "rows": 240,
+        "disagree": 112
+      },
+      "pursue": {
+        "rows": 64,
+        "disagree": 48
+      },
+      "curious": {
+        "rows": 384,
+        "disagree": 180
+      },
+      "rest": {
+        "rows": 96,
+        "disagree": 32
+      },
+      "default": {
+        "rows": 288,
+        "disagree": 86
+      }
+    },
+    "by_ref_drive": {
+      "gf": {
+        "rows": 2048,
+        "disagree": 0
+      },
+      "wind": {
+        "rows": 1024,
+        "disagree": 384
+      },
+      "feed": {
+        "rows": 384,
+        "disagree": 48
+      },
+      "curious": {
+        "rows": 240,
+        "disagree": 36
+      },
+      "rest": {
+        "rows": 100,
+        "disagree": 34
+      },
+      "default": {
+        "rows": 300,
+        "disagree": 100
+      }
+    },
+    "disagree_examples": [
+      "002",
+      "003",
+      "012",
+      "013",
+      "022",
+      "023",
+      "032",
+      "033",
+      "042",
+      "043",
+      "052",
+      "053",
+      "062",
+      "063",
+      "072",
+      "073"
+    ]
+  },
+  "hosts": [
+    "node/tsx (scripts/calibrate.ts)"
+  ],
+  "note": "Calibration, not certification: agreement with a draft reference is a distance, not a grade. FLY-LIF/0's constants are editorial (see sim/reference.ts), the 12-bit word layout merges LC4 and LPLC2 into one threat channel, and GF recall == 1.0 here reflects that OneFly's rule 1 and the reference share the literature, not that the circuit reproduces the connectome. Anyone can re-run: npx tsx scripts/calibrate.ts",
+  "seal": "0c24da2421f0a33a0942d4d7846d5fa0f7fd1f12c33c9ee59bce5c1b204422d9"
+}

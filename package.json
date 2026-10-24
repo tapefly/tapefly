@@ -1,0 +1,38 @@
+{
+  "name": "tapefly",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TAPEFLY \u2014 today's fly, the same one for everyone. Its whole brain is 50 NAND gates, and every tick is sealed.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "replay": "tsx scripts/replay.ts",
+    "lineage": "tsx scripts/lineage.ts",
+    "record": "tsx scripts/make-record.ts",
+    "verify-record": "tsx scripts/verify-record.ts",
+    "calibrate": "tsx scripts/calibrate.ts",
+    "check": "npm run typecheck && npm test && npm run lineage -- --check && npm run board -- --check && npm run anchor -- --check && npm run tapeout -- bytes > /dev/null && npm run build",
+    "board": "tsx scripts/board.ts",
+    "tapeout": "tsx scripts/tapeout.ts",
+    "anchor": "tsx scripts/anchor.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "next": "14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "viem": "^2.57.7"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.2",
+    "@types/react": "18.3.24",
+    "@types/react-dom": "18.3.7",
+    "tsx": "4.23.15",
+    "typescript": "5.9.2"
+  }
+}

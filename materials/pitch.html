@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>别问它像不像果蝇。判卷。— One Fly</title>
+<meta name="description" content="ONE FLY：50 颗 NAND、4,096 道行为题、一份任何人一条命令都能重算的成绩单。TapeOut 让电路上链，我们给电路发成绩单。" />
+<style>
+  :root {
+    --bg:#f4efe6; --card:#fbf9f3; --ink:#232323; --dim:#7a756b; --line:#ddd6c8;
+    --clay:#bc5b3c; --ok:#3f6f5f; --blue:#3d5a7a; --gold:#c9a227;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.95 -apple-system,"PingFang SC","Noto Sans SC",sans-serif;-webkit-font-smoothing:antialiased}
+  main{max-width:800px;margin:0 auto;padding:84px 26px 64px}
+  h1,.claim,.fin,.grade{font-family:Georgia,"Songti SC","Noto Serif SC",serif;font-weight:400}
+
+  /* cover */
+  .kicker{font:500 13px/1 var(--mono);letter-spacing:.2em;color:var(--clay);text-transform:uppercase}
+  .fly{margin:24px 0 4px}
+  h1{font-size:clamp(36px,6.4vw,58px);line-height:1.2;margin:0 0 10px;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--clay)}
+  .sub{font-size:19.5px;color:#4a463e;max-width:660px;margin-top:16px}
+  .sub b{color:var(--ink)}
+  .lead{font-family:Georgia,"Songti SC","Noto Serif SC",serif;font-size:clamp(22px,3.2vw,28px);line-height:1.65;margin:20px 0 8px;max-width:640px}
+  .lead b{color:var(--clay);font-weight:400}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:28px 0 0}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 12px;text-align:center}
+  .kpi b{display:block;font-family:Georgia,serif;font-size:26px;line-height:1.1}
+  .kpi span{font-size:12px;color:var(--dim)}
+  @media(max-width:620px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:20px;font:12.5px/1.6 var(--mono);color:var(--dim)}
+  .meta span:before{content:"· ";color:var(--clay)}.meta span:first-child:before{content:""}
+
+  /* toc */
+  .toc{margin:42px 0 0;padding:22px 24px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+  .toc b{display:block;font:600 12px/1 var(--mono);letter-spacing:.16em;color:var(--dim);margin-bottom:14px}
+  .toc ol{columns:2;column-gap:28px;margin:0;padding-left:18px;font-size:14.5px;line-height:2}
+  .toc a{color:#4a463e;text-decoration:none}.toc a:hover{color:var(--clay)}
+  @media(max-width:620px){.toc ol{columns:1}}
+
+  section{margin-top:92px}
+  .num{font:500 12px/1 var(--mono);letter-spacing:.18em;color:var(--clay);display:block;margin-bottom:12px}
+  .claim{font-size:clamp(25px,4.3vw,34px);line-height:1.5;margin:0 0 20px;text-wrap:balance}
+  .claim em{font-style:normal;color:var(--clay)}
+  p{margin:0 0 16px}
+  p.say{max-width:680px}
+  p.say b,.note b{color:var(--ink);font-weight:650}
+  .note{font-size:14px;line-height:1.9;color:var(--dim);max-width:680px;border-left:3px solid var(--line);padding-left:16px;margin:20px 0}
+  .note b{font-weight:600}
+
+  /* figures */
+  figure{margin:30px 0 8px}
+  figcaption{font-size:13px;line-height:1.8;color:var(--dim);max-width:680px;margin-top:10px}
+  figcaption b{color:var(--ink)}
+  .figlabel{display:inline-block;font:600 10.5px/1 var(--mono);letter-spacing:.12em;color:var(--clay);margin-bottom:8px}
+  canvas{display:block;width:100%;height:auto;image-rendering:pixelated;border:1px solid var(--line);border-radius:8px;background:#fff}
+  .maps{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:620px){.maps{grid-template-columns:1fr}}
+  .blocks{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;max-width:520px;margin:14px 0 4px}
+  .blocks i{display:block;aspect-ratio:1/1;border-radius:3px;background:#e9e1d2;border:1px solid #d6cbb7}
+
+  /* flow */
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:26px 0}
+  .step{flex:1 1 130px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 14px 12px;min-width:130px}
+  .step b{display:block;font-size:15px;line-height:1.4}
+  .step span{display:block;font-size:12.5px;color:var(--dim);line-height:1.6;margin-top:4px}
+  .step.hot{border-color:var(--clay);background:#fbf1ea}
+  .arrow{align-self:center;color:var(--clay);font-size:18px;line-height:1}
+  @media(max-width:620px){.arrow{display:none}}
+
+  /* tables */
+  .tbl{margin:24px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;font-size:15px;line-height:1.7;min-width:480px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font:600 12px/1.4 var(--mono);letter-spacing:.05em;color:var(--dim);border-bottom:1.5px solid var(--line)}
+  td.n,th.n{text-align:right;font-family:var(--mono);font-size:13.5px;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  tr.new td{background:#fbf1ea}
+  tr.new td:first-child{box-shadow:inset 3px 0 0 var(--clay)}
+  .wall{color:var(--ok);font-weight:650}.warn{color:var(--clay);font-weight:650}
+  .pill{display:inline-block;font:600 11px/1 var(--mono);letter-spacing:.04em;padding:5px 8px;border-radius:999px;background:#e3ece7;color:var(--ok);white-space:nowrap}
+
+  /* bars */
+  .bars{margin:18px 0 6px}
+  .bar{display:grid;grid-template-columns:110px 1fr 96px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .bar:last-child{border-bottom:none}
+  .bar .name{color:#4a463e}
+  .bar .track{height:14px;background:#ece6da;border-radius:7px;overflow:hidden}
+  .bar .fill{height:100%;background:var(--clay);border-radius:7px}
+  .bar .v{font:12.5px/1 var(--mono);color:var(--dim);text-align:right;white-space:nowrap}
+  .bar.zero .fill{background:var(--ok)}
+  @media(max-width:620px){.bar{grid-template-columns:86px 1fr 80px}}
+
+  /* roles */
+  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}
+  .role{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .role b{display:block;font-size:15.5px;margin-bottom:4px}
+  .role span{font-size:13.5px;color:var(--dim);line-height:1.7}
+  .role.core{border-color:var(--clay);background:#fbf1ea;grid-column:1/-1;text-align:center}
+  @media(max-width:620px){.roles{grid-template-columns:1fr 1fr}.role.core{grid-column:1/-1}}
+
+  /* certificate */
+  .report{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:32px 30px 22px;margin:26px 0 10px}
+  .rt{font:500 12px/1 var(--mono);letter-spacing:.18em;color:var(--clay)}
+  .grade{font-size:clamp(58px,10.5vw,86px);line-height:1;margin:12px 0 4px}
+  .grade small{font-size:.36em;color:var(--dim);letter-spacing:.08em}
+  .report .what{color:#4a463e;max-width:580px;font-size:16px}
+  .report .row{display:flex;gap:32px;flex-wrap:wrap;margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+  .report .row div b{display:block;font-family:Georgia,serif;font-size:24px}
+  .report .row div span{font-size:12.5px;color:var(--dim)}
+  .report .foot{margin-top:14px;font:12px/1.7 var(--mono);color:var(--dim);word-break:break-all}
+
+  /* chips / misc */
+  .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12px;color:var(--dim)}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle}
+  pre{background:#2a2723;color:#efe9dc;border-radius:10px;padding:16px 18px;overflow-x:auto;font:13px/1.85 var(--mono);margin:20px 0}
+  pre .c{color:#a79f90}
+  code{font-family:var(--mono);font-size:.92em;background:#efe8da;padding:2px 6px;border-radius:5px}
+  .rule{list-style:none;padding:0;margin:22px 0}
+  .rule li{padding:11px 0 11px 28px;border-bottom:1px solid var(--line);position:relative;font-size:16px}
+  .rule li:last-child{border-bottom:none}
+  .rule li:before{content:"×";position:absolute;left:2px;color:var(--clay);font-family:Georgia,serif;font-size:18px}
+  .invite{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 26px;margin:24px 0}
+  .invite p{font-size:15.5px;margin-bottom:8px}.invite p:last-child{margin-bottom:0}
+
+  /* timeline */
+  .timeline{margin:24px 0;border-left:2px solid var(--line);padding-left:22px}
+  .tl{position:relative;padding:0 0 18px}
+  .tl:before{content:"";position:absolute;left:-29px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--card);border:2px solid var(--line)}
+  .tl.done:before{background:var(--ok);border-color:var(--ok)}
+  .tl.now:before{background:var(--clay);border-color:var(--clay)}
+  .tl b{font-size:16px}
+  .tl span{display:block;font-size:13.5px;color:var(--dim);line-height:1.7}
+  .tl .st{font:600 10.5px/1 var(--mono);letter-spacing:.08em;margin-left:8px;color:var(--dim)}
+
+  /* hero with map */
+  .hero{display:grid;grid-template-columns:1fr 230px;gap:26px;align-items:center}
+  .hero-map{margin:0}
+  .hero-map canvas{width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+  .hero-map figcaption{font:11px/1.5 var(--mono);color:var(--dim);margin-top:7px;letter-spacing:.02em}
+  @media(max-width:700px){.hero{grid-template-columns:1fr}.hero-map{max-width:230px}}
+
+  /* stack */
+  .stack{margin:24px 0 10px}
+  .lay{border:1px solid var(--line);border-radius:12px;padding:15px 18px}
+  .lay b{display:block;font-size:15.5px}
+  .lay span{display:block;font-size:13px;color:var(--dim);line-height:1.7;margin-top:3px}
+  .lay.base{background:var(--card)}
+  .lay.new{background:#fbf1ea;border-color:var(--clay)}
+  .lay.new b{color:var(--clay)}
+  .iface{text-align:center;font:11.5px/1.6 var(--mono);color:var(--dim);padding:7px 0;letter-spacing:.06em}
+
+  /* situation card */
+  .sit{border:1px solid var(--line);border-radius:12px;padding:18px 20px;background:var(--card);margin:20px 0 0}
+  .sit-row{display:grid;grid-template-columns:96px repeat(4,1fr);gap:6px;align-items:center;margin-bottom:6px}
+  .sit-row span{font-size:12.5px;color:var(--dim)}
+  .sit-row i{font:12px/1 var(--mono);font-style:normal;text-align:center;padding:7px 0;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--dim)}
+  .sit-row i.on{background:var(--clay);border-color:var(--clay);color:#fff}
+  .sit-io{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px;border-top:1px solid var(--line);padding-top:13px}
+  .sit-io .word{font:600 12px/1.6 var(--mono);color:var(--dim)}
+  .sit-io .rule{font-size:14px;color:#4a463e}
+  .sit-io .out{margin-left:auto;font:600 13px/1 var(--mono);background:var(--clay);color:#fff;padding:9px 12px;border-radius:7px}
+
+  /* eco hub */
+  .eco{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0}
+  .eco-cell{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 14px}
+  .eco-cell b{display:block;font-size:14.5px;line-height:1.4}
+  .eco-cell span{display:block;font-size:12px;color:var(--dim);line-height:1.65;margin-top:3px}
+  .eco-core{background:#fbf1ea;border:1.5px solid var(--clay);border-radius:10px;padding:16px 14px;text-align:center}
+  .eco-core b{display:block;font-size:15.5px;color:var(--clay)}
+  .eco-core span{display:block;font-size:12px;color:var(--dim);line-height:1.6;margin-top:3px}
+  .eco-cell.wide{grid-column:1/-1;background:#f2eee4}
+  @media(max-width:620px){.eco{grid-template-columns:1fr 1fr}.eco-core{order:-1;grid-column:1/-1}.eco-cell.wide{grid-column:1/-1}}
+
+  /* quadrant */
+  .quad{margin:22px 0 8px}
+  .quad-top{display:flex;font:11px/1 var(--mono);color:var(--dim);margin:0 0 6px 34px;justify-content:space-between}
+  .quad-body{display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:stretch}
+  .quad-y{display:flex;flex-direction:column;justify-content:space-between;font:10.5px/1.4 var(--mono);color:var(--dim);text-align:right;padding:2px 0}
+  .quad-plot{position:relative;height:240px;border:1px solid var(--line);border-radius:10px;background:
+    linear-gradient(to right,transparent calc(50% - .5px),#e8e1d4 calc(50% - .5px),#e8e1d4 calc(50% + .5px),transparent calc(50% + .5px)),
+    linear-gradient(to bottom,transparent calc(50% - .5px),#e8e1d4 calc(50% - .5px),#e8e1d4 calc(50% + .5px),transparent calc(50% + .5px)),
+    #fdfcf8}
+  .dot{position:absolute;transform:translate(-50%,-50%);font-size:11px;line-height:1.35;color:#4a463e}
+  .dot:before{content:"";display:block;width:10px;height:10px;border-radius:50%;background:var(--dim);margin:0 auto 4px}
+  .dot b{display:block;font-size:12px;color:var(--ink);white-space:nowrap}
+  .dot.ours:before{background:var(--clay);width:13px;height:13px}
+  .dot.ours b{color:var(--clay)}
+  .quad-x{text-align:center;font:11px/1 var(--mono);color:var(--dim);margin-top:7px}
+
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 0}
+  .cta a{display:inline-block;padding:12px 18px;border-radius:8px;font:600 13.5px/1 var(--mono);text-decoration:none}
+  .cta a.solid{background:var(--clay);color:#fff}
+  .cta a.ghost{border:1px solid var(--clay);color:var(--clay)}
+  .cta a:hover{opacity:.85}
+  footer{margin-top:80px;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.9;color:var(--dim)}
+  .fin{font-size:17px;color:#4a463e;margin-top:12px}
+  .fin em{font-style:normal;color:var(--clay)}
+  @media print{body{background:#fff;font-size:12pt}main{max-width:none;padding:0}section{margin-top:30px;page-break-inside:avoid}.toc,.cta{display:none}pre{background:#f2f2f2;color:#222}}
+</style>
+</head>
+<body>
+<main>
+
+  <header>
+    <div class="hero">
+    <div>
+    <div class="kicker">ONE FLY · 一只电子果蝇 · 2026-10-19</div>
+    <div class="fly" aria-hidden="true" style="max-width:640px">
+      <svg viewBox="0 0 640 190" width="100%" role="img" aria-label="一只电子果蝇趴在电路板上，旁边是一张 4,096 格的考卷">
+        <g stroke="#bc5b3c" stroke-width="2" fill="none" stroke-linecap="round">
+          <!-- 电路板：走线 + 焊点 -->
+          <g stroke="#c9bfa9" stroke-width="1.6">
+            <path d="M20 168 H250 V150 H340"/>
+            <path d="M40 180 H300 V160 H420"/>
+            <path d="M60 156 H180"/>
+            <circle cx="250" cy="168" r="3"/><circle cx="340" cy="150" r="3"/>
+            <circle cx="300" cy="180" r="3"/><circle cx="420" cy="160" r="3"/>
+          </g>
+          <!-- 电路板上的 5×10 小积木（暗示 50 块） -->
+          <g fill="#e9e1d2" stroke="#d6cbb7">
+            <rect x="30" y="96" width="12" height="12" rx="2"/><rect x="48" y="96" width="12" height="12" rx="2"/><rect x="66" y="96" width="12" height="12" rx="2"/><rect x="84" y="96" width="12" height="12" rx="2"/><rect x="102" y="96" width="12" height="12" rx="2"/><rect x="120" y="96" width="12" height="12" rx="2"/><rect x="138" y="96" width="12" height="12" rx="2"/><rect x="156" y="96" width="12" height="12" rx="2"/><rect x="174" y="96" width="12" height="12" rx="2"/><rect x="192" y="96" width="12" height="12" rx="2"/>
+            <rect x="30" y="114" width="12" height="12" rx="2"/><rect x="48" y="114" width="12" height="12" rx="2"/><rect x="66" y="114" width="12" height="12" rx="2"/><rect x="84" y="114" width="12" height="12" rx="2"/><rect x="102" y="114" width="12" height="12" rx="2"/><rect x="120" y="114" width="12" height="12" rx="2"/><rect x="138" y="114" width="12" height="12" rx="2"/><rect x="156" y="114" width="12" height="12" rx="2"/><rect x="174" y="114" width="12" height="12" rx="2"/><rect x="192" y="114" width="12" height="12" rx="2"/>
+            <rect x="30" y="132" width="12" height="12" rx="2"/><rect x="48" y="132" width="12" height="12" rx="2"/><rect x="66" y="132" width="12" height="12" rx="2"/><rect x="84" y="132" width="12" height="12" rx="2"/><rect x="102" y="132" width="12" height="12" rx="2"/><rect x="120" y="132" width="12" height="12" rx="2"/><rect x="138" y="132" width="12" height="12" rx="2"/><rect x="156" y="132" width="12" height="12" rx="2"/><rect x="174" y="132" width="12" height="12" rx="2"/><rect x="192" y="132" width="12" height="12" rx="2"/>
+          </g>
+          <!-- 果蝇 -->
+          <g transform="translate(300,84) scale(1.5)">
+            <ellipse cx="46" cy="30" rx="22" ry="11" transform="rotate(-18 46 30)"/>
+            <ellipse cx="46" cy="30" rx="22" ry="11" transform="rotate(18 46 30)"/>
+            <ellipse cx="84" cy="30" rx="12" ry="8"/>
+            <circle cx="99" cy="28" r="4.5" fill="#bc5b3c" stroke="none"/>
+            <line x1="70" y1="42" x2="64" y2="52"/><line x1="78" y1="43" x2="76" y2="54"/><line x1="86" y1="42" x2="88" y2="52"/>
+            <line x1="98" y1="36" x2="106" y2="46"/>
+          </g>
+          <!-- 考卷：4,096 格示意 + 分数 -->
+          <rect x="470" y="40" width="140" height="120" rx="8" fill="#fbf9f3" stroke="#232323" stroke-width="2"/>
+          <line x1="470" y1="66" x2="610" y2="66" stroke="#232323" stroke-width="1.4"/>
+          <text x="540" y="58" text-anchor="middle" font-size="12" fill="#7a756b" font-family="-apple-system,PingFang SC,sans-serif">行为考卷 · 4,096 题</text>
+          <g fill="#dcd3c0">
+            <rect x="484" y="78" width="22" height="8" rx="1.5"/><rect x="512" y="78" width="22" height="8" rx="1.5"/><rect x="540" y="78" width="22" height="8" rx="1.5"/><rect x="568" y="78" width="28" height="8" rx="1.5"/>
+            <rect x="484" y="92" width="22" height="8" rx="1.5"/><rect x="512" y="92" width="22" height="8" rx="1.5"/><rect x="540" y="92" width="22" height="8" rx="1.5"/><rect x="568" y="92" width="28" height="8" rx="1.5"/>
+            <rect x="484" y="106" width="22" height="8" rx="1.5"/><rect x="512" y="106" width="22" height="8" rx="1.5"/><rect x="540" y="106" width="22" height="8" rx="1.5"/><rect x="568" y="106" width="28" height="8" rx="1.5"/>
+          </g>
+          <text x="540" y="146" text-anchor="middle" font-size="26" fill="#bc5b3c" font-family="Georgia,serif">85.30</text>
+          <!-- 从积木指向考卷的箭头 -->
+          <path d="M250 118 C 330 118 400 110 462 96" fill="none" stroke="#bc5b3c" stroke-width="2" stroke-dasharray="5 5"/>
+          <path d="M468 94 l-11 -2 5 10 z" fill="#bc5b3c"/>
+        </g>
+      </svg>
+    </div>
+    <h1>别问它像不像果蝇。<br><em>判卷。</em></h1>
+    <p class="lead">我们用 <b>50 个电子小积木</b>，拼了一只"电子果蝇"的大脑。</p>
+    <p class="sub">然后给它出了 <b>4,096 道题</b>：遇到这种情况，你会怎么做？再把它的答案和一份参考答案对照，打出一个分数：<b>85.30 分</b>。这个分数，你自己也能重新算一遍。</p>
+    </div>
+    <figure class="hero-map">
+      <canvas id="map-hero" width="64" height="64" aria-label="4,096 种处境按规则着色的地图"></canvas>
+      <figcaption>4,096 种处境 · 颜色 = 决定它的规则</figcaption>
+    </figure>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><b>50</b><span>个电子小积木</span></div>
+      <div class="kpi"><b>4,096</b><span>道"它会怎么做"的题</span></div>
+      <div class="kpi"><b>85.30</b><span>和参考答案的相似度</span></div>
+      <div class="kpi"><b>4</b><span>步，自己就能验</span></div>
+    </div>
+    <div class="meta"><span>写给不懂技术的朋友</span><span>每个数字都能查</span><span>没做完的会写"没做完"</span></div>
+  </header>
+
+  <nav class="toc" aria-label="目录">
+    <b>CONTENTS</b>
+    <ol>
+      <li><a href="#n0">一页看懂</a></li>
+      <li><a href="#n1">它站在哪</a></li>
+      <li><a href="#n15">TapeOut 题库是啥</a></li>
+      <li><a href="#n2">这不是一只宠物</a></li>
+      <li><a href="#n3">它怎么长大</a></li>
+      <li><a href="#n4">和 TapeOut 比一比</a></li>
+      <li><a href="#n5">先看它的大脑</a></li>
+      <li><a href="#n6">再看考卷</a></li>
+      <li><a href="#n7">再看成绩单</a></li>
+      <li><a href="#n8">那 602 道怎么办</a></li>
+      <li><a href="#n9">你自己也能验</a></li>
+      <li><a href="#n10">另外三只蝇</a></li>
+      <li><a href="#n11">我们不做的事</a></li>
+      <li><a href="#vision">我们的愿景</a></li>
+      <li><a href="#nft">NFT 与 token</a></li>
+      <li><a href="#value">贡献与怎么赚钱</a></li>
+      <li><a href="#n12">接下来</a></li>
+      <li><a href="#glossary">名词小抄</a></li>
+    </ol>
+  </nav>
+
+  <!-- 00 -->
+  <section id="n0">
+    <span class="num">00 · 一页看懂</span>
+    <h2 class="claim">一只电子果蝇，<br><em>参加了一场 4,096 道题的考试。</em></h2>
+    <p class="say">它没有眼睛，也没有肚子。它只有六个"感觉开关"：饿不饿、有没有吃的、危不危险、亮不亮、新不新鲜、上一秒在干嘛。每种开关有 4 档，全部组合起来是 <b>4,096 种情况</b>。每一种情况，它都要做一个决定：去吃、去躲、去探索，还是休息。</p>
+    <p class="say">我们把 4,096 种情况一种不漏地问了它，再把它的回答和一份"参考答案"逐题对照。答对（做得一样）的有 <b>3,494 道</b>，所以是 <b>85.30 分</b>。</p>
+    <div class="flow">
+      <div class="step"><b>六个感觉</b><span>每种 4 档</span></div>
+      <div class="arrow">→</div>
+      <div class="step"><b>50 个小积木</b><span>拼成它的大脑</span></div>
+      <div class="arrow">→</div>
+      <div class="step hot"><b>4,096 道题</b><span>一种情况都不漏</span></div>
+      <div class="arrow">→</div>
+      <div class="step"><b>一张成绩单</b><span>85.30 分，能自己验</span></div>
+      <div class="arrow">→</div>
+      <div class="step"><b>存到链上</b><span>变成标本（还没做）</span></div>
+    </div>
+    <div class="tbl">
+      <table>
+        <tbody>
+          <tr><th style="width:30%">这是什么</th><td>一只用 50 个电子小积木拼成的"果蝇大脑"，加一份 4,096 道题的考卷</td></tr>
+          <tr><th>分数怎么来</th><td>一道一道对答案；和参考答案一样的有 3,494 道 → 3,494 ÷ 4,096 = 85.30%</td></tr>
+          <tr><th>为什么能信</th><td>题库、答案、成绩单全部公开；你拿自己的电脑可以重算，算不出 85.30 就是我们错</td></tr>
+          <tr><th>和 TapeOut 的关系</th><td>TapeOut 搭积木、存证、挖矿；我们给搭好的积木<b>办考试</b></td></tr>
+          <tr><th>现在做完没</th><td><span class="pill done">考卷做完了</span> "存到链上"还差一颗小积木的钱</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 01 -->
+  <section id="n1">
+    <span class="num">01 · 它站在哪</span>
+    <h2 class="claim">TapeOut 比谁搭得便宜。<br><em>我们比谁做得像。</em></h2>
+    <p class="say">先打个比方。<b>TapeOut 像一个"电子积木市场"</b>：大家用两种小积木搭电路（一种会算，一种会记），搭好以后可以"拍照存证"，变成一件谁也改不了的数字作品。它还会出 267 道题，比谁搭得更省。</p>
+    <p class="say">但它不问一件事：<b>"你搭的东西，行为对不对？"</b>一个很便宜、很省电的电路，做出来的动作也可能完全不像一只果蝇。我们补的就是这一问——给它<b>出一张行为考卷</b>。</p>
+    <div class="stack">
+      <div class="lay new"><b>我们加的：考试层</b><span>4,096 道题 · 一张成绩单 · 一个能收藏的标本</span></div>
+      <div class="iface">↑ 看它的电路　　↓ 给它发成绩单</div>
+      <div class="lay base"><b>TapeOut 原有的：积木层</b><span>小积木 · 电路图 · 存证 · 挖矿 · 钱包</span></div>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th style="width:24%">比什么</th><th style="width:38%">TapeOut</th><th style="width:38%">我们（Onefly）</th></tr></thead>
+        <tbody>
+          <tr><td>用的积木</td><td>NAND / LATCH 两种小积木</td><td>用同一种积木，<b>不另外发币</b></td></tr>
+          <tr><td>出的题</td><td>267 道"怎么搭更省"</td><td>4,096 道<b>"它会怎么做"</b></td></tr>
+          <tr><td>给的结果</td><td>算力、奖励</td><td>一张成绩单、一个标本</td></tr>
+          <tr class="new"><td>两家关系</td><td>地基</td><td><b>在地基上加一层考试</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figure>
+      <span class="figlabel">FIG A · 市场上已经有一堆电路，但没有一张成绩单</span>
+      <div class="bars">
+        <div class="bar"><span class="name">在售电路</span><span class="track"><i class="fill" style="width:100%;display:block"></i></span><span class="v">5,519 件</span></div>
+        <div class="bar zero"><span class="name">带成绩单的</span><span class="track"><i class="fill" style="width:2%;display:block"></i></span><span class="v">0 件</span></div>
+        <div class="bar"><span class="name">24 小时成交</span><span class="track"><i class="fill" style="width:62%;display:block"></i></span><span class="v">131.8 BNB</span></div>
+      </div>
+      <figcaption><b>先说一句实话：这 5,519 件电路，没有一件需要"像果蝇"。</b>买家要的是挖矿，买卖只看"省不省"。图上的空白不是"等着我们填的市场"，是"还没人造过尺子的地方"——我们造尺子，第一位用户是自己（见下面"谁在乎"）。</figcaption>
+    </figure>
+    <p class="note"><b>谁在乎"像不像果蝇"？今天几乎没人在乎，我们不装。</b>第一位用户是我们自己：考试让"我们的电子蝇很逼真"从一句没法反驳的宣传语，变成一个<b>可以被推翻的主张</b>。第二位是研究果蝇的科学家：那 602 道分歧题对他们有信息量。第三位才是市场——而且是个<b>赌注</b>，不是承诺。</p>
+    <p class="note"><b>一句话：</b>我们不跟 TapeOut 抢生意，也不假装它的买家需要成绩单。它把电路变成可以买卖的东西；我们做的是另一件事——<b>给自己出一张卷，让"像"这个词第一次可以被推翻</b>。</p>
+  </section>
+
+  <!-- 01.5 -->
+  <section id="n15">
+    <span class="num">01.5 · 先看懂 TapeOut 的题库</span>
+    <h2 class="claim">题库不是"考你"。<br><em>题库是挖矿游戏的计分器和防作弊器。</em></h2>
+    <p class="say">TapeOut 是个游戏：用 NAND 门拼电路，拼得好挖 BEM。可"拼得好"怎么算？游戏要是只说"随便拼、烧门换币"，人人摆 1000 个垃圾门就刷爆了。于是官方出了 <b>267 道作业题</b>（组合 209 + 时序 58，官方自报）：造一个加法器、造一个"八位全零检测器"、造一个"八选一开关"……</p>
+    <p class="say"><b>类比：一个高尔夫球场加排行榜。</b>267 个洞，每洞有标准杆；你打一杆（交一个电路），合约自动量你离洞多远；别人怀疑你作弊，举证一条算错的就能把你踢出榜。</p>
+    <figure>
+      <span class="figlabel">FIG I · 题库的三个用处</span>
+      <svg viewBox="0 0 760 168" role="img" aria-label="题库的三个用处：标准答案、标准杆、抽检打假">
+        <g font-family="-apple-system,PingFang SC,sans-serif">
+          <rect x="12" y="10" width="236" height="120" rx="10" fill="#fbf9f3" stroke="#ddd6c8"/>
+          <rect x="262" y="10" width="236" height="120" rx="10" fill="#fbf9f3" stroke="#ddd6c8"/>
+          <rect x="512" y="10" width="236" height="120" rx="10" fill="#fbf9f3" stroke="#ddd6c8"/>
+          <text x="130" y="34" text-anchor="middle" font-size="14" fill="#232323">① 有标准答案</text>
+          <text x="380" y="34" text-anchor="middle" font-size="14" fill="#232323">② 有标准杆</text>
+          <text x="630" y="34" text-anchor="middle" font-size="14" fill="#232323">③ 能抽检打假</text>
+          <text x="130" y="56" text-anchor="middle" font-size="11.5" fill="#7a756b">每道题一张输入输出表</text>
+          <text x="380" y="56" text-anchor="middle" font-size="11.5" fill="#7a756b">官方参考实现的成本 C_ref</text>
+          <text x="630" y="56" text-anchor="middle" font-size="11.5" fill="#7a756b">挖矿时合约现场抽 ≥3 条向量</text>
+          <g stroke="#7a756b" stroke-width="1.2">
+            <rect x="70" y="70" width="30" height="16"/><rect x="104" y="70" width="30" height="16"/><rect x="70" y="90" width="30" height="16"/><rect x="104" y="90" width="30" height="16"/>
+            <rect x="152" y="70" width="30" height="16" fill="#3f6f5f" stroke="#3f6f5f"/><rect x="186" y="70" width="30" height="16"/><rect x="152" y="90" width="30" height="16"/><rect x="186" y="90" width="30" height="16" fill="#3f6f5f" stroke="#3f6f5f"/>
+          </g>
+          <text x="130" y="122" text-anchor="middle" font-size="11.5" fill="#7a756b">对错精确判定，不用吵</text>
+          <text x="380" y="122" text-anchor="middle" font-size="11.5" fill="#7a756b">比它小 = 打得好 = 算力加成</text>
+          <text x="630" y="122" text-anchor="middle" font-size="11.5" fill="#7a756b">答错一条，任何人可举证撤销</text>
+        </g>
+        <g font-family="Georgia,serif" fill="#bc5b3c" font-size="13">
+          <text x="316" y="106">C_ref</text><text x="378" y="106" fill="#3f6f5f">你的 C</text>
+        </g>
+        <g stroke="#bc5b3c" stroke-width="2" fill="none">
+          <line x1="322" y1="98" x2="322" y2="114"/><line x1="354" y1="100" x2="354" y2="114"/><line x1="386" y1="106" x2="386" y2="114"/>
+        </g>
+      </svg>
+      <figcaption><b>一句话：题库让"挖矿"从"烧门换币"变成"打比赛"。</b>标准答案让对错不用吵，标准杆让好坏可比，抽检让作弊有代价——三样齐了，游戏才成立。（机制引自官方规则页，自报口径。）</figcaption>
+    </figure>
+    <p class="say">但这台机器能转，<b>全靠它的题"有标准答案、有标准杆"</b>。逻辑题天生如此：与非门跑四条向量就知道对不对，成本能从网表直接算出来，纪录可以被破。</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th style="width:22%"></th><th style="width:39%">TapeOut 的 267 道题</th><th style="width:39%">我们的 4,096 道题</th></tr></thead>
+        <tbody>
+          <tr><td>考什么</td><td>算得<b>对不对</b>（功能正确）</td><td>像得<b>像不像</b>（行为接近）</td></tr>
+          <tr><td>标准答案</td><td>有，且唯一（真值表）</td><td><b>没有</b>，要生物学家人工写，还可能是错的</td></tr>
+          <tr><td>标准杆</td><td>有，C_ref 上链冻结</td><td><b>没有</b>——不存在"最像的蝇"</td></tr>
+          <tr><td>防作弊</td><td>合约自动跑向量 + 任何人可举证撤销</td><td>判卷程序公开 + 你自己重算一遍</td></tr>
+          <tr><td>纪录</td><td>最优首创，C 严格更小才能夺榜</td><td>没有榜——只有"更能被推翻"</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="say">所以我们的卷<b>没法抄它</b>：行为题没有真值表、没有标准杆、没有纪录可破。能借的只有它的方法——<b>出题、计分、打假</b>——答案那一半，只能自己写。这就是下一章要讲的东西。</p>
+  </section>
+
+  <!-- 02 -->
+  <section id="n2">
+    <span class="num">02 · 这不是一只宠物</span>
+    <h2 class="claim">一只考完不算什么。<br><em>要办成一所学校。</em></h2>
+    <p class="say">如果只是我们养了一只电子果蝇，那没什么稀奇。真正有用的是：把"怎么考"变成一套谁都能用的办法。以后蜜蜂、蚂蚁、蟋蟀……都可以来考同一套卷子。每来一个新动物，只要交两样东西：<b>一张电路图</b>和<b>一份参考答案</b>。</p>
+    <div class="eco">
+      <div class="eco-cell"><b>出题的人</b><span>交一张电路图 + 一份参考答案，就能加一个新动物</span></div>
+      <div class="eco-cell"><b>验卷的人</b><span>任何人拿电脑重算；算不出同样的分数，成绩单作废</span></div>
+      <div class="eco-cell"><b>玩家</b><span>自己上手玩；分数来自回放，不是自己说了算</span></div>
+      <div class="eco-cell"><b>矿工</b><span>继续在 TapeOut 挖矿；我们不抢他们的算力</span></div>
+      <div class="eco-core"><b>一套考试办法</b><span>题目 + 答案 + 成绩单，三样都公开</span></div>
+      <div class="eco-cell"><b>收藏者</b><span>存到链上的作品 = 一件带日期的标本</span></div>
+      <div class="eco-cell wide"><b>案例库（数字标本馆）</b><span>每多一只动物，就多一件可以比较的标本；以后谁想证明自己的电子蜜蜂像蜜蜂，都得先来这里排个位置</span></div>
+    </div>
+    <div class="flow" style="margin-top:6px">
+      <div class="step"><b>新动物</b><span>电路图 + 答案</span></div><div class="arrow">→</div>
+      <div class="step hot"><b>考试</b><span>4,096 道题</span></div><div class="arrow">→</div>
+      <div class="step"><b>成绩单</b><span>分数 + 防伪章</span></div><div class="arrow">→</div>
+      <div class="step"><b>标本</b><span>存到链上，带日期</span></div><div class="arrow">→</div>
+      <div class="step"><b>案例库</b><span>下一个的参照</span></div>
+    </div>
+    <p class="say">这个循环里最值钱的不是某一只蝇，是<b>案例库</b>：每复刻一篇论文里的神经回路，就多一件带日期、带分数的标本。标本越多，后来的人越绕不开你——因为大家比的都是同一张卷子。</p>
+    <figure>
+      <span class="figlabel">FIG B · 一个会自己转起来的圈</span>
+      <svg viewBox="0 0 760 170" role="img" aria-label="考试循环：新动物进考场，成绩单变成标本，标本进案例库，案例库吸引下一个新动物">
+        <g stroke="#232323" stroke-width="1.8" fill="none">
+          <rect x="16" y="52" width="128" height="56" rx="12"/>
+          <rect x="184" y="52" width="128" height="56" rx="12" stroke="#bc5b3c" stroke-width="2.2"/>
+          <rect x="352" y="52" width="128" height="56" rx="12"/>
+          <rect x="520" y="52" width="128" height="56" rx="12"/>
+        </g>
+        <g font-size="14" fill="#232323" text-anchor="middle" font-family="-apple-system,PingFang SC,sans-serif">
+          <text x="80" y="76">新动物来考试</text><text x="80" y="95" font-size="11.5" fill="#7a756b">电路图 + 参考答案</text>
+          <text x="248" y="76" fill="#bc5b3c">4,096 道题</text><text x="248" y="95" font-size="11.5" fill="#7a756b">一种情况都不漏</text>
+          <text x="416" y="76">一张成绩单</text><text x="416" y="95" font-size="11.5" fill="#7a756b">分数 + 防伪章</text>
+          <text x="584" y="76">存成标本</text><text x="584" y="95" font-size="11.5" fill="#7a756b">进案例库（还没上链）</text>
+        </g>
+        <g stroke="#7a756b" stroke-width="1.8" fill="#7a756b">
+          <line x1="144" y1="80" x2="176" y2="80"/><path d="M184 80 l-9 -5 v10 z" stroke="none"/>
+          <line x1="312" y1="80" x2="344" y2="80"/><path d="M352 80 l-9 -5 v10 z" stroke="none"/>
+          <line x1="480" y1="80" x2="512" y2="80"/><path d="M520 80 l-9 -5 v10 z" stroke="none"/>
+        </g>
+        <path d="M584 108 C 584 152 80 152 80 114" fill="none" stroke="#bc5b3c" stroke-width="2" stroke-dasharray="5 5"/>
+        <path d="M80 108 l-5 10 11 -1 z" fill="#bc5b3c"/>
+        <text x="332" y="160" text-anchor="middle" font-size="12.5" fill="#bc5b3c" font-family="-apple-system,PingFang SC,sans-serif">案例库越大，下一个来考试的人越多——同一张卷子，谁都绕不开</text>
+      </svg>
+      <figcaption><b>考一次不稀奇，稀奇的是这个圈能自己转。</b>每多一件标本，案例库就更难绕开；而这个圈每转一圈，花的力气主要是"写一份参考答案"，不是写代码。</figcaption>
+    </figure>
+    <p class="note"><b>说实话：</b>现在只有 1 只动物（果蝇），案例库只有 1 件，标本还没存到链上（等一颗积木的钱）。上面画的是<b>以后会长成什么样</b>，不是已经做完了。</p>
+  </section>
+
+  <!-- 03 -->
+  <section id="n3">
+    <span class="num">03 · 它怎么长大</span>
+    <h2 class="claim">每多一个感觉，<em>题目就翻 4 倍。</em></h2>
+    <p class="say">为什么是 4 倍？因为每个感觉有 4 档（0、1、2、3）。6 个感觉就是 4×4×4×4×4×4 = <b>4,096</b> 道题。再加一个感觉，就再乘 4，变成 16,384 道。</p>
+    <div class="bars">
+      <div class="bar"><span class="name">4 个感觉</span><span class="track"><i class="fill" style="width:9%;display:block"></i></span><span class="v">256 道</span></div>
+      <div class="bar"><span class="name">5 个感觉</span><span class="track"><i class="fill" style="width:32%;display:block"></i></span><span class="v">1,024 道</span></div>
+      <div class="bar"><span class="name">6 个 · 现在</span><span class="track"><i class="fill" style="width:64%;display:block;background:var(--ok)"></i></span><span class="v">4,096 道</span></div>
+      <div class="bar"><span class="name">7 个感觉</span><span class="track"><i class="fill" style="width:87%;display:block"></i></span><span class="v">16,384 道</span></div>
+      <div class="bar"><span class="name">8 个感觉</span><span class="track"><i class="fill" style="width:100%;display:block"></i></span><span class="v">65,536 道</span></div>
+    </div>
+    <p class="note">条形是按比例缩着画的。<b>电脑算 65,536 道题也就一眨眼</b>——所以"题多"根本不是问题。</p>
+    <figure>
+      <span class="figlabel">FIG C · 六个旋钮，怎么拧出 4,096 道题</span>
+      <svg viewBox="0 0 760 150" role="img" aria-label="六个各有 4 档的感觉旋钮，全部组合成 4,096 道题">
+        <g stroke="#232323" stroke-width="1.8" fill="none">
+          <circle cx="62" cy="52" r="26"/><circle cx="152" cy="52" r="26"/><circle cx="242" cy="52" r="26"/><circle cx="332" cy="52" r="26"/><circle cx="422" cy="52" r="26"/><circle cx="512" cy="52" r="26"/>
+        </g>
+        <g stroke="#bc5b3c" stroke-width="2.4" stroke-linecap="round">
+          <line x1="62" y1="52" x2="76" y2="40"/><line x1="152" y1="52" x2="138" y2="40"/><line x1="242" y1="52" x2="256" y2="40"/><line x1="332" y1="52" x2="318" y2="40"/><line x1="422" y1="52" x2="436" y2="40"/><line x1="512" y1="52" x2="498" y2="40"/>
+        </g>
+        <g font-size="13.5" fill="#232323" text-anchor="middle" font-family="-apple-system,PingFang SC,sans-serif">
+          <text x="62" y="98">饿不饿</text><text x="152" y="98">有没有吃的</text><text x="242" y="98">危不危险</text><text x="332" y="98">亮不亮</text><text x="422" y="98">新不新鲜</text><text x="512" y="98">上一秒在干嘛</text>
+          <text x="62" y="118" font-size="11.5" fill="#7a756b">4 档</text><text x="152" y="118" font-size="11.5" fill="#7a756b">4 档</text><text x="242" y="118" font-size="11.5" fill="#7a756b">4 档</text><text x="332" y="118" font-size="11.5" fill="#7a756b">4 档</text><text x="422" y="118" font-size="11.5" fill="#7a756b">4 档</text><text x="512" y="118" font-size="11.5" fill="#7a756b">4 档</text>
+          <text x="596" y="46" font-size="16" fill="#bc5b3c" font-family="Georgia,serif">4×4×4</text>
+          <text x="596" y="68" font-size="16" fill="#bc5b3c" font-family="Georgia,serif">×4×4×4</text>
+          <text x="596" y="96" font-size="22" fill="#bc5b3c" font-family="Georgia,serif">4,096</text>
+          <text x="596" y="116" font-size="11.5" fill="#7a756b">道题，一道不漏</text>
+        </g>
+      </svg>
+      <figcaption><b>每个旋钮拧一下，题量就乘 4。</b>六个旋钮全拧完，就是 4,096 种处境；再拧多一个旋钮（加一个感觉），变成 16,384——所以题目"多"从来不是问题。</figcaption>
+    </figure>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>什么在变大</th><th>怎么变大</th><th>现在</th><th>要紧吗</th></tr></thead>
+        <tbody>
+          <tr><td>考卷</td><td>每多一个感觉 ×4</td><td>4,096 道</td><td>电脑算得完，不要紧</td></tr>
+          <tr><td>大脑</td><td>跟着"规则几条"长</td><td>7 条规则 → 50 个积木</td><td>跟题目多少无关</td></tr>
+          <tr><td>成绩单</td><td>盖一个防伪章</td><td>几秒钟</td><td>不要紧</td></tr>
+          <tr><td>加一个新动物</td><td>要写一份靠谱的参考答案</td><td>1 只</td><td><b>真正花时间的是这个</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="say">所以"能长大"不是指题目多，而是：<b>考试的办法、成绩单的格式、验算的程序，只写一次；每加一个新动物，只要写一份参考答案。</b>真正难的就是这份答案——它是科学判断，不是写代码。所以我们把它公开、标上"草稿"（第 0 版）：谁做得更好，就出第 1 版，全部重考。护城河不是代码，是"公开的答案 + 公开的卷子 + 公开的成绩单"。</p>
+  </section>
+
+  <!-- 04 -->
+  <section id="n4">
+    <span class="num">04 · 和 TapeOut 比一比</span>
+    <h2 class="claim">把 TapeOut 的东西一件件摆好，<em>看看我们站在哪。</em></h2>
+    <p class="say">下面这张表，左边是 TapeOut 已经有的零件，右边是我们怎么对应。<b>"借用"</b>就是直接用它的，<b>"新增"</b>就是我们加的，<b>"平行"</b>就是各干各的、不抢。</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>TapeOut 有什么</th><th>它用来干什么</th><th>我们怎么用</th><th>关系</th></tr></thead>
+        <tbody>
+          <tr><td>两种小积木</td><td>搭电路用（一种会算，一种会记）</td><td>拼出 50 个积木的大脑</td><td>借用</td></tr>
+          <tr><td>电路图 + 存证</td><td>存成谁也改不了的作品</td><td>把大脑存上去，变成标本</td><td>借用</td></tr>
+          <tr><td>267 道"省不省"的题</td><td>比谁搭得更便宜</td><td>4,096 道<b>"像不像"</b>的题</td><td><b>新增</b></td></tr>
+          <tr><td>算力、奖励</td><td>按设计分奖励</td><td>我们不参与分钱，只发成绩单</td><td><b>新增</b></td></tr>
+          <tr><td>"镇子"（处理器）</td><td>挖矿的地方</td><td>每种动物一个位置</td><td>对应</td></tr>
+          <tr><td>钱包（容器）</td><td>给电路一个账户</td><td>给动物一个"身体"和日记</td><td>借用</td></tr>
+          <tr><td>挖矿</td><td>按设计分产出</td><td>判卷机：按"能复算的聪明"发证</td><td>平行</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="say"><b>为什么这一层以前是空的？</b>因为 TapeOut 的 267 道题默认"功能已经对了，只比省不省"。可一旦电路要做"行为"——机器人怎么躲、AI 怎么选、游戏里的角色怎么反应——<b>"省"不能代替"对"</b>。现在有人在卖"AI 的宪法"，但官网上连一张电路图都没有；等他们真做出来，第一件事就是被这套卷子考。</p>
+    <p class="note"><b>说清楚：</b>我们不发行代币、不参与挖矿分钱、不承诺收益。我们用的还是 TapeOut 的地基，产出的是成绩单和标本。<b>所以不是抢生意，是加一层。</b></p>
+  </section>
+
+  <!-- 05 -->
+  <section id="n5">
+    <span class="num">05 · 先看它的大脑</span>
+    <h2 class="claim">它的脑子里，<em>只有 50 个小积木。</em></h2>
+    <figure>
+      <span class="figlabel">FIG 0 · 全部家当</span>
+      <div class="blocks" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <figcaption><b>50 块，全部在这。</b>没有第 51 块，也没有"AI 魔法"。它们连起来，才变成"会做决定"。</figcaption>
+    </figure>
+    <p class="say">这些小积木叫 <b>NAND</b>，你可以理解成"两个开关都打开时，灯反而灭"的小零件。它们不会记事，所以"上一秒在干嘛"也要当成一个感觉输进去。整个大脑没有记忆，只有一套"如果……就……"的规则。</p>
+    <figure>
+      <span class="figlabel">FIG D · 一块小积木（NAND）到底是啥</span>
+      <svg viewBox="0 0 760 180" role="img" aria-label="NAND 小积木的图解和真值表">
+        <g stroke="#232323" stroke-width="1.8" fill="none">
+          <rect x="30" y="34" width="86" height="34" rx="8"/>
+          <rect x="30" y="96" width="86" height="34" rx="8"/>
+          <rect x="196" y="60" width="72" height="46" rx="10"/>
+        </g>
+        <g stroke="#232323" stroke-width="1.6">
+          <line x1="116" y1="51" x2="196" y2="72"/><line x1="116" y1="113" x2="196" y2="94"/>
+          <line x1="268" y1="83" x2="306" y2="83"/>
+        </g>
+        <circle cx="330" cy="83" r="18" fill="#fbf9f3" stroke="#232323" stroke-width="1.8"/>
+        <g stroke="#7a756b" stroke-width="2.4" stroke-linecap="round"><line x1="322" y1="91" x2="338" y2="75"/></g>
+        <g font-size="12.5" fill="#4a463e" font-family="-apple-system,PingFang SC,sans-serif">
+          <text x="73" y="55">开关 A：开</text><text x="73" y="117">开关 B：开</text>
+          <text x="232" y="88" text-anchor="middle" fill="#232323" font-size="13">NAND</text>
+          <text x="330" y="120" text-anchor="middle" fill="#7a756b">灯：灭</text>
+          <text x="126" y="168" fill="#7a756b">只有"两个都开"这一种情况，灯反而灭——所以叫"与非"。</text>
+        </g>
+        <g font-family="-apple-system,PingFang SC,sans-serif">
+          <rect x="430" y="26" width="300" height="130" rx="10" fill="#fbf9f3" stroke="#ddd6c8"/>
+          <text x="580" y="48" text-anchor="middle" font-size="13" fill="#7a756b">四种拧法，三种亮</text>
+          <g stroke="#ddd6c8"><line x1="440" y1="62" x2="720" y2="62"/></g>
+          <g font-size="12.5" fill="#4a463e">
+            <text x="470" y="80">关</text><text x="520" y="80">关</text><circle cx="590" cy="76" r="8" fill="#c9a227"/>
+            <text x="470" y="106">关</text><text x="520" y="106">开</text><circle cx="590" cy="102" r="8" fill="#c9a227"/>
+            <text x="470" y="132">开</text><text x="520" y="132">关</text><circle cx="590" cy="128" r="8" fill="#c9a227"/>
+          </g>
+          <rect x="452" y="142" width="250" height="1.6" fill="#ddd6c8"/>
+          <g font-size="12.5" fill="#4a463e"><text x="470" y="164">开</text><text x="520" y="164">开</text></g>
+          <g stroke="#bc5b3c" stroke-width="2"><line x1="583" y1="158" x2="597" y2="172"/><line x1="597" y1="158" x2="583" y2="172"/></g>
+        </g>
+      </svg>
+      <figcaption><b>它只会算，不会记事。</b>50 块这样的积木连起来，就是这只蝇的全部大脑——没有第 51 块，也没有藏在里面的"AI 魔法"。</figcaption>
+    </figure>
+    <div class="sit">
+      <div class="sit-row"><span>有吃的吗</span><i>没有</i><i>一点</i><i class="on">不少</i><i>很多</i></div>
+      <div class="sit-row"><span>危险吗</span><i>安全</i><i class="on">有点</i><i>很危险</i><i>快跑</i></div>
+      <div class="sit-row"><span>亮不亮</span><i>黑</i><i class="on">有点光</i><i>亮</i><i>很亮</i></div>
+      <div class="sit-row"><span>新不新鲜</span><i class="on">见过</i><i>有点新</i><i>很新</i><i>从没见过</i></div>
+      <div class="sit-row"><span>饿不饿</span><i>不饿</i><i>有点</i><i>饿</i><i class="on">很饿</i></div>
+      <div class="sit-row"><span>上一秒</span><i class="on">在吃饭</i><i>在躲</i><i>在看</i><i>在休息</i></div>
+      <div class="sit-io">
+        <span class="word">这就是第 790 道题</span>
+        <span class="rule">规则：很饿 + 有吃的</span>
+        <span class="out">去吃饭 →</span>
+      </div>
+    </div>
+    <p class="note" style="border-left-color:var(--clay)"><b>一道题 = 六个感觉各选一档。</b>全部选完，就是 4,096 道题里的第 790 道。下面 FIG 2 的地图上，我们把它圈了出来。</p>
+    <figure>
+      <span class="figlabel">FIG 1 · 从"影子变大"到"跳"</span>
+      <svg viewBox="0 0 760 190" role="img" aria-label="从影子到 Giant Fiber 放电">
+        <g fill="none" stroke="#232323" stroke-width="2.2"><circle cx="86" cy="92" r="28"/></g>
+        <path d="M86 44 a48 48 0 0 1 48 48" fill="none" stroke="#bc5b3c" stroke-width="2.4"/>
+        <path d="M86 28 a64 64 0 0 1 64 64" fill="none" stroke="#bc5b3c" stroke-width="1.4" opacity=".5"/>
+        <text x="86" y="97" text-anchor="middle" font-size="12.5" fill="#232323" font-family="-apple-system,PingFang SC,sans-serif">影子变大</text>
+        <line x1="146" y1="58" x2="278" y2="66" stroke="#7a756b" stroke-width="1.6"/>
+        <line x1="146" y1="126" x2="278" y2="118" stroke="#7a756b" stroke-width="1.6"/>
+        <rect x="284" y="42" width="196" height="44" rx="22" fill="none" stroke="#232323" stroke-width="1.8"/>
+        <rect x="284" y="102" width="196" height="44" rx="22" fill="none" stroke="#232323" stroke-width="1.8"/>
+        <text x="382" y="62" text-anchor="middle" font-size="13" fill="#232323" font-family="-apple-system,PingFang SC,sans-serif">神经一 · 量速度</text>
+        <text x="382" y="122" text-anchor="middle" font-size="13" fill="#232323" font-family="-apple-system,PingFang SC,sans-serif">神经二 · 拉警报</text>
+        <line x1="484" y1="92" x2="562" y2="92" stroke="#7a756b" stroke-width="2"/>
+        <path d="M571 92 l-10 -6 v12 z" fill="#7a756b"/>
+        <rect x="576" y="64" width="150" height="56" rx="12" fill="#bc5b3c"/>
+        <text x="651" y="88" text-anchor="middle" font-size="14.5" fill="#fff" font-family="-apple-system,PingFang SC,sans-serif">发出"跳"</text>
+        <text x="651" y="107" text-anchor="middle" font-size="11.5" fill="#f4efe6" opacity=".85" font-family="-apple-system,PingFang SC,sans-serif">0.1 秒内</text>
+      </svg>
+      <figcaption><b>真果蝇主要靠两条神经决定"跳不跳"。</b>我们的电子版把这条线压成了 50 个小积木：六个感觉 → 一套"如果……就……" → 一个动作。6 个感觉 × 每个 4 档 = 4,096 道题。</figcaption>
+    </figure>
+    <div class="tbl">
+      <table>
+        <thead><tr><th class="n">#</th><th>规则</th><th>输出</th></tr></thead>
+        <tbody>
+          <tr><td class="n">1</td><td>很危险</td><td>躲开，并发出"跳"</td></tr>
+          <tr><td class="n">2</td><td>有点危险，而且刚躲过 / 不太饿</td><td>躲开</td></tr>
+          <tr><td class="n">3</td><td>很饿，而且有吃的</td><td>去吃</td></tr>
+          <tr><td class="n">4</td><td>吃的很多</td><td>去吃</td></tr>
+          <tr><td class="n">5</td><td>正在吃，而且还有吃的</td><td>继续吃</td></tr>
+          <tr><td class="n">6</td><td>有没见过的东西</td><td>去看看</td></tr>
+          <tr><td class="n">7</td><td>刚在休息，而且不太饿</td><td>继续休息</td></tr>
+          <tr><td class="n">其他</td><td>都不符合</td><td>亮就看看，黑就休息</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>三条要老实说的话：</b>① 真果蝇那两条视觉神经，我们合成了一条；② "该跳就跳"是 100%，但那是因为我们和参考答案读的是同一批论文，<b>不是</b>我们复刻了真大脑；③ 参考答案里的数字是我们自己定的，不是量出来的。</p>
+  </section>
+
+  <!-- 06 -->
+  <section id="n6">
+    <span class="num">06 · 再看考卷</span>
+    <h2 class="claim">4,096 道题，<em>一道都没漏。</em></h2>
+    <p class="say">下面这张图，每一个小格子就是一道题。<b>颜色表示它决定做什么</b>：红的是躲、金的是吃、青的是看看……你看颜色是一大片一大片的，说明它不是把 4,096 道题死记下来，而是按几条规则分类。</p>
+    <figure>
+      <span class="figlabel">FIG 2 · 4,096 个处境，按决定规则着色</span>
+      <canvas id="map-rules" width="64" height="64" aria-label="4,096 个处境按规则着色的 64x64 地图"></canvas>
+      <div class="legend">
+        <span><i style="background:#b4453f"></i>逃逸 2,048 · 0%</span>
+        <span><i style="background:#c9762f"></i>危险 640 · 0%</span>
+        <span><i style="background:#d9a441"></i>进食 336 · 43%</span>
+        <span><i style="background:#a8a04a"></i>诱饵 240 · 47%</span>
+        <span><i style="background:#5c7a4f"></i>追逐 64 · 75%</span>
+        <span><i style="background:#3f6f5f"></i>好奇 384 · 47%</span>
+        <span><i style="background:#3d5a7a"></i>休息 96 · 33%</span>
+        <span><i style="background:#8a8378"></i>默认 288 · 30%</span>
+      </div>
+      <figcaption><b>整张图是算出来的，不是画的。</b>每一格 = 一道题；颜色 = 哪条规则决定它。旁边每个颜色后面的百分比，是"和参考答案不一样"的比例。</figcaption>
+    </figure>
+    <p class="say">那"参考答案"是谁写的？<b>是我们写的一份草稿。</b>它也有版本号（第 0 版）、状态（草稿）和防伪码。我们把它公开，就是让所有人看到：我们到底拿什么在比。</p>
+    <p class="note">为什么不随便抽 100 道题？因为<b>全部跑完，就没法"挑好看的题"</b>。50 个积木也小到一个人能从第一块看到最后一块。别人做 661 个零件——零件多不等于像，只等于没人能从头看到尾。</p>
+    <figure>
+      <span class="figlabel">FIG E · 抽考 vs 全考</span>
+      <svg viewBox="0 0 760 160" role="img" aria-label="抽考与全考对比">
+        <g font-size="13" fill="#232323" font-family="-apple-system,PingFang SC,sans-serif">
+          <text x="20" y="26">只抽 100 道</text>
+          <text x="400" y="26">4,096 道全考</text>
+        </g>
+        <g fill="#dcd3c0">
+          <rect x="20" y="40" width="340" height="72" rx="6"/>
+        </g>
+        <g fill="#bc5b3c">
+          <rect x="32" y="50" width="10" height="10" rx="1"/><rect x="74" y="50" width="10" height="10" rx="1"/><rect x="158" y="50" width="10" height="10" rx="1"/><rect x="240" y="50" width="10" height="10" rx="1"/>
+          <rect x="116" y="68" width="10" height="10" rx="1"/><rect x="302" y="68" width="10" height="10" rx="1"/>
+          <rect x="53" y="86" width="10" height="10" rx="1"/><rect x="199" y="86" width="10" height="10" rx="1"/><rect x="335" y="86" width="10" height="10" rx="1"/>
+          <rect x="95" y="98" width="10" height="10" rx="1"/>
+        </g>
+        <text x="190" y="132" text-anchor="middle" font-size="12" fill="#bc5b3c" font-family="-apple-system,PingFang SC,sans-serif">只有零星几格被问到，可以"挑好看的"</text>
+        <g fill="#3f6f5f">
+          <rect x="400" y="40" width="340" height="72" rx="6"/>
+        </g>
+        <text x="570" y="132" text-anchor="middle" font-size="12" fill="#3f6f5f" font-family="-apple-system,PingFang SC,sans-serif">每一格都问到，想作弊也没有缝</text>
+      </svg>
+      <figcaption><b>全考的好处很朴素：没有地方藏。</b>抽考可以专挑自己会的答；全考 4,096 格，一格都跑不掉——这也是为什么 85.30 这个数字没法"美化"。</figcaption>
+    </figure>
+  </section>
+
+  <!-- 07 -->
+  <section id="n7">
+    <span class="num">07 · 再看成绩单</span>
+    <h2 class="claim">85.30 分，<em>是这么算出来的。</em></h2>
+    <div class="report">
+      <div class="rt">一份真实的成绩单 · 第 1 号</div>
+      <div class="grade">85.30<small> / 100</small></div>
+      <p class="what">4,096 道题里，有 <b>3,494 道</b>和参考答案做得一样。3,494 ÷ 4,096 = 0.8530，也就是 85.30 分。这<b>不是"及格证"</b>，只是"和我们的草稿答案有多像"。</p>
+      <div class="row">
+        <div><b>3,494</b><span>做得一样</span></div>
+        <div><b>602</b><span>做得不一样</span></div>
+        <div><b>2,048</b><span>该躲的全躲了</span></div>
+        <div><b>0</b><span>次乱躲</span></div>
+      </div>
+      <div class="foot">防伪码 0c24da2421f0a33a0942d4d7846d5fa0f7fd1f12c33c9ee59bce5c1b204422d9</div>
+    </div>
+    <figure>
+      <span class="figlabel">FIG 3 · 哪些题做错了</span>
+      <div class="maps">
+        <div>
+          <canvas id="map-agree" width="64" height="64" aria-label="4,096 个处境的答题地图"></canvas>
+          <div class="legend"><span><i style="background:#3f6f5f"></i>做得一样 3,494</span><span><i style="background:#bc5b3c"></i>不一样 602</span></div>
+        </div>
+        <div>
+          <div class="bars" style="margin-top:0">
+            <div class="bar zero"><span class="name">逃逸</span><span class="track"><i class="fill" style="width:2%;display:block"></i></span><span class="v">0 / 2,048</span></div>
+            <div class="bar zero"><span class="name">危险</span><span class="track"><i class="fill" style="width:2%;display:block"></i></span><span class="v">0 / 640</span></div>
+            <div class="bar"><span class="name">进食</span><span class="track"><i class="fill" style="width:43%;display:block"></i></span><span class="v">144 / 336</span></div>
+            <div class="bar"><span class="name">诱饵</span><span class="track"><i class="fill" style="width:47%;display:block"></i></span><span class="v">112 / 240</span></div>
+            <div class="bar"><span class="name">追逐</span><span class="track"><i class="fill" style="width:75%;display:block"></i></span><span class="v">48 / 64</span></div>
+            <div class="bar"><span class="name">好奇</span><span class="track"><i class="fill" style="width:47%;display:block"></i></span><span class="v">180 / 384</span></div>
+            <div class="bar"><span class="name">休息</span><span class="track"><i class="fill" style="width:33%;display:block"></i></span><span class="v">32 / 96</span></div>
+            <div class="bar"><span class="name">默认</span><span class="track"><i class="fill" style="width:30%;display:block"></i></span><span class="v">86 / 288</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption><b>左边：绿色 = 做得一样，红色 = 不一样。</b>右边：每种规则下错了几道。红色不是乱撒的，而是集中在几条规则的边界上——这说明它是按规则出错，不是随机乱猜。</figcaption>
+    </figure>
+    <p class="note"><b>最得意的数字是"2,048 道危险题全躲对，0 次乱躲"。</b>但我们不把它算成"复刻了真大脑"——因为我们和参考答案读的是同一批论文，这项本来就该对。它只证明一件事：<b>这只蝇在危险面前不会犯傻。</b></p>
+  </section>
+
+  <!-- 08 -->
+  <section id="n8">
+    <span class="num">08 · 那 602 道怎么办</span>
+    <h2 class="claim">602 道"不一样"，<em>其实是 602 个好玩的问题。</em></h2>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>哪一类题</th><th class="n">不一样的比例</th><th>说白了</th></tr></thead>
+        <tbody>
+          <tr><td>吃饱了还追不追</td><td class="n warn">75%</td><td>两种做法在真果蝇身上都见过，没有标准答案。</td></tr>
+          <tr><td>黑屋子里有新鲜味道</td><td class="n">47%</td><td>我们的蝇敢去；参考答案说"先有光再说"。</td></tr>
+          <tr><td>好奇和饿，哪个更要紧</td><td class="n">47%</td><td>这是个可以争论的实验设计问题。</td></tr>
+          <tr><td>饿了 + 有吃的，怎么算</td><td class="n">43%</td><td>两套写法不一样，算出来的结果就不一样。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figure>
+      <span class="figlabel">FIG F · 一道"分歧题"长什么样</span>
+      <svg viewBox="0 0 760 230" role="img" aria-label="一道分歧题的两边答案">
+        <rect x="16" y="16" width="728" height="198" rx="12" fill="#fbf9f3" stroke="#ddd6c8"/>
+        <text x="380" y="44" text-anchor="middle" font-size="12.5" fill="#7a756b" font-family="-apple-system,PingFang SC,sans-serif">同一道题：黑屋子 + 有新鲜味道 + 不太饿</text>
+        <g font-family="-apple-system,PingFang SC,sans-serif" font-size="13" fill="#4a463e">
+          <rect x="60" y="60" width="300" height="64" rx="10" fill="#f2eee4" stroke="#ddd6c8"/>
+          <text x="76" y="86">参考答案（草稿）：</text>
+          <text x="76" y="108" fill="#7a756b">"先有光再说" → 继续休息</text>
+          <rect x="400" y="60" width="300" height="64" rx="10" fill="#fbf1ea" stroke="#bc5b3c"/>
+          <text x="416" y="86" fill="#bc5b3c">电子蝇（50 块积木）：</text>
+          <text x="416" y="108" fill="#7a756b">"有新鲜味道就敢去" → 去看看</text>
+        </g>
+        <g stroke="#bc5b3c" stroke-width="2" fill="none"><path d="M368 92 l14 0"/><path d="M382 92 l-7 -4 v8 z" fill="#bc5b3c"/></g>
+        <text x="380" y="158" text-anchor="middle" font-size="13.5" fill="#232323" font-family="-apple-system,PingFang SC,sans-serif">两个答案都没错——真果蝇身上两种都见过。</text>
+        <text x="380" y="186" text-anchor="middle" font-size="12.5" fill="#7a756b" font-family="-apple-system,PingFang SC,sans-serif">所以它不是"答错了"，是"问住我们了"。这样的题有 602 道。</text>
+      </svg>
+      <figcaption><b>例子是编出来的，道理是真的。</b>成绩单里像这样"两边都讲得通"的题有 602 道——它们不是错题本，是留给果蝇专家的 602 个研究问题。</figcaption>
+    </figure>
+    <p class="say">所以这 602 道<b>不是"错题"，是 602 个可以研究的问题</b>。成绩单里还留了 16 道具体的题，每一道都能单独重算。哪天有研究果蝇的专家愿意来改答案，这 602 道就是起点。</p>
+  </section>
+
+  <!-- 09 -->
+  <section id="n9">
+    <span class="num">09 · 你自己也能验</span>
+    <h2 class="claim">你也可以自己验。<em>算不出 85.30，就是我们作弊。</em></h2>
+    <p class="say">不用相信我们。打开电脑，把下面几行复制进去，它会重新判 4,096 道题，再写出一张新的成绩单。</p>
+    <pre><span class="c"># 第一步：安装需要的东西</span>
+npm install
+
+<span class="c"># 第二步：重新判 4,096 道题，写一张新成绩单</span>
+npx tsx scripts/calibrate.ts
+
+<span class="c"># 第三步：自动检查，分数必须还是 85.30</span>
+npm test
+
+<span class="c"># 第四步（可选）：把整个项目从头检查一遍</span>
+npm run check</pre>
+    <p class="say">你只要看两个地方：分数还是不是 <code>0.8530</code>，防伪码还是不是 <code>0c24da24…422d9</code>。<b>对不上，就是我们错。</b></p>
+    <p class="note"><b>给完全没写过代码的朋友：</b><code>npm</code> 就像手机上的"应用商店"，<code>npx tsx</code> 是"把某个程序跑一次"。上面四行做的事，说白了就是：装工具 → 重新判卷 → 对答案 → 全项目复查。你不用看懂每个词，只要看到最后两行一样就行。</p>
+    <figure>
+      <span class="figlabel">FIG G · 为什么说"你自己也能验"</span>
+      <svg viewBox="0 0 760 160" role="img" aria-label="两台电脑算出同样的分数和防伪码">
+        <g stroke="#232323" stroke-width="1.8" fill="#fbf9f3">
+          <rect x="40" y="30" width="280" height="86" rx="10"/>
+          <rect x="440" y="30" width="280" height="86" rx="10"/>
+        </g>
+        <g font-family="Georgia,serif" fill="#bc5b3c" font-size="24" text-anchor="middle">
+          <text x="180" y="66">85.30</text>
+          <text x="580" y="66">85.30</text>
+        </g>
+        <g font-family="-apple-system,PingFang SC,sans-serif" font-size="11.5" fill="#7a756b" text-anchor="middle">
+          <text x="180" y="90">防伪码 0c24da24…422d9</text>
+          <text x="580" y="90">防伪码 0c24da24…422d9</text>
+          <text x="180" y="140">你的电脑</text>
+          <text x="580" y="140">我们的电脑</text>
+        </g>
+        <g stroke="#bc5b3c" stroke-width="2" fill="none">
+          <line x1="330" y1="55" x2="430" y2="55"/><path d="M430 55 l-8 -4 v8 z" fill="#bc5b3c" stroke="none"/>
+          <line x1="430" y1="90" x2="330" y2="90"/><path d="M330 90 l8 -4 v8 z" fill="#bc5b3c" stroke="none"/>
+        </g>
+        <text x="380" y="80" text-anchor="middle" font-size="12" fill="#7a756b" font-family="-apple-system,PingFang SC,sans-serif">同样的题 · 同样的答案</text>
+      </svg>
+      <figcaption><b>判卷的不是我们，是规则。</b>题目、答案、判卷程序全部公开；任何人跑一遍，要么得到同样的 85.30，要么就是我们错了——没有中间选项。</figcaption>
+    </figure>
+  </section>
+
+  <!-- 10 -->
+  <section id="n10">
+    <span class="num">10 · 另外三只蝇</span>
+    <h2 class="claim">另外三只电子果蝇，<em>分数都是自己打的。</em></h2>
+    <div class="quad">
+      <div class="quad-body">
+        <div class="quad-y"><span>有公开卷</span><span>无公开卷</span></div>
+        <div class="quad-plot">
+          <span class="dot ours" style="left:26%;top:24%"><b>One Fly</b>50 个零件</span>
+          <span class="dot" style="left:18%;top:80%"><b>FFF</b>24</span>
+          <span class="dot" style="left:52%;top:84%"><b>LoomEscape</b>173</span>
+          <span class="dot" style="left:82%;top:76%"><b>NANDFLY</b>661</span>
+        </div>
+      </div>
+      <div class="quad-x">← 零件更少　　　　零件更多 →</div>
+    </div>
+    <p class="note" style="border-left-color:var(--clay)"><b>横着看是"零件多少"，竖着看是"有没有公开考卷"。</b>左上角只有我们：零件最少，但只有我们有一张谁都能重算的卷子。这是位置，不是形容词。</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>项目</th><th>零件</th><th>它说自己多厉害</th><th>别人怎么评</th><th>问题在哪</th></tr></thead>
+        <tbody>
+          <tr><td>LoomEscape</td><td class="n">173</td><td>自己测了 838 万次</td><td>没人复核</td><td>分数自己说的</td></tr>
+          <tr><td>NANDFLY</td><td class="n">661</td><td>说自己 98.9% 像</td><td>"没有评价"</td><td>太大，没人看得完</td></tr>
+          <tr><td>Fruit Fly World</td><td class="n">24</td><td>最好玩的生存游戏</td><td>圈里最热闹</td><td>大脑没上链</td></tr>
+          <tr class="new"><td>One Fly</td><td class="n">50</td><td>4,096 道题全测完</td><td>考官位置公开</td><td>答案是我们自己写的草稿</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>我们还去翻了一家的网页代码（2026-10-19）。</b>它那个"规则演示"其实早就写死了：点哪个按钮、显示"通过"还是"拒绝"，是提前定好的；网页自己都写着"预设结果 · 未提交真实交易"。官网上也找不到电路图、合约地址、GitHub。它的想法不坏，只是<b>现在没法被检查</b>。</p>
+    <p class="say">如果它哪天真的把电路放上链，我们第一件事不是吵架，是<b>给它出这套卷子</b>——那会是这个圈子里第一张"第三方成绩单"。</p>
+  </section>
+
+  <!-- 11 -->
+  <section id="n11">
+    <span class="num">11 · 我们不做的事</span>
+    <h2 class="claim">我们不做什么。<em>这一节，决定你信不信前面十节。</em></h2>
+    <ul class="rule">
+      <li><b>不发币、不承诺赚钱。</b>生态里的 BEM 是别人的币，价格一个月里从 18 涨到 92 又掉到 40；我们只用几块钱体验，不重仓，也不给投资建议。</li>
+      <li><b>不说它"活着"。</b>它是一堆会算的开关，不是生物，不是 AI。</li>
+      <li><b>不说 85.30 是"及格证"。</b>答案是我们自己写的草稿；成绩单上就印着"这是校准，不是认证"。</li>
+      <li><b>不把"以后要做"说成"已经做完"。</b>没做的就写没做。</li>
+      <li><b>不假装有需求。</b>TapeOut 的买家要的是挖矿，没有一个人等着"像不像果蝇"的体检报告。我们不说那是市场空白——<b>第一位用户是我们自己，考试是为了让这个项目可以被推翻。</b></li>
+      <li><b>不发一个你没法自己验的分数。</b>这是最低要求，也是我们唯一真正的护城河。</li>
+    </ul>
+  </section>
+
+  <!-- vision -->
+  <section id="vision">
+    <span class="num">11.5 · 我们的愿景</span>
+    <h2 class="claim">今天是一只果蝇。<br><em>明天是一层"行为的考场"。</em></h2>
+    <div class="tbl">
+      <table>
+        <tbody>
+          <tr><td style="width:22%"><b>使命<br><span style="color:var(--clay)">现在在做的</span></b></td><td>给"像不像"立一把尺子：出一张 4,096 题的卷，写一份参考答案，发一张<b>任何人都能重算</b>的成绩单。第一把尺子已经造出来了（85.30）。</td></tr>
+          <tr><td><b>愿景<br><span style="color:var(--clay)">想要的世界</span></b></td><td>每只说自己"像"的电路——果蝇、蜜蜂、将来的机器人小脑——都能来排队考试，成绩单<b>互相可比</b>。"像"从一个形容词，变成一个数字。</td></tr>
+          <tr><td><b>赌注<br><span style="color:var(--clay)">相信但未被证明的</span></b></td><td>会动的机器会越来越多，"能被检查的行为"迟早比"更省的门"更值钱。今天没人出这张卷，不是因为它难，是还没人非它不可。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="say">先把话说小：今天做完的只有一只果蝇、一份草稿答案、50 块积木。但把它背后的方法抽出来，会长成一个比"果蝇"大得多的东西——<b>一层给"行为"打分的公共设施</b>。</p>
+    <p class="say">打个比方。TapeOut 把"造电路"这件事标准化了：积木、存证、挖矿、市场。我们想在它上面标准化另一件事：<b>"这个电路的行为，到底对不对、有多对"</b>。它像一座<b>考试院</b>，不是一所学校——我们不自己养所有动物，我们只负责出卷、判卷、发一张谁都能复算的成绩单。</p>
+    <div class="stack">
+      <div class="lay new"><b>我们想去的：行为层</b><span>出卷 · 判卷 · 第三方成绩单 · 可比较的标本</span></div>
+      <div class="iface">↑ 考行为　　↓ 借用它的地基</div>
+      <div class="lay base"><b>TapeOut 已经在的：电路层</b><span>积木 · 电路图 · 存证 · 挖矿 · 市场（5,519 件在售）</span></div>
+      <div class="iface">↑ 再往下</div>
+      <div class="lay base"><b>更底层：链</b><span>谁都改不了、谁都能读的账本</span></div>
+    </div>
+    <p class="say"><b>为什么这层可能值钱——注意，是赌注，不是承诺。</b>世界也许正在往"会动的机器"上走：机器人、无人车、游戏角色、AI 代理。如果有一天"会动的东西"真的要互相买卖，那最缺的大概不是算力，是<b>能被检查的行为</b>。今天没人出这张卷，不是因为它难，是因为还没人非它不可。我们先把尺子做便宜、做公开——赌对了，尺子就是基础设施；赌错了，一把尺子也亏不到哪去。</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th style="width:24%">可以长出去的方向</th><th style="width:52%">怎么长（用的是同一套办法）</th><th style="width:24%">现在到哪了</th></tr></thead>
+        <tbody>
+          <tr><td>更多动物</td><td>蜜蜂、蚂蚁、蟋蟀……每个只要交一张电路图 + 一份参考答案</td><td><span class="pill" style="background:#fbf1ea;color:var(--clay)">计划</span></td></tr>
+          <tr><td>机器人小脑</td><td>避障、觅食、跟随，换成机器人的"感觉"，还是 4,096 道题的模板</td><td><span class="pill" style="background:#fbf1ea;color:var(--clay)">计划</span></td></tr>
+          <tr><td>第三方成绩单</td><td>别人做的电路也能来排队考试，我们只出卷、不站队——<b>但前提是有人愿意来</b></td><td><span class="pill" style="background:#fbf1ea;color:var(--clay)">赌注</span></td></tr>
+          <tr><td>可比较的标本库</td><td>每份成绩单都带日期、带防伪章，攒成一张参照表——<b>先攒自己的</b></td><td><span class="pill" style="background:#fbf1ea;color:var(--clay)">第 1 件还没上链</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="say">这四件事今天<b>一件都没做完</b>。它们的共同点是：不需要重写系统，只需要<b>再写一份参考答案</b>。这也是我们说"扩展性强"的真正意思——难的不是代码，是那份答案背后的科学判断；所以它慢，但也正因为慢，别人很难一夜之间抄走。</p>
+    <p class="note"><b>一句话的远方：</b>让"它像不像真的"从一句宣传语，变成一个<b>任何人打开电脑都能重算的数字</b>。今天这个数字是 85.30，属于一只果蝇；以后它应该属于每一个说自己"像"的电路。</p>
+  </section>
+
+  <!-- 12 -->
+  <section id="nft">
+    <span class="num">12 · 我们发什么：NFT 与 token</span>
+    <h2 class="claim">发 NFT（标本），<em>不发币。</em></h2>
+    <p class="say">先说结论：<b>我们铸 NFT，不发行新代币</b>——结算直接用生态里已有的 BEM，不另起炉灶。机制上参考了 stonkrobotics.xyz 的玩法（4,444 台人形机器人、0–100 分上链、答题最高分免费铸），它几乎是为"考试 + 收藏"量身定做的模板——<b>但有一个地方我们比它硬，后面说。</b></p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th style="width:26%">TapeOut 生态里已有的</th><th style="width:36%">它是什么</th><th style="width:38%">我们对应发什么</th></tr></thead>
+        <tbody>
+          <tr><td>处理器（三种"镇子"）</td><td>流片和挖矿的地方，分 Behemoth / TapeOut / Genesis</td><td><b>租用，不自己造</b>——考场是人家的</td></tr>
+          <tr><td>电路（在售 5,519 件）</td><td>一份上链的网表，可以买卖</td><td><b>果蝇 = 一份 50 NAND 网表</b>，流片后铸成「标本 NFT」</td></tr>
+          <tr><td>容器</td><td>给电路一个账户</td><td>给每只果蝇一个<b>身体 + 性格日记</b></td></tr>
+          <tr><td>晶体管（NAND / LATCH）</td><td>消耗品，按颗买、流片时烧掉</td><td>造果蝇的<b>原料</b>——50 颗 NAND 就是它的全部家当</td></tr>
+          <tr><td>$BEM</td><td>生态的挖矿奖励代币</td><td><b>我们的结算层</b>（判卷费、市场计价都用它，不新发币）</td></tr>
+          <tr><td>空投</td><td>生态活动</td><td>参与，不承诺</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="say"><b>最关键的一个机制，直接借 STONKROBOTICS 的"best plan"：</b>它每 20 分钟开一个窗口，你把考题粘给自己在用的 AI，写出方案交回去，<b>窗口截止时分数最高的那个人免费拿一台机器人</b>——不是先到先得，是考得最好才拿。把它换成我们的东西：</p>
+    <figure>
+      <span class="figlabel">FIG J · 免费铸造循环：考得最好，白拿一只</span>
+      <svg viewBox="0 0 760 190" role="img" aria-label="答题、打分、免费铸造的循环">
+        <g font-family="-apple-system,PingFang SC,sans-serif" font-size="12.5">
+          <rect x="14" y="22" width="160" height="64" rx="10" fill="#fbf9f3" stroke="#ddd6c8"/>
+          <rect x="212" y="22" width="160" height="64" rx="10" fill="#fbf9f3" stroke="#ddd6c8"/>
+          <rect x="410" y="22" width="160" height="64" rx="10" fill="#fbf9f3" stroke="#ddd6c8"/>
+          <rect x="608" y="22" width="138" height="64" rx="10" fill="#3f6f5f"/>
+          <text x="94" y="48" text-anchor="middle" fill="#232323" font-weight="bold">窗口开启</text>
+          <text x="94" y="68" text-anchor="middle" fill="#7a756b" font-size="11">一道行为考题</text>
+          <text x="292" y="48" text-anchor="middle" fill="#232323" font-weight="bold">你去作答</text>
+          <text x="292" y="68" text-anchor="middle" fill="#7a756b" font-size="11">调你的电路或 AI</text>
+          <text x="490" y="48" text-anchor="middle" fill="#232323" font-weight="bold">判卷机打分</text>
+          <text x="490" y="68" text-anchor="middle" fill="#7a756b" font-size="11">0–100，公开可复算</text>
+          <text x="677" y="48" text-anchor="middle" fill="#fdfbf6" font-weight="bold">最高分免费铸</text>
+          <text x="677" y="68" text-anchor="middle" fill="#d8e4dc" font-size="11">标本 NFT 上链</text>
+          <path d="M 677 90 L 677 128 L 94 128 L 94 92" fill="none" stroke="#bc5b3c" stroke-width="2" stroke-dasharray="5 4"/>
+          <path d="M 89 96 L 94 86 L 99 96" fill="none" stroke="#bc5b3c" stroke-width="2"/>
+          <text x="385" y="146" text-anchor="middle" fill="#bc5b3c" font-size="11.5">下一道题，下一只果蝇——永远循环</text>
+          <text x="385" y="172" text-anchor="middle" fill="#7a756b" font-size="11.5">不想等？直接买一只已考过的（带成绩单），价格市场定，我们不定价</text>
+        </g>
+      </svg>
+      <figcaption><b>免费 mint = 答题拿。</b>考得好才白拿，先到没用——这正好是我们 4,096 道题天生就会干的事。</figcaption>
+    </figure>
+    <div class="tbl">
+      <table>
+        <thead><tr><th style="width:30%">STONKROBOTICS 的机制</th><th style="width:36%">它怎么干</th><th style="width:34%">我们怎么对应</th></tr></thead>
+        <tbody>
+          <tr><td>免费 mint</td><td>每窗口答题，最高分白拿</td><td><b>一模一样</b>：考 4,096 题，分高免费铸</td></tr>
+          <tr><td>付费 mint</td><td>统一 5 USDC，先到先得</td><td>直接买已考过的果蝇，<b>价格市场定</b></td></tr>
+          <tr><td>分数上链</td><td>0–100 分永久记录</td><td>85.30 + 防伪码，<b>且可复算</b></td></tr>
+          <tr><td>ERC-6551 绑定钱包</td><td>每个 NFT 自带一个账户</td><td>对应 TapeOut 的<b>「容器」</b>：身体 + 日记</td></tr>
+          <tr><td>稀有度</td><td>开盲盒抽 tier</td><td><b>分数档 + 行为特征</b>——不是随机的，是考出来的</td></tr>
+          <tr><td>Fleet Finance（借贷/质押/分红）</td><td>NFT 当抵押品</td><td><b>不做。</b>NFT 是标本收藏品，不是证券</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="say"><b>我们比它硬的地方：</b>STONK 的分数来自"某个 AI 临时写的一份方案"——换个人换个模型重跑，分数就变了，没法复算。我们的分数来自<b>固定的 4,096 道题 + 公开的判卷程序</b>，任何人一条命令重跑，要么得到同一个 85.30，要么证明我们错了。<b>同样是"考分铸 NFT"，我们的是可审计的。</b></p>
+    <p class="note"><b>诚实边界：</b>不发币、不做金融层（不搞借贷、质押、分红那一套）、不承诺收益。标本 NFT 是"带成绩单的收藏品"，不是证券，不对应任何公司的股权。</p>
+  </section>
+
+  <!-- 13 -->
+  <section id="value">
+    <span class="num">13 · 我们对生态的贡献，以及怎么赚钱</span>
+    <h2 class="claim">补一层，不抢一层。<em>钱的事，一句谎都不说。</em></h2>
+    <p class="say"><b>对 TapeOut 生态的贡献，三条：</b></p>
+    <ul class="rule">
+      <li><b>补一层，不抢一层。</b>267 道题默认"功能已对，只比省不省"；我们用同一套地基证明：电路还能被问"<b>行为对不对、有多对</b>"。不建平行链，不加一层楼。</li>
+      <li><b>第一个非游戏化样板。</b>生态现有用途几乎全是挖矿和市场交易。电子蝇是第一个"TapeOut 电路做可验证行为"的完整案例——设计、流片、判卷、复算，一条龙跑通，后面的蜜蜂、蚂蚁、机器人小脑照抄模板。</li>
+      <li><b>公共判卷程序。</b>开源、一条命令复算。第三方也能来排队考试——将来生态里要有"行为成绩单"这回事，尺子已经造好了。</li>
+    </ul>
+    <p class="say"><b>怎么赚钱——诚实三层，越往后越不确定：</b></p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th style="width:22%">层</th><th style="width:78%">内容</th></tr></thead>
+        <tbody>
+          <tr><td><b>今天</b></td><td>收入 = <b>0</b>，不假装有。最近一笔真实可能的钱：<b>X Layer × TapeOut 黑客松</b>（10 万 USDT 奖金池：一等奖 1 名 20,000 / 二等奖 5 名各 10,000 / 三等奖 5 名各 6,000，官方自报）——评审规则明说"尚未产生收入也可参赛"</td></tr>
+          <tr><td><b>参赛可写的模式</b></td><td>① 出卷/判卷服务：别人的电路来考试，按次收链上费用；② 成绩单数据与 API：标本库对研究者和开发者收费；③ IP 游戏化：对战、性格日记、容器皮肤。<b>全部标"计划"，一个都没开始做</b></td></tr>
+          <tr><td><b>长期（赌注）</b></td><td>如果"可检查的行为"真成了被交易的东西，尺子就是基础设施。赌错了，亏的只是一把尺子</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="say"><b>附：按黑客松评审标准自评（给提交表用，也是给自己照镜子）：</b></p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th style="width:30%">评审标准</th><th style="width:70%">我们的诚实回答</th></tr></thead>
+        <tbody>
+          <tr><td>用户价值与商业潜力</td><td>坦白：今天用户是自己 + 科研圈。商业是赌注，上面写清了——这比编一个"目标市场十亿人"安全</td></tr>
+          <tr><td>创新性</td><td>生态里第一次"考行为"而不是"考省"——50 颗 NAND 做闭环行为，分数可复算</td></tr>
+          <tr><td>生态应用</td><td>购晶体管 → 流片 → 容器 → 存证，全链路用 TapeOut 能力，不重复造轮子</td></tr>
+          <tr><td>完成度与使用体验</td><td>判卷机已跑出 85.30；复算一条命令；"50 个电子小积木"起、按 5 段难度给果蝇上智力，全程无门槛叙述</td></tr>
+          <tr><td>Demo（≤3 分钟建议）</td><td>拍"买一颗最便宜的 NAND → 流片 → 判卷机出 85.30 → 观众当场重算"，全程录屏</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><b>一个硬约束：</b>黑客松要求使用 <b>X Layer 上</b>的 TapeOut 电路/合约/链上数据并提供地址——我们目前的操作在 BNB Chain 侧。要参赛，得先在 X Layer 落一块电路。截止 2026-12-07 23:59 UTC。</p>
+  </section>
+
+  <!-- 14 -->
+  <section id="n12">
+    <span class="num">14 · 接下来</span>
+    <h2 class="claim">先让一颗小积木上链，<em>再谈一整个学校。</em></h2>
+    <p class="say">先做最小的一步：花几块钱，买一颗最小的积木，把这只果蝇的大脑"存"到链上。这一步做完，才有资格谈后面。</p>
+    <div class="timeline">
+      <div class="tl now"><b>阶段 0 · 先买一颗积木<span class="st">正在做</span></b><span>买 1 颗最便宜的积木 → 做一个最简单的"与非门" → 开始挖矿 → 看第一笔 BEM。</span></div>
+      <div class="tl"><b>阶段 1 · 把大脑存上链<span class="st">下一步</span></b><span>50 个积木的大脑存上链，拿到第一件带日期的标本。</span></div>
+      <div class="tl"><b>阶段 2 · 考试变成游戏<span class="st">设计</span></b><span>对战、出题、每天的性格日记；玩家和 AI 都能进考场。</span></div>
+      <div class="tl"><b>阶段 3 · 更多动物来排队<span class="st">蓝图</span></b><span>蜜蜂、蚂蚁、蟋蟀；别人的电路也能来考 4,096 道题领成绩单。</span></div>
+      <div class="tl"><b>阶段 4 · 变成公共标准<span class="st">很远</span></b><span>让"行为考试"成为 TapeOut 生态里大家都认的一件事。</span></div>
+    </div>
+    <p class="say">这几步的意义不在赚钱，而在把"这颗积木真的能用在 TapeOut"从一句<b>商品介绍</b>变成一次<b>实测</b>。如果弹窗拒绝便宜料，把那段话抄回来——那是最有价值的一条记录。</p>
+    <div class="invite"><p><b>现在就能点开看：</b>线上考盘 <code>/calibrate</code> 和已部署的应用。宣传页还在本地，没有正式发布，等负责人点头。</p></div>
+    <div class="cta">
+      <a class="solid" href="https://onefly-nu.vercel.app/calibrate">打开线上考盘 /calibrate</a>
+      <a class="ghost" href="https://onefly-nu.vercel.app/">看已部署的应用</a>
+    </div>
+  </section>
+
+  <section id="glossary">
+    <span class="num">附 · 名词小抄</span>
+    <h2 class="claim">看不懂的词，<em>看这里。</em></h2>
+    <figure>
+      <span class="figlabel">FIG H · 五个词，一张图</span>
+      <svg viewBox="0 0 760 110" role="img" aria-label="名词小抄的图标速览">
+        <g stroke="#232323" stroke-width="1.8" fill="none" stroke-linecap="round">
+          <rect x="30" y="24" width="46" height="22" rx="6"/><rect x="30" y="54" width="46" height="22" rx="6"/>
+          <line x1="76" y1="35" x2="110" y2="44"/><line x1="76" y1="65" x2="110" y2="52"/>
+          <circle cx="128" cy="48" r="16"/>
+          <rect x="210" y="28" width="56" height="40" rx="6"/><text x="238" y="55" text-anchor="middle" font-size="17" fill="#232323" stroke="none" font-family="Georgia,serif">1</text>
+          <path d="M330 70 h56 l-7 12 h-42 z"/><line x1="358" y1="70" x2="358" y2="36"/><rect x="344" y="20" width="28" height="16" rx="4"/>
+          <circle cx="492" cy="48" r="24"/><path d="M492 30 v-8 M492 74 v-8" opacity=".001"/><path d="M480 44 l12 -8 12 8" fill="none"/><path d="M481 48 l11 8 11 -8" fill="none"/>
+          <path d="M610 48 a26 26 0 1 1 -8 -19" fill="none"/><path d="M606 24 l6 -8 8 5" fill="none"/>
+          <path d="M600 52 l9 -9" />
+        </g>
+        <g font-size="12" fill="#7a756b" text-anchor="middle" font-family="-apple-system,PingFang SC,sans-serif">
+          <text x="84" y="96">NAND：只会算</text>
+          <text x="238" y="96">LATCH：会记事</text>
+          <text x="386" y="96">流片：烧成作品</text>
+          <text x="492" y="96">防伪码：改一字全变</text>
+          <text x="620" y="96">复算：再算一遍</text>
+        </g>
+      </svg>
+      <figcaption><b>后面的小抄更细。</b>看不懂哪个词，先在这里找到它长什么样。</figcaption>
+    </figure>
+    <div class="tbl">
+      <table>
+        <thead><tr><th style="width:26%">词</th><th>大白话</th></tr></thead>
+        <tbody>
+          <tr><td>NAND（与非门）</td><td>"两个开关都打开时，灯反而灭"的小零件。它只会算，不会记。</td></tr>
+          <tr><td>LATCH（锁存器）</td><td>会"记住"的零件。我们一个都没用，因为大脑只要会算。</td></tr>
+          <tr><td>流片</td><td>把电路图"烧"成一件谁也改不了的作品，存在链上。</td></tr>
+          <tr><td>考卷（4,096 题）</td><td>6 个感觉、每个 4 档，所有组合都问一遍。</td></tr>
+          <tr><td>参考答案</td><td>我们自己写的一份"标准做法"，上面标着"草稿"。</td></tr>
+          <tr><td>防伪码（哈希）</td><td>给文件盖的章。内容改一个字，章就完全变了。</td></tr>
+          <tr><td>复算</td><td>别人拿同样的题和答案再算一遍，必须得到同一个分数。</td></tr>
+          <tr><td>挖矿（PoD）</td><td>TapeOut 的发奖励办法：设计越省，分得越多。</td></tr>
+          <tr><td>BEM</td><td>TapeOut 生态里的代币 / 奖励，是别人的，不是我们的。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">还有哪个词没看懂？告诉我，我把它加进来——这份小抄本来就是给第一次接触的人写的。</p>
+  </section>
+
+  <footer>
+    <p><b>数字出处</b>：科学数字见 Ache et al. 2019（LC4/LPLC2 与 Giant Fiber）与 FlyWire 2024（13.9 万神经元）；生态数字为 TapeOut 官方页面自报或第三方行情转述（快照 2026-10-18/19）；自家数字全部可用 <code>npx tsx scripts/calibrate.ts</code> 复算。完整四档表见 <code>docs-export/07-key-numbers.md</code>。</p>
+    <p class="fin">我们没发明果蝇，也没发明电路。<br>我们只是把"像不像"变成了一个<em>可以判卷的问题</em>。</p>
+  </footer>
+
+</main>
+<script>
+(function () {
+  var COLORS = ["#b4453f","#c9762f","#d9a441","#a8a04a","#5c7a4f","#3f6f5f","#3d5a7a","#8a8378"];
+  var AGREE_B64 = "z//P/8//z//P/8//z//P/w//z//P/8//D//P/8//z//f/9//3//f/9//3//f/9//H//f/9//3/8f/9//3//f//D/8P/w//D/8P/w//D/8P8w//D/8P/w/zD/8P/w//D/8P/w//D/8P/w//D/8P/w/3D/8P/w//D/cP/w//D/8P/v/+//7//v/+//7//v/+//D//v/+//7/8P/+//7//v//////////////////////8f/////////x//////////3//f/9//3//f/9//3//f/x//3//f/9//H//f/9//3///////////////////////f/////////9//////////+//7//v/+//7//v/+//7/8P/+//7//v/w//7//v/+///////////////////////x//////////H//////////Q/9D/0P/Q/9D/0P/Q/9D/EP/Q/9D/0P8Q/9D/0P/Q//D/8P/w//D/8P/w//D/8P9w//D/8P/w/3D/8P/w//D/7//v/+//7//v/+//7//v/w//7//v/+//D//v/+//7///////////////////////H/////////8f/////////9D/0P/Q/9D/0P/Q/9D/0P8Q/9D/0P/Q/xD/0P/Q/9D/8P9w/3D/cP/w/3D/cP9w/3D/8P/w//D/cP/w//D/8P8=";
+
+  function bytes(b64) {
+    var s = atob(b64), a = new Uint8Array(s.length);
+    for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i);
+    return a;
+  }
+  function hex(c) {
+    return [parseInt(c.slice(1,3),16), parseInt(c.slice(3,5),16), parseInt(c.slice(5,7),16)];
+  }
+  function paint(id, fn) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var ctx = el.getContext("2d"), img = ctx.createImageData(64, 64);
+    for (var w = 0; w < 4096; w++) {
+      var rgb = fn(w);
+      img.data[w*4] = rgb[0]; img.data[w*4+1] = rgb[1]; img.data[w*4+2] = rgb[2]; img.data[w*4+3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+  var ab = bytes(AGREE_B64);
+  /* The rule map is computed here with the same seven rules as sim/rules.ts,
+     so the figure cannot drift from the document it illustrates. */
+  function ruleFor(w) {
+    var f = w & 3, t = (w >> 2) & 3, l = (w >> 4) & 3,
+        n = (w >> 6) & 3, h = (w >> 8) & 3, p = (w >> 10) & 3;
+    if (t >= 2) return 0;
+    if (t >= 1 && (p === 1 || h < 2)) return 1;
+    if (h >= 3 && f >= 1) return 2;
+    if (f >= 3) return 3;
+    if (p === 0 && f >= 2) return 4;
+    if (n >= 2) return 5;
+    if (p === 3 && h < 3) return 6;
+    return 7;
+  }
+  function ruleColor(w) { return hex(COLORS[ruleFor(w)]); }
+  paint("map-rules", ruleColor);
+  paint("map-hero", ruleColor);
+  /* Mark the situation card's word (790) on the section map. */
+  (function () {
+    var el = document.getElementById("map-rules");
+    if (!el) return;
+    var ctx = el.getContext("2d"), mx = 790 % 64, my = Math.floor(790 / 64);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(mx - 2, my - 2, 5, 5);
+    ctx.strokeStyle = "#232323";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(mx - 2.5, my - 2.5, 5, 5);
+  })();
+  paint("map-agree", function (w) {
+    var ok = (ab[w >> 3] >> (7 - (w & 7))) & 1;
+    return ok ? [63,111,95] : [188,91,60];
+  });
+})();
+</script>
+</body>
+</html>

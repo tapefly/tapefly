@@ -1,0 +1,16 @@
+{
+  "status": "not-taped-out",
+  "note": "Fill this in after the brain is taped out. Until then the site says plainly that it has not been.",
+  "chain": "bsc",
+  "chainId": 56,
+  "rpc": "https://bsc-dataseed.bnbchain.org",
+  "processor": null,
+  "circuitId": null,
+  "txHash": null,
+  "bytesSha256": "a763117011fe4c4be7106d9b0d2c78fe79b81c15ccc2a6531c9263b4f443d4dd",
+  "tapeflyProcessor": "0x6Ac12D578e29D340f178E18eB2C297C7915E011C",
+  "tapeflyTransistors": "0x09FD3719f7de0E6FB399279fCC890B205895b942",
+  "tapeflyProcessorTx": "0x13ac466f4ccecf0d19303bafa1549ace6536b99d554eec610e36689cb4da59a7",
+  "tapeflyProcessorCreated": "2026-10-24",
+  "tapeflyProcessorNote": "The TapeFly processor on BNB Chain, once created from /tapeout/processor. Players' tape-outs default to it."
+}

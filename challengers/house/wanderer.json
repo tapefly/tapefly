@@ -1,0 +1,7 @@
+{
+ "handle": "house",
+ "house": true,
+ "name": "Wanderer",
+ "note": "Eats when it smells food, wanders otherwise, ignores danger.",
+ "program": "p1.Ac3MDAAC"
+}

@@ -1,0 +1,7 @@
+{
+ "handle": "house",
+ "house": true,
+ "name": "Greedy",
+ "note": "Always heads for the nearest food. Fearless, and it shows.",
+ "program": "p1.AAA"
+}
