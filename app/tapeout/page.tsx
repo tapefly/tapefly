@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SiteNav, SiteFooter } from "@/app/components/ui/Shell";
 import HexView from "@/app/components/ui/HexView";
 import { BRAIN } from "@/sim/netlist";
@@ -41,6 +42,25 @@ export default function TapeOutPage() {
                "TapeOut is a protocol on BNB Chain where people build circuits out of NAND gates and put them on chain. A TapeFly brain is exactly such a circuit. Here is TapeOut in one minute, what it means for your fly, and a panel to tape one out yourself.")}
           </p>
         </header>
+
+        {live && (
+          <figure className="to-live-shot">
+            <Image
+              src="/tapefly-circuit1-onchain.png"
+              alt={t("TapeFly 官方大脑电路 #1 已在 BNB Chain 上流片", "TapeFly official brain circuit #1 is live on BNB Chain")}
+              width={1080}
+              height={1080}
+              priority
+              sizes="(max-width: 760px) 100vw, 760px"
+            />
+            <figcaption>
+              {t(
+                <>官方大脑电路 #1 · TapeFly 处理器 · 全部 4,096 个答案核对一致</>,
+                <>Official brain circuit #1 · TapeFly processor · all 4,096 answers verified</>
+              )}
+            </figcaption>
+          </figure>
+        )}
 
         <section className="to-explain" aria-label={t("一分钟看懂 TapeOut", "TapeOut in one minute")}>
           <div><b>{t("NAND 门就是代币", "NAND gates are tokens")}</b><p>{t("NAND 门只有在两个输入都是 1 时才输出 0。任何计算都能用它搭出来。在 TapeOut 上，每个门是一个晶体管代币，在处理器上购买。", "A NAND gate outputs 0 only when both inputs are 1. Any computation can be built from it. On TapeOut each gate is a transistor token, bought on a processor.")}</p></div>

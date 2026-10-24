@@ -1049,6 +1049,33 @@ details.mind > summary:hover { color: var(--chalk); border-color: var(--fog); }
 .proof-list b { display: block; font-size: 17px; margin-bottom: 6px; color: var(--agar); }
 .proof-list span { color: var(--fog); font-size: 14.5px; }
 @media (max-width: 700px) { .proof-list { grid-template-columns: 1fr; } }
+
+.to-live-shot {
+  max-width: 760px;
+  margin: 10px auto 30px;
+  padding: 12px;
+  border: 1px solid rgba(242, 182, 75, 0.42);
+  border-radius: var(--r-l);
+  background: var(--slide);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+}
+.to-live-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: calc(var(--r-l) - 8px);
+}
+.to-live-shot figcaption {
+  padding: 12px 8px 3px;
+  color: var(--fog);
+  font-family: var(--mono);
+  font-size: 13px;
+  text-align: center;
+}
+@media (max-width: 520px) {
+  .to-live-shot { padding: 7px; margin-bottom: 22px; }
+  .to-live-shot figcaption { font-size: 12px; line-height: 1.5; }
+}
 .dish-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; margin-top: 10px; font-size: 13.5px; color: var(--fog); }
 .dish-legend span { display: inline-flex; align-items: center; gap: 6px; color: var(--chalk); }
 .dish-legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
