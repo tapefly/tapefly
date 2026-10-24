@@ -1,5 +1,5 @@
 /* ── tests/engine.test.ts ────────────────────────────────────────────────────
-   The promises ONE FLY makes, checked:
+   The promises TAPEFLY makes, checked:
 
      1. the committed netlist IS the seven rules, on all 4096 input words;
      2. SHA-256 here agrees with node:crypto;
@@ -48,7 +48,7 @@ test("sha256 agrees with node:crypto", () => {
     sha256Hex(""),
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   );
-  for (const s of ["ONE FLY", '{"a":1,"b":[2,3]}', "果蝇"]) {
+  for (const s of ["TAPEFLY", '{"a":1,"b":[2,3]}', "果蝇"]) {
     assert.equal(sha256Hex(s), createHash("sha256").update(s, "utf8").digest("hex"));
   }
 });

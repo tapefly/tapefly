@@ -128,6 +128,6 @@
   "hosts": [
     "node/tsx (scripts/calibrate.ts)"
   ],
-  "note": "Calibration, not certification: agreement with a draft reference is a distance, not a grade. FLY-LIF/0's constants are editorial (see sim/reference.ts), the 12-bit word layout merges LC4 and LPLC2 into one threat channel, and GF recall == 1.0 here reflects that OneFly's rule 1 and the reference share the literature, not that the circuit reproduces the connectome. Anyone can re-run: npx tsx scripts/calibrate.ts",
-  "seal": "0c24da2421f0a33a0942d4d7846d5fa0f7fd1f12c33c9ee59bce5c1b204422d9"
+  "note": "Calibration, not certification: agreement with a draft reference is a distance, not a grade. FLY-LIF/0's constants are editorial (see sim/reference.ts), the 12-bit word layout merges LC4 and LPLC2 into one threat channel, and GF recall == 1.0 here reflects that TapeFly's rule 1 and the reference share the literature, not that the circuit reproduces the connectome. Anyone can re-run: npx tsx scripts/calibrate.ts",
+  "seal": "8ad5cac47210f324b746269e52785c477c78ed2d26b333db43e4ca987ddc8171"
 }

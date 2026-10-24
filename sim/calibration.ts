@@ -111,7 +111,7 @@ export function fidelityCert(): { cert: Record<string, unknown>; sealed: Record<
       "Calibration, not certification: agreement with a draft reference is a distance, " +
       "not a grade. FLY-LIF/0's constants are editorial (see sim/reference.ts), the " +
       "12-bit word layout merges LC4 and LPLC2 into one threat channel, and GF recall " +
-      "== 1.0 here reflects that OneFly's rule 1 and the reference share the literature, " +
+      "== 1.0 here reflects that TapeFly's rule 1 and the reference share the literature, " +
       "not that the circuit reproduces the connectome. Anyone can re-run: npx tsx " +
       "scripts/calibrate.ts"
   };

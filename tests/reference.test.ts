@@ -2,7 +2,7 @@
    The reference brain's promises. FLY-LIF/0 is frozen, total, deterministic
    and biologically ordered — and it is deliberately NOT a copy of the
    committed netlist or of sim/rules.ts. The last test pins the distance
-   between them: if the reference ever collapses onto the OneFly rules (or
+   between them: if the reference ever collapses onto the TapeFly rules (or
    onto Nothing at all), calibration stops measuring anything.
    --------------------------------------------------------------------------- */
 import { test } from "node:test";
@@ -54,11 +54,11 @@ test("reference: loom table is superlinear and sub-threshold at t=1", () => {
   assert.ok(d > c, "loom grows with closing speed");
 });
 
-test("reference: it is not a re-encode of the OneFly rules", () => {
+test("reference: it is not a re-encode of the TapeFly rules", () => {
   const ref = refTable();
   const one = rulesTable();
   const agree = ref.reduce((n, v, w) => n + (v === one[w] ? 1 : 0), 0);
-  assert.ok(agree < 4096, "the reference must not collapse onto the OneFly table");
+  assert.ok(agree < 4096, "the reference must not collapse onto the TapeFly table");
   assert.ok(agree > 0, "the reference must not be an anti-mirror either");
 });
 
@@ -77,5 +77,5 @@ test("reference: drives are documented, first match wins in the same order", () 
   assert.equal(REF_DRIVES[3].id, "curious");
   assert.equal(REF_DRIVES[4].id, "rest");
   assert.equal(REF_DRIVES[5].id, "default");
-  void decideWord; // the OneFly side of the comparison lives in rules.ts; kept here for symmetry
+  void decideWord; // the TapeFly side of the comparison lives in rules.ts; kept here for symmetry
 });

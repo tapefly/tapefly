@@ -30,7 +30,7 @@ console.log("gf: tp %d · fp %d · fn %d · tn %d · recall %s · precision %s",
   totals.gf.tp, totals.gf.fp, totals.gf.fn, totals.gf.tn,
   dim(totals.gf.tp, totals.gf.tp + totals.gf.fn),
   dim(totals.gf.tp, totals.gf.tp + totals.gf.fp));
-console.log("\ndisagreements by OneFly rule (which rule was deciding):");
+console.log("\ndisagreements by TapeFly rule (which rule was deciding):");
 for (const r of RULES) {
   const b = totals.byBrainRule[r.id];
   console.log(`  ${r.id.padEnd(8)} rows ${String(b.rows).padStart(4)} · disagree ${String(b.disagree).padStart(4)} (${dim(b.disagree, b.rows)})`);
