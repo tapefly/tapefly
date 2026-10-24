@@ -242,8 +242,10 @@ anchors/         optional daily lineage anchors
 | Product documentation | [tapefly.xyz/docs](https://tapefly.xyz/docs) |
 | Demo video, 1:58, Chinese narration | [tapefly.xyz/tapefly-demo.mp4](https://tapefly.xyz/tapefly-demo.mp4) |
 | 3-minute demo script | [docs/DEMO.md](./docs/DEMO.md) |
+| One-page pitch | [docs/PITCH.md](./docs/PITCH.md) |
 | VC investment memo | [docs/INVESTOR-MEMO.md](./docs/INVESTOR-MEMO.md) |
 | Xccelerate form copy | [docs/XCCELERATE-SUBMISSION.md](./docs/XCCELERATE-SUBMISSION.md) |
+| X launch copy | [docs/X-LAUNCH-POST.md](./docs/X-LAUNCH-POST.md) |
 | On-chain proof | [TapeOut circuit #1](https://tapefly.xyz/tapeout) |
 | API for agents | [tapefly.xyz/agents](https://tapefly.xyz/agents) |
 
