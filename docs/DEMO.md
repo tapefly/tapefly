@@ -2,10 +2,10 @@
 
 **Recorded demo:** <https://tapefly.xyz/tapefly-demo.mp4>
 
-**Duration:** 1 minute 50 seconds. The Xccelerate limit is three minutes.
+**Duration:** 1 minute 58 seconds. The Xccelerate limit is three minutes.
 
-The script below is a longer planning version. The recorded edit uses English
-voiceover and bilingual English/Chinese subtitle cards.
+The script below is a longer planning version. The recorded edit uses Chinese
+voiceover with compact Chinese and English subtitle cards.
 
 ## Before recording
 

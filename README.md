@@ -41,7 +41,7 @@ No database or account is needed to play or verify a day. A date is the seed, ev
 |---|---|
 | Live product | [tapefly.xyz](https://tapefly.xyz) |
 | Product documentation | [tapefly.xyz/docs](https://tapefly.xyz/docs) |
-| Demo video, 1:50 | [tapefly.xyz/tapefly-demo.mp4](https://tapefly.xyz/tapefly-demo.mp4) |
+| Demo video, 1:58, Chinese narration | [tapefly.xyz/tapefly-demo.mp4](https://tapefly.xyz/tapefly-demo.mp4) |
 | Source code | This repository, MIT licensed |
 | TapeOut processor | [`0x6Ac12D578e29D340f178E18eB2C297C7915E011C`](https://bscscan.com/address/0x6Ac12D578e29D340f178E18eB2C297C7915E011C) |
 | Transistor contract | [`0x09FD3719f7de0E6FB399279fCC890B205895b942`](https://bscscan.com/address/0x09FD3719f7de0E6FB399279fCC890B205895b942) |
@@ -240,7 +240,7 @@ anchors/         optional daily lineage anchors
 | Live product | [tapefly.xyz](https://tapefly.xyz) |
 | Public source | [github.com/tapefly/tapefly](https://github.com/tapefly/tapefly) |
 | Product documentation | [tapefly.xyz/docs](https://tapefly.xyz/docs) |
-| Demo video, 1:50 | [tapefly.xyz/tapefly-demo.mp4](https://tapefly.xyz/tapefly-demo.mp4) |
+| Demo video, 1:58, Chinese narration | [tapefly.xyz/tapefly-demo.mp4](https://tapefly.xyz/tapefly-demo.mp4) |
 | 3-minute demo script | [docs/DEMO.md](./docs/DEMO.md) |
 | VC investment memo | [docs/INVESTOR-MEMO.md](./docs/INVESTOR-MEMO.md) |
 | Xccelerate form copy | [docs/XCCELERATE-SUBMISSION.md](./docs/XCCELERATE-SUBMISSION.md) |

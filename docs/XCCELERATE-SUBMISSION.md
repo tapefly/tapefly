@@ -118,7 +118,7 @@ https://github.com/tapefly/tapefly/releases/tag/v0.1.0
 
 - Fill nationality and Telegram handle.
 - Confirm whether the team has two people.
-- The one-minute-fifty-second demo is recorded from [DEMO.md](./DEMO.md).
+- The one-minute-fifty-eight-second demo uses Chinese narration and is recorded from [DEMO.md](./DEMO.md).
 - Verify the hosted video opens without permission and remains below three minutes.
 - Do not describe X Layer as live before its processor, circuit ID, transaction
   and exhaustive verification are public.
