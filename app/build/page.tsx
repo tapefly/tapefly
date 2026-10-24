@@ -5,13 +5,14 @@ import { serverT } from "../i18n/server";
 
 export const dynamic = "force-dynamic";
 /* A shared builder link unfolds into the fly's card: its name, brain size and last seven dishes. */
-export function generateMetadata({ searchParams }: { searchParams: Record<string, string | string[] | undefined> }) {
-  const t = serverT();
+export async function generateMetadata({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const t = await serverT();
+  const query = await searchParams;
   const base = { title: t("大脑编辑器 — TapeFly", "Brain editor — TapeFly") };
-  const p = typeof searchParams.p === "string" ? searchParams.p : "";
+  const p = typeof query.p === "string" ? query.p : "";
   if (!p.startsWith("p1.")) return base;
   const q = new URLSearchParams({ kind: "fly", p });
-  if (typeof searchParams.n === "string") q.set("n", searchParams.n);
+  if (typeof query.n === "string") q.set("n", query.n);
   const image = `/api/og?${q.toString()}`;
   return { ...base, openGraph: { title: t("TapeFly 上的一只果蝇", "A fly on TapeFly"), images: [{ url: image, width: 1200, height: 630 }] }, twitter: { card: "summary_large_image", images: [image] } };
 }

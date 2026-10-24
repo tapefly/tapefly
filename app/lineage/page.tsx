@@ -10,16 +10,16 @@ import AnchorList from "./AnchorList";
    file that `npm run lineage -- --check` recomputes from the founder and the calendar. */
 
 export const dynamic = "force-dynamic";
-export function generateMetadata() { return { title: serverT()("血统 — TapeFly", "Lineage — TapeFly") }; }
+export async function generateMetadata() { return { title: (await serverT())("血统 — TapeFly", "Lineage — TapeFly") }; }
 
-export default function LineagePage() {
+export default async function LineagePage() {
   const days = lineageDays();
   const champions = recentChampions(60);
   const survived = days.filter((d) => d.alive).length;
   const last = days[days.length - 1];
   const drift = last ? genomeDrift(last.champion) : 0;
   const maxDrift = Math.max(1, ...days.map((d) => genomeDrift(d.champion)));
-  const t = serverT();
+  const t = await serverT();
   const W = 1000, H = 160;
   const bw = W / Math.max(1, days.length);
   const driftPath = days.map((d, i) => `${i ? "L" : "M"}${(i + 0.5) * bw} ${H - (genomeDrift(d.champion) / maxDrift) * (H - 10) - 4}`).join(" ");

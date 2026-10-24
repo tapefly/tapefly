@@ -3,16 +3,16 @@ import { SiteNav, SiteFooter } from "../components/ui/Shell";
 import { serverT } from "../i18n/server";
 
 /* The corner page: every way to check TapeFly without trusting it, in one list. */
-export function generateMetadata() {
-  const t = serverT();
+export async function generateMetadata() {
+  const t = await serverT();
   return {
     title: t("怎么证明没作假 — TapeFly", "How we prove it — TapeFly"),
     description: t("TapeFly 的每一天都能只凭日期重放。这里教你亲自核查每一个说法。", "Every TapeFly day can be replayed from its date. Here is how to check each claim yourself.")
   };
 }
 
-export default function ProofPage() {
-  const t = serverT();
+export default async function ProofPage() {
+  const t = await serverT();
   const ITEMS: { href: string; title: string; line: string }[] = [
     { href: "/verify", title: t("重放任意一天", "Replay any day"), line: t("每一天只由日期决定，每一步都折进一个哈希。在浏览器里重放一天，对比哈希。", "Each day is a pure function of its date, and every step is folded into a hash. Replay a day in your browser and compare the hash.") },
     { href: "/lineage", title: t("血统账本", "The lineage ledger"), line: t("每个结束的日子都和前一天链在一起，所以过去的任何一天都没法被悄悄改掉。", "Every finished day is chained to the one before it, so no past day can be quietly changed.") },

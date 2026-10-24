@@ -18,17 +18,17 @@ import { serverT } from "../i18n/server";
    disagrees with a fresh recomputation. A stale file cannot be published
    by accident. */
 
-export function generateMetadata() { return { title: serverT()("考试 — TapeFly", "Calibrate — TapeFly") }; }
+export async function generateMetadata() { return { title: (await serverT())("考试 — TapeFly", "Calibrate — TapeFly") }; }
 
 const dim = (v: number, total: number) => (v / total).toFixed(4);
 
-export default function CalibratePage() {
+export default async function CalibratePage() {
   const { sealed } = fidelityCert();
   if (stableStringify(sealed) !== stableStringify(committed)) {
     throw new Error("calibration/ffw-nand-1.json is stale — run `npm run calibrate` and commit the result");
   }
 
-  const t = serverT();
+  const t = await serverT();
   const { rows, totals } = runCalibration();
   void rows;
   const r = sealed as {

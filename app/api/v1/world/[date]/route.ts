@@ -8,8 +8,8 @@ import { ok, bad, isDate } from "../../json";
 
 export const dynamic = "force-dynamic";
 
-export function GET(_req: Request, { params }: { params: { date: string } }) {
-  const { date } = params;
+export async function GET(_req: Request, { params }: { params: Promise<{ date: string }> }) {
+  const { date } = await params;
   if (!isDate(date)) return bad("date must be YYYY-MM-DD");
 
   const seed = seedFromDate(date);

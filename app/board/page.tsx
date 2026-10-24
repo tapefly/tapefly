@@ -13,12 +13,12 @@ const HOUSE_ZH: Record<string, [string, string]> = {
 };
 
 export const dynamic = "force-dynamic";
-export function generateMetadata() {
-  const t = serverT();
+export async function generateMetadata() {
+  const t = await serverT();
   return { title: t("冠军榜 — TapeFly", "Champions — TapeFly"), description: t("本周最强的 TapeFly 大脑，在同样 7 个培养皿里排名。", "This week's best TapeFly brains, ranked on the same seven dishes.") };
 }
 
-export default function BoardPage() {
+export default async function BoardPage() {
   const rows = loadBoard();
   const through = boardThrough();
   const from = addDays(through, -6);
@@ -26,8 +26,8 @@ export default function BoardPage() {
   const won = trophies(ledger);
   const now = seasonOf(addDays(through, 1));
   const cur = seasonDates(now);
-  const t = serverT();
-  const zh = getLang() === "zh";
+  const t = await serverT();
+  const zh = (await getLang()) === "zh";
   const nm = (r: { name: string; house: boolean }) => (zh && r.house && HOUSE_ZH[r.name] ? HOUSE_ZH[r.name][0] : r.name);
   const note = (r: { name: string; house: boolean; note?: string }) => (zh && r.house && HOUSE_ZH[r.name] ? HOUSE_ZH[r.name][1] : r.note);
 

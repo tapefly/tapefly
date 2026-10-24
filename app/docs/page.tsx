@@ -15,8 +15,8 @@ import { ANCHORS } from "@/sim/anchor";
    checked on this site or on chain today, or it carries a Next / Planned tag.
    Numbers that come from the code are computed here, not typed in. */
 
-export function generateMetadata() {
-  const t = serverT();
+export async function generateMetadata() {
+  const t = await serverT();
   return {
     title: t("文档 — TapeFly", "Docs — TapeFly"),
     description: t("TapeFly 全貌：BNB Chain 上的永生果蝇，大脑用 TapeOut 的 NAND 门搭成。缘起、愿景、玩法、技术、经济模型、路线图。", "TapeFly in full: immortal fruit flies on BNB Chain, with brains built from TapeOut's NAND gates. Origins, vision, play, technology, economics and roadmap.")
@@ -25,7 +25,7 @@ export function generateMetadata() {
 
 type State = "live" | "next" | "later";
 const TAG: Record<State, [string, string]> = { live: ["已上线", "Live"], next: ["下一步", "Next"], later: ["计划中", "Planned"] };
-const Tag = ({ s }: { s: State }) => <span className={`dtag ${s}`}>{getLang() === "zh" ? TAG[s][0] : TAG[s][1]}</span>;
+const Tag = async ({ s }: { s: State }) => <span className={`dtag ${s}`}>{(await getLang()) === "zh" ? TAG[s][0] : TAG[s][1]}</span>;
 
 const TOC: [string, string, string][] = [
   ["why-now", "为什么是现在", "Why now"],
@@ -53,9 +53,9 @@ const COMBO_ORDER: Switches[] = [
   { eat: false, flee: false, jump: true, roam: false }
 ];
 
-export default function DocsPage() {
-  const t = serverT();
-  const zh = getLang() === "zh";
+export default async function DocsPage() {
+  const t = await serverT();
+  const zh = (await getLang()) === "zh";
   const live = config.status === "live";
   const combos = COMBO_ORDER.map((s) => {
     const b = brainFromProgram(programFromSwitches(s));

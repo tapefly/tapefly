@@ -11,8 +11,8 @@ import { ok, bad, isDate } from "../../../json";
 
 export const dynamic = "force-dynamic";
 
-export function GET(_req: Request, { params }: { params: { date: string; name: string } }) {
-  const { date, name } = params;
+export async function GET(_req: Request, { params }: { params: Promise<{ date: string; name: string }> }) {
+  const { date, name } = await params;
   if (!isDate(date)) return bad("date must be YYYY-MM-DD");
 
   const index = indexOfName(seedFromDate(date), name, COLONY_SIZE);

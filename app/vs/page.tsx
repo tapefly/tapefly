@@ -13,9 +13,9 @@ const toQuery = (sp: SP) => {
 };
 
 /* A shared match link unfolds into its own card: names, score, the seven rounds. */
-export function generateMetadata({ searchParams }: { searchParams: SP }) {
-  const q = toQuery(searchParams);
-  const t = serverT();
+export async function generateMetadata({ searchParams }: { searchParams: Promise<SP> }) {
+  const q = toQuery(await searchParams);
+  const t = await serverT();
   const base = { title: t("对战 — TapeFly", "Versus — TapeFly"), description: t("我的果蝇对你的果蝇：同一个培养皿，抢同样的食物，比 7 轮。", "My fly against yours: one dish, shared food, seven rounds.") };
   if (!q.get("a")) return base;
   const an = q.get("an") || t("挑战者", "Challenger"), bn = q.get("bn");

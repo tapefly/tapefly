@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import PlayClient from "./PlayClient";
 import { serverT } from "../i18n/server";
 
-export function generateMetadata() { return { title: serverT()("大脑学校 — TapeFly", "Brain School — TapeFly") }; }
+export async function generateMetadata() { return { title: (await serverT())("大脑学校 — TapeFly", "Brain School — TapeFly") }; }
 
 export default function PlayPage() {
   return (

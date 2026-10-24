@@ -9,8 +9,8 @@ import { LangProvider } from "./i18n/client";
 const ZH_TITLE = "TapeFly — 用 TapeOut 门电路造一颗果蝇大脑";
 const ZH_DESCRIPTION = "拨动果蝇的本能开关，它们会编译成 NAND 门电路，就是大家在 TapeOut 上流片的那种门。和朋友对战，赢下本周。每一天都能只凭日期重放验证。";
 
-export function generateMetadata(): Metadata {
-  const zh = getLang() === "zh";
+export async function generateMetadata(): Promise<Metadata> {
+  const zh = (await getLang()) === "zh";
   const title = zh ? ZH_TITLE : SITE_TITLE, description = zh ? ZH_DESCRIPTION : SITE_DESCRIPTION;
   return {
   title,
@@ -25,8 +25,8 @@ export function generateMetadata(): Metadata {
 
 export const viewport = { themeColor: "#06191e" };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const lang = getLang();
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const lang = await getLang();
   return (
     <html lang={lang === "zh" ? "zh-CN" : "en"}>
       <body><LangProvider lang={lang}>{children}</LangProvider></body>

@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  outputFileTracingRoot: __dirname,
   /* The site is one page that computes the day's fly entirely in the browser
      from the committed engine. No API, no database, no wallet, nothing on
      chain. The headers below carry no CSP risk (inline module trees would). */

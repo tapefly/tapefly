@@ -7,7 +7,7 @@ import { serverT } from "../i18n/server";
    claim in a pull request, checked by replay. This page is the human-readable
    half of docs/AGENTS.md. */
 
-export function generateMetadata() { return { title: serverT()("给智能体 — TapeFly", "Agents — TapeFly") }; }
+export async function generateMetadata() { return { title: (await serverT())("给智能体 — TapeFly", "Agents — TapeFly") }; }
 
 const ENDPOINTS: [string, string, string][] = [
   ["GET /api/v1/health", "version, today, today's champion, ledger height", "版本、今天、今天的冠军、账本高度"],
@@ -22,8 +22,8 @@ const ENDPOINTS: [string, string, string][] = [
   ["GET /api/v1/tapeout", "the brain as TapeOut bytes, and whether it is on chain yet", "大脑的 TapeOut 字节，以及是否已上链"]
 ];
 
-export default function AgentsPage() {
-  const t = serverT();
+export default async function AgentsPage() {
+  const t = await serverT();
   return (
     <main>
       <SiteNav here="/agents" />

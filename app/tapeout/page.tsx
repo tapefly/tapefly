@@ -11,16 +11,16 @@ import { serverT } from "../i18n/server";
 
 /* What the brain is in TapeOut's terms, a panel to tape one out, and — plainly — how far the official brain has got. */
 
-export function generateMetadata() {
-  const t = serverT();
+export async function generateMetadata() {
+  const t = await serverT();
   return {
     title: t("上链 — TapeFly", "On TapeOut — TapeFly"),
     description: t("TapeFly 的大脑就是 TapeOut 电路：NAND 门，流片在 BNB Chain 上。", "TapeFly brains are TapeOut circuits: NAND gates, taped out on BNB Chain.")
   };
 }
 
-export default function TapeOutPage() {
-  const t = serverT();
+export default async function TapeOutPage() {
+  const t = await serverT();
   const live = config.status === "live";
   const steps: [string, string, boolean][] = [
     [t("把规则编译成 NAND 门", "Compile the rules to NAND gates"), t("50 个门，9 层深，在全部 4,096 种输入上和规则逐一对过。", "50 gates, 9 deep, tested against the rules on all 4,096 inputs."), true],
