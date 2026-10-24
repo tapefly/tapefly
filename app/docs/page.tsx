@@ -219,7 +219,7 @@ export default function DocsPage() {
               <tr><td>{t("流片、电路 NFT", "Tape-out, circuit NFT")}</td><td>{t("在“上链”页面用你自己的钱包流片；NFT 归你。", "Tape out from your own wallet on the On TapeOut page; the NFT is yours.")}</td><td><Tag s="live" /></td></tr>
               <tr><td>{t("eval 只读调用", "eval, read-only")}</td><td>{t("用来逐个答案证明：上链的大脑就是你比赛用的那颗。", "Proves, answer by answer, that the brain on chain is the one you raced.")}</td><td><Tag s="live" /></td></tr>
               <tr><td>{t("门数 × 层数³", "gates × depth³")}</td><td>{t("TapeOut 自己的电路成本指标。TapeFly 给每颗大脑显示它，并用大小打破平局。", "TapeOut’s own cost measure. TapeFly shows it for every brain and breaks ties on size.")}</td><td><Tag s="live" /></td></tr>
-              <tr><td>{t("处理器", "Processors")}</td><td>{t("官方处理器的 NAND 已经卖完。TapeFly 处理器会出售果蝇大脑需要的那几个 NAND。", "The official processors’ NAND has sold out. A TapeFly processor will sell the few NAND a fly brain needs.")}</td><td><Tag s="next" /></td></tr>
+              <tr><td>{t("处理器", "Processors")}</td><td>{t("官方处理器的 NAND 已经卖完。TapeFly 处理器已经上线，并直接出售果蝇大脑需要的 NAND。", "The official processors’ NAND has sold out. The TapeFly processor is live and sells the NAND a fly brain needs.")}</td><td><Tag s="live" /></td></tr>
               <tr><td>{t("电路引用（REF）", "Circuit references (REF)")}</td><td>{t("一个电路可以引用另一个已上链的电路。这让“大脑由大脑组成”、后代继承祖先成为可能。", "A circuit can reference another taped-out circuit. That makes brains built from brains, and offspring inheriting ancestors, possible.")}</td><td><Tag s="later" /></td></tr>
               <tr><td>{t("设计证明（PoD）挖矿", "Proof-of-Design mining")}</td><td>{t("TapeOut 奖励做出最小正确电路的矿工。TapeFly 练的就是这项本事。我们起草了一个“果蝇反射”挖矿任务提案。", "TapeOut rewards miners for the smallest correct circuits. TapeFly trains exactly that skill. We drafted a proposal for a fly-reflex mining task.")}</td><td><Tag s="later" /></td></tr>
             </tbody>
@@ -242,7 +242,7 @@ export default function DocsPage() {
             <thead><tr><th>{t("谁", "Who")}</th><th>{t("付出", "Pays")}</th><th>{t("得到", "Gets")}</th><th /></tr></thead>
             <tbody>
               <tr><td>{t("玩家", "Player")}</td><td>{t("大脑需要的 NAND、处理器的流片费、gas", "NAND for the brain, the processor’s tape-out fee, gas")}</td><td>{t("自己大脑的电路 NFT，以及榜上的战绩", "A circuit NFT of their brain, with its record on the board")}</td><td><Tag s="live" /></td></tr>
-              <tr><td>{t("TapeFly 处理器", "TapeFly processor")}</td><td>{t("一次性的工厂费", "A one-time factory fee")}</td><td>{t("玩家在这里买 NAND 的收入。具体分成由 TapeOut 合约决定，链上读出后公布", "NAND sales from players who tape out there. The split is set by TapeOut’s contracts and will be published once read on chain")}</td><td><Tag s="next" /></td></tr>
+              <tr><td>{t("TapeFly 处理器", "TapeFly processor")}</td><td>{t("一次性的工厂费", "A one-time factory fee")}</td><td>{t("玩家在这里买 NAND 的收入。具体分成由 TapeOut 合约决定，链上可查", "NAND sales from players who tape out there. The split is set by TapeOut’s contracts and can be checked on chain")}</td><td><Tag s="live" /></td></tr>
               <tr><td>{t("每周冠军", "Weekly champion")}</td><td>{t("不用付", "Nothing")}</td><td>{t("自己的大脑由 TapeFly 出钱流片，电路 NFT 送到手", "Their brain taped out by TapeFly, the circuit NFT sent to them")}</td><td><Tag s="later" /></td></tr>
               <tr><td>TapeOut</td><td>{t("不用付", "Nothing")}</td><td>{t("每次流片都烧掉晶体管，供应只减不增", "Transistors burned with every tape-out, so supply only shrinks")}</td><td><Tag s="live" /></td></tr>
             </tbody>

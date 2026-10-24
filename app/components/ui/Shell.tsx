@@ -44,6 +44,9 @@ export function SiteNav({ here }: { here?: string }) {
               {t(zh, en)}
             </Link>
           ))}
+          <a href="https://github.com/tapefly/tapefly" target="_blank" rel="noreferrer">
+            GitHub <span aria-hidden>↗</span>
+          </a>
         </nav>
         <Link href="/tapeout" className="nav-cta">{t("基于 TapeOut", "Built on TapeOut")}</Link>
         <LangToggle />
@@ -77,6 +80,9 @@ export function SiteFooter() {
             <Link href="/docs">{t("文档：完整介绍", "Docs: the whole picture")}</Link>
             <Link href="/build">{t("大脑编辑器", "Brain editor")}</Link>
             <Link href="/proof">{t("怎么证明没作假", "How we prove it")}</Link>
+            <a href="https://github.com/tapefly/tapefly" target="_blank" rel="noreferrer">
+              {t("开源代码（GitHub）", "Source on GitHub")}
+            </a>
           </div>
           <div>
             <h4>{t("如实说明", "Honest state")}</h4>
