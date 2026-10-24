@@ -1,6 +1,11 @@
 # TapeFly — 3-minute demo
 
-Target length: **2 minutes 45 seconds**. The Xccelerate limit is three minutes.
+**Recorded demo:** <https://tapefly.xyz/tapefly-demo.mp4>
+
+**Duration:** 1 minute 50 seconds. The Xccelerate limit is three minutes.
+
+The script below is a longer planning version. The recorded edit uses English
+voiceover and bilingual English/Chinese subtitle cards.
 
 ## Before recording
 

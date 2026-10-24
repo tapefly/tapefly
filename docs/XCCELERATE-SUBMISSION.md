@@ -13,7 +13,7 @@ Prepared: 24 October 2026
 | Team contact email | `ritsuyan4763@gmail.com` |
 | Team size | 2, confirm before submission |
 | GitHub repository | <https://github.com/tapefly/tapefly> |
-| Demo video | `[UPLOAD AND LINK]` |
+| Demo video | <https://tapefly.xyz/tapefly-demo.mp4> |
 
 ## Team background — English
 
@@ -118,7 +118,7 @@ https://github.com/tapefly/tapefly/releases/tag/v0.1.0
 
 - Fill nationality and Telegram handle.
 - Confirm whether the team has two people.
-- Record the demo using [DEMO.md](./DEMO.md); keep it below three minutes.
-- Upload the video and verify the link opens without permission.
+- The one-minute-fifty-second demo is recorded from [DEMO.md](./DEMO.md).
+- Verify the hosted video opens without permission and remains below three minutes.
 - Do not describe X Layer as live before its processor, circuit ID, transaction
   and exhaustive verification are public.
