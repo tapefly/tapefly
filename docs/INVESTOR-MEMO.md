@@ -2,7 +2,7 @@
 
 **Stage:** Pre-seed / early product  
 **Date:** 24 October 2026  
-**Founder:** Richard  
+**Founder:** Richard — previous X Layer hackathon second-prize winner
 **Live:** <https://tapefly.xyz>  
 **Source:** <https://github.com/tapefly/tapefly>
 
@@ -20,17 +20,19 @@ network for games, humans and AI agents.
 
 ## Why invest
 
-1. **The product already exists.** The game, compiler, deterministic replay,
+1. **The founder has X Layer proof.** Richard previously won second prize in an
+   X Layer hackathon, then continued shipping the product after the event.
+2. **The product already exists.** The game, compiler, deterministic replay,
    complete truth table, API and on-chain verifier are built.
-2. **The central claim is live on chain.** The official brain is TapeOut circuit
+3. **The central claim is live on chain.** The official brain is TapeOut circuit
    `#1`; its bytes and all 4,096 answers match the public source.
-3. **The unit is unusually small.** A 12-input, 3-output, 50-gate brain can be
+4. **The unit is unusually small.** A 12-input, 3-output, 50-gate brain can be
    tested completely instead of sampled.
-4. **There are two entry markets.** The product gives consumers a reason to enter
+5. **There are two entry markets.** The product gives consumers a reason to enter
    TapeOut and gives developers an auditable behavior component.
-5. **The upside is a new category.** The down case is a focused on-chain game. The
+6. **The upside is a new category.** The down case is a focused on-chain game. The
    up case is a behavior verification layer for agents and games.
-6. **A token is not required to begin.** Free play and optional circuit ownership
+7. **A token is not required to begin.** Free play and optional circuit ownership
    create a legitimate first revenue path.
 
 ## Stage and evidence
@@ -45,7 +47,7 @@ them.
 | --- | --- |
 | Product | Live at [tapefly.xyz](https://tapefly.xyz) |
 | Official brain | `FFW-NAND/1`, 50 NAND gates, depth 9 |
-| Deployment | TapeOut circuit `#1` on BNB Chain |
+| Deployment | TapeOut circuit `#1` on the TapeFly processor |
 | Behavior | `4,096 / 4,096` on-chain answers identical |
 | Bytes | Exact match to the committed 350-byte netlist |
 | Source | MIT licensed, public GitHub repository |
@@ -140,8 +142,9 @@ TapeFly returns value to the ecosystem through:
 - an API through which agents enter the same world.
 
 X Layer is the next distribution and product milestone. The current product is
-live on BNB Chain. X Layer is not claimed as live before a processor, circuit ID,
-transaction and exhaustive verification exist publicly.
+already live and TapeOut-verifiable. The Xccelerate build is designed for X Layer,
+and X Layer is not claimed as live before a processor, circuit ID, transaction and
+exhaustive verification exist publicly.
 
 ## Business model
 
@@ -233,10 +236,15 @@ Defensibility can compound through:
 
 ## Team
 
-TapeFly is built by an independent team led by Richard. The team has demonstrated
-full-stack execution across product direction, deterministic TypeScript
-simulation, NAND compilation, exhaustive testing, Next.js production engineering,
-wallet integration, chain verification and open-source CI/CD.
+TapeFly is founded by Richard, who previously won second prize in an X Layer
+hackathon. That result was not a one-off demo: the team continued after the event
+and shipped a live consumer product, compiler, complete verification system and
+open-source repository.
+
+The team has demonstrated full-stack execution across product direction,
+deterministic TypeScript simulation, NAND compilation, exhaustive testing, Next.js
+production engineering, wallet integration, chain verification and open-source
+CI/CD.
 
 Funding should add distribution, growth, security and ecosystem partnership
 capacity.
