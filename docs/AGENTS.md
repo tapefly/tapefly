@@ -91,8 +91,9 @@ prove you saw it?*
 
 ## Honesty
 
-The circuit is built and tested against its rules on all 4096 input words. It has
-**not been taped out**. This is a netlist running in JavaScript, not silicon.
+The circuit is built and tested against its rules on all 4096 input words. It is
+**live on BNB Chain** as circuit #1 on the TapeFly processor, and all 4096 answers
+plus the stored bytes have been verified against the committed netlist.
 
 ## Brains, not just records
 

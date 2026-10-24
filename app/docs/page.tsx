@@ -116,7 +116,7 @@ export default function DocsPage() {
           {H("immortal", "永生果蝇：我们怎么做到", "Immortal flies: how TapeFly does it")}
           <p className="big">{t("在 TapeFly 里，“永生”不是一句口号，而是五件可以验证的事。", "In TapeFly, “immortal” is not a slogan. It is five things you can check.")}</p>
           <div className="docs-cards two">
-            <div><Tag s={live ? "live" : "next"} /><b>{t("1 · 大脑永远在链上", "1 · The brain lives on chain for good")}</b><p>{t("流片之后，大脑电路存在 BNB Chain 上，谁都改不了、删不掉，包括我们。只要链在，这颗大脑就在，任何人随时都能向它提问。", "Once taped out, the brain’s circuit sits on BNB Chain. Nobody can edit or delete it, us included. As long as the chain exists, the brain exists, and anyone can ask it questions at any time.")} {live ? null : t("流片面板已经上线；官方大脑的第一次流片还没发出。", "The tape-out panel is live; the official brain’s first tape-out has not been sent yet.")} <Link className="link" href="/tapeout#tape-out">{t("流片面板", "Tape-out panel")}</Link></p></div>
+            <div><Tag s={live ? "live" : "next"} /><b>{t("1 · 大脑永远在链上", "1 · The brain lives on chain for good")}</b><p>{t("流片之后，大脑电路存在 BNB Chain 上，谁都改不了、删不掉，包括我们。只要链在，这颗大脑就在，任何人随时都能向它提问。", "Once taped out, the brain’s circuit sits on BNB Chain. Nobody can edit or delete it, us included. As long as the chain exists, the brain exists, and anyone can ask it questions at any time.")} {live ? null : t("链上状态还没有同步到网站配置；请以流片面板和链上核对结果为准。", "The on-chain status has not been synced to the site configuration yet; use the tape-out panel and on-chain verification as the source of truth.")} <Link className="link" href="/tapeout#tape-out">{t("流片面板", "Tape-out panel")}</Link></p></div>
             <div><Tag s="live" /><b>{t("2 · 每一天都能复活", "2 · Every day can be brought back")}</b><p>{t("一天里发生的一切，都只由日期决定。十年后输入同一个日期，同一只果蝇会在同一个培养皿里醒来，走出完全一样的每一步。死亡只是这一天的结局，不是这只果蝇的终点。", "Everything in a day follows from its date. Enter the same date ten years from now and the same fly wakes in the same dish and takes exactly the same steps. Death ends a day, not the fly.")}</p></div>
             <div><Tag s="live" /><b>{t("3 · 血统从不中断", "3 · The bloodline never breaks")}</b><p>{t(`每天早上的 ${COLONY_SIZE} 只果蝇，都由前一天活得最久的冠军繁衍而来，身体略有变异。这条血统从纪元第一天起从未中断，写在账本里，任何人都能重算。`, `Each morning’s ${COLONY_SIZE} flies are born from yesterday’s longest-lived champion, with small mutations. The line has run unbroken since the first day, kept in a ledger anyone can recompute.`)} <Link className="link" href="/lineage">{t("看血统", "See the lineage")}</Link></p></div>
             <div><Tag s="live" /><b>{t("4 · 记忆被封存", "4 · Memories are sealed")}</b><p>{t("果蝇活过的每一步都折进一条哈希链。改掉任何一步，哈希就会变。这是它的记忆，也是它的身份证。", "Every step a fly lives is folded into a hash chain. Change any step and the hash changes. It is the fly’s memory and its proof of identity.")} <Link className="link" href="/verify">{t("核查一条记忆", "Check a memory")}</Link></p></div>
@@ -257,8 +257,8 @@ export default function DocsPage() {
             </tbody>
           </table>
           <p className="dim">{live
-            ? t("冠军奖品在第一次流片核对通过后开始。", "The champion prize starts after the first verified tape-out.")
-            : t("TapeFly 处理器还没创建，价格是计划值。冠军奖品要等第一次流片核对通过后才开始，目前还没有。", "The TapeFly processor has not been created yet; the price is the planned default. The champion prize starts after the first verified tape-out, which has not happened yet.")}</p>
+            ? t("第一次流片已经核对通过；冠军奖品在第一季竞技场开赛后开始。", "The first tape-out is verified; the champion prize begins when the first arena season opens.")
+            : t("冠军奖品在第一季竞技场开赛后开始；具体状态以流片面板和链上记录为准。", "The champion prize begins when the first arena season opens; use the tape-out panel and on-chain record as the source of truth.")}</p>
         </section>
 
         {/* 10 earn */}
@@ -298,11 +298,11 @@ export default function DocsPage() {
               <li>{t("用链接和朋友对战；每周赛季写进公开账本", "Race a friend by link; weekly seasons on a public ledger")}</li>
               <li>{t("流片面板：买 NAND、流片、核对全部 4,096 个答案", "Tape-out panel: buy NAND, tape out, verify all 4,096 answers")}</li>
               <li>{t("永不中断的血统账本、哈希链、签名记录", "An unbroken lineage ledger, hash chains and signed records")}</li>
+              <li>{t("官方大脑第一次流片并完成全部答案核对", "The official brain taped out and fully verified on chain")}</li>
+              <li>{t("TapeFly 处理器上线，玩家能买到大脑需要的 NAND", "The TapeFly processor is live, so players can buy the NAND a brain needs")}</li>
               <li>{t("中英双语", "Chinese and English")}</li>
             </ul></li>
             <li className="next"><b>{t("下一步", "Next")}</b><ul>
-              <li>{t("官方大脑第一次流片并核对通过", "First verified tape-out of the official brain")}</li>
-              <li>{t("TapeFly 处理器上线，玩家能买到大脑需要的 NAND", "The TapeFly processor, so players can buy the NAND a brain needs")}</li>
               <li>{t("每天把血统哈希写上 BNB Chain（已做好，等第一笔）", "The lineage head written onto BNB Chain every day (built, awaiting the first)")}</li>
               <li>{t("冠军奖品：每周最强大脑流片后送给它的作者", "Champion prize: the week’s best brain taped out and sent to its builder")}</li>
               <li>{t("网页内直接报名参赛，不用 GitHub", "Enter the board from the page, no GitHub needed")}</li>

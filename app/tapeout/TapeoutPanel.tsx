@@ -158,7 +158,7 @@ export default function TapeoutPanel({ tapeflyProcessor }: { tapeflyProcessor: s
       <h3>{t("3 · 签名", "3 · Sign")}</h3>
       <label className="tp-agree">
         <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
-        <span>{t("我明白这会花真实的 BNB，流片无法撤销；TapeFly 是独立项目，这个格式还没经过第一次流片验证。", "I understand this spends real BNB, a tape-out cannot be undone, and TapeFly is an independent project: this format has not yet been proven by a first verified tape-out.")}</span>
+        <span>{t("我明白这会花真实的 BNB，流片无法撤销；TapeFly 是独立项目，这个格式已在电路 #1 上验证过。", "I understand this spends real BNB, a tape-out cannot be undone, and TapeFly is an independent project: this format has already been verified on circuit #1.")}</span>
       </label>
       <div className="row tp-actions">
         {!account ? (

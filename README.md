@@ -67,9 +67,9 @@ CI validates the file and recomputes everything. Netlists work too, as JSON or a
 
 ## Honest state
 
-- The brain is a tested netlist. It has **not been taped out**. `config/tapeout.json` says so, and the site reads that file.
-- Once the circuit is on chain, `npm run tapeout -- verify --processor … --id …` asks the live circuit all 4,096 questions through the free `eval` call and compares the answers.
-- The byte format follows public reverse-engineering notes and has not yet been exercised against the live contract.
+- The official brain is **live on BNB Chain** as circuit #1 on the TapeFly processor (`0x6Ac12D578e29D340f178E18eB2C297C7915E011C`). All 4,096 answers and the stored bytes were checked against the committed netlist.
+- `npm run tapeout -- verify --processor … --id …` asks the live circuit all 4,096 questions through the free `eval` call and compares the answers.
+- The byte format follows public reverse-engineering notes and has been exercised successfully against the live TapeOut contract.
 - There is no token, no database and no account system.
 
 ## Commands

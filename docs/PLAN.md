@@ -111,7 +111,8 @@ The owner posts them from their GitHub account.
 - /tapeout has a working tape-out panel: connect wallet, buy NAND, simulate then tape out, verify all 4,096 answers via multicall (sim/onchain.ts).
 - eval inputs are now packed bit-wise (bit 0 of byte 0 = first pin), per the public format notes; the old one-byte-per-bit guess is kept as evalInputBytesPerBit.
 - /tapeout/processor creates the TapeFly processor from the operator's wallet (factory createCPU). After it exists, put its address in config/tapeout.json → tapeflyProcessor.
-- Open: read on chain where NAND sale money goes for a factory processor before announcing it; first verified tape-out; champion prize.
+- Done: the official brain is live as circuit #1 on the TapeFly processor, with all 4,096 answers and stored bytes verified on chain.
+- Open: read on chain where NAND sale money goes for the TapeFly processor before announcing it; champion prize.
 
 ## 2026-10-21 · Chinese by default
 

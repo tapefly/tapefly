@@ -81,8 +81,8 @@ export function SiteFooter() {
           <div>
             <h4>{t("如实说明", "Honest state")}</h4>
             <p>
-              {t(<>官方大脑是一个测试过的电路，<b>还没有在 TapeOut 上流片</b>；<Link href="/tapeout#tape-out">你可以自己流片一个</Link>。没有代币，没有数据库，没有账号。</>,
-                 <>The brain is a tested netlist. It has <b>not yet been taped out</b> on TapeOut; <Link href="/tapeout#tape-out">tape one out yourself</Link>. No token, no database, no accounts.</>)}
+              {t(<>官方大脑已经在 BNB Chain 上流片：<Link href="/tapeout">TapeFly 处理器电路 #1，全部 4,096 个答案核对一致</Link>。没有代币，没有数据库，没有账号。</>,
+                 <>The official brain is <b>live on BNB Chain</b>: <Link href="/tapeout">TapeFly processor circuit #1 passed all 4,096 answer checks</Link>. No token, no database, no accounts.</>)}
             </p>
           </div>
         </div>

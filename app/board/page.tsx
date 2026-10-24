@@ -53,8 +53,8 @@ export default function BoardPage() {
             </p>
           </div>
           <p className="prize-state">
-            {t(<><b>还没开始。</b>等官方大脑流片上链、核对通过后才启动。在那之前，冠军只记录，不铸造。</>,
-               <><b>Not started yet.</b> It begins once the official brain has been taped out and checked on chain. Until then, champions are recorded here but not minted.</>)}{" "}
+            {t(<><b>即将开始。</b>官方大脑已经在电路 #1 上完成流片和全量核对；第一季竞技场开赛后开始发放冠军电路。</>,
+               <><b>Opening soon.</b> The official brain is taped out and fully verified as circuit #1; champion circuits begin with the first arena season.</>)}{" "}
             <Link className="link" href="/tapeout">{t("看进度", "Status")}</Link>
           </p>
         </section>
