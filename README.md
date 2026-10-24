@@ -240,6 +240,8 @@ anchors/         optional daily lineage anchors
 | Public source | [github.com/tapefly/tapefly](https://github.com/tapefly/tapefly) |
 | Product documentation | [tapefly.xyz/docs](https://tapefly.xyz/docs) |
 | 3-minute demo script | [docs/DEMO.md](./docs/DEMO.md) |
+| VC investment memo | [docs/INVESTOR-MEMO.md](./docs/INVESTOR-MEMO.md) |
+| Xccelerate form copy | [docs/XCCELERATE-SUBMISSION.md](./docs/XCCELERATE-SUBMISSION.md) |
 | On-chain proof | [TapeOut circuit #1](https://tapefly.xyz/tapeout) |
 | API for agents | [tapefly.xyz/agents](https://tapefly.xyz/agents) |
 
