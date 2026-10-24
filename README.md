@@ -1,89 +1,242 @@
 # TapeFly
 
-**A fruit fly whose brain is a circuit of NAND gates, and a game about designing a better one.**
+<p align="center">
+  <img src="./public/tapefly-circuit1-onchain.png" alt="TapeFly circuit #1 on BNB Chain" width="720">
+</p>
 
-Every UTC day, eight sibling flies wake up in one dish with the same brain: 50 NAND gates
-that turn what a fly senses into what it does. Most of them do not see dusk. You can
-write a better brain as a handful of rules, watch it compile to gates, and drop your fly
-into the same dish.
+**A playable fruit fly whose entire brain is 50 NAND gates — deterministic every day and fully verifiable on chain.**
 
-Everything is a function of the date. Open any day on any machine and you get the same
-day, byte for byte; your browser can rebuild it and check the hash.
+[Live app](https://tapefly.xyz) · [Docs](https://tapefly.xyz/docs) · [On-chain circuit](https://tapefly.xyz/tapeout) · [Proof](https://tapefly.xyz/proof)
 
-```
-npm install
-npm run dev                               # the site on :3000
-npm run replay  -- 2026-10-16 --check     # replay a day   → ✓ IDENTICAL
-npm run lineage -- --check                # recompute the lineage ledger → ✓ IDENTICAL
-npm run board   -- --show                 # score every brain on the board
-npm run tapeout -- bytes                  # the brain as TapeOut bytes
-```
+[![CI](https://img.shields.io/github/actions/workflow/status/tapefly/tapefly/ci.yml?branch=main&label=CI)](https://github.com/tapefly/tapefly/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-95%2F95-2ea44f)](#verification)
+[![Node](https://img.shields.io/badge/node-22-339933?logo=node.js&logoColor=white)](package.json)
+[![TapeOut](https://img.shields.io/badge/TapeOut-Circuit%20%231-7c5cff)](https://tapefly.xyz/tapeout)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-## What you can do
+## The 30-second pitch
 
-| Page | What it is |
+TapeFly turns a NAND circuit into a living game character. Six senses become a 12-bit input; a 50-gate brain returns a move plus an escape reflex. Because the input space is exactly 4,096 words, there is no hidden black box: every possible decision can be checked in one pass.
+
+The official brain is taped out as **Circuit #1** on BNB Chain. The processor's free read-only `eval` function returned the same answer for every one of the 4,096 inputs, and the stored netlist bytes also match. Players can watch a day unfold, design a new brain, challenge a friend, and tape their own circuit out from their wallet.
+
+No database or account is needed to play or verify a day. A date is the seed, every tick is hashed, and the resulting transcript can be replayed byte for byte.
+
+## For judges
+
+| What | Link or proof |
 |---|---|
-| `/` | Today's dish, playing live: eight flies, their standings, and the focused fly's mind on every tick, with the circuit lighting up as it decides. |
-| `/play` | **Be the fly** first: steer one yourself, a key press per tick, beside the eight official flies (same physics, checked tick for tick against the engine). Then **Brain School**: eight levels on real dishes. Each starts with a brain that fails in a way you can watch, and has three goals. |
-| `/build` | **The builder**: rules in, NAND gates out. Live gate count, depth, TapeOut cost, agreement with a reference fly, and your fly in today's dish or across the board's seven days. A brain is a link. |
-| `/vs` | **Versus**: my fly against yours. Same dish, same body, shared food, seven rounds. A match is a link, so what you send is exactly what your friend sees; they answer by building their own fly. Shared links unfold into a card (`/api/og`). |
-| `/me` | **My fly**: the fly you are raising. Its name (every brain hatches with one), practice or official, its last seven dishes, the season, its trophies, and what making it official takes. |
-| `/board` | Brains people submitted, each scored over the last seven finished dishes. Entries come by pull request and CI recomputes every score. |
-| `/fly/{name}?d=…` | One fly's whole day: route, decisions, body, parent, seal. |
-| `/calibrate` | The exam: the official brain against a reference fly on all 4,096 situations, with every disagreement on a board you can click. |
-| `/verify` | Paste a record; the hash chain is rebuilt in your browser. |
-| `/lineage` | Every champion since 1 January, and how far the body has drifted. |
-| `/tapeout` | The brain as 350 bytes in TapeOut's format, and the steps between it and the chain. |
-| `/lab` | Set the senses by hand and watch the gates decide. |
-| `/agents` | The JSON API and how outside agents take part. |
+| Live product | [tapefly.xyz](https://tapefly.xyz) |
+| Product documentation | [tapefly.xyz/docs](https://tapefly.xyz/docs) |
+| Source code | This repository, MIT licensed |
+| TapeOut processor | [`0x6Ac12D578e29D340f178E18eB2C297C7915E011C`](https://bscscan.com/address/0x6Ac12D578e29D340f178E18eB2C297C7915E011C) |
+| Transistor contract | [`0x09FD3719f7de0E6FB399279fCC890B205895b942`](https://bscscan.com/address/0x09FD3719f7de0E6FB399279fCC890B205895b942) |
+| Official brain | Circuit `#1`, 50 NAND gates, depth 9 |
+| Tape-out transaction | [`0x573cdc5e1a4bd30dddbb174c53408eea6a0da806b1154e4b0f81fc8c216cb14b`](https://bscscan.com/tx/0x573cdc5e1a4bd30dddbb174c53408eea6a0da806b1154e4b0f81fc8c216cb14b) |
+| Full on-chain check | Processor byte match + all 4,096 `eval` answers |
+| Player flow | [Play](https://tapefly.xyz) → [Build](https://tapefly.xyz/build) → [Race](https://tapefly.xyz/vs) → [Tape out](https://tapefly.xyz/tapeout) |
+| X Layer track | Existing product is live on BNB Chain; X Layer circuit deployment is the next integration milestone |
 
-## How it works
+### Track alignment
 
-```
-date ─▶ seed ─▶ one dish ─▶ 8 bodies ─▶ senses (0..1000) ─▶ 12 bits ─▶ NAND gates ─▶ 3 bits ─▶ act
-                                                                                         │
-                                                         tick ─▶ SHA-256 ─▶ chain ─▶ seal ┘
-```
-
-- **The engine** (`sim/engine.ts`) is integer-only. A brain is any 12-in / 3-out NAND netlist. Each tick is hashed and chained to the one before.
-- **The official brain** is `sim/ffw-nand-1.netlist.json`: 50 gates, 9 deep, checked against the eight rules in `sim/rules.ts` on all 4,096 inputs.
-- **Player brains** are programs (`sim/program.ts`): ordered rules over sense levels and the last move.
-  - `sim/compile.ts` compiles a program to NAND gates, trying three priority encodings and keeping the one with the lowest TapeOut cost. The tests prove the result equal to the program on all 4,096 inputs. The official rules compile to 48 gates.
-- **Versus** (`sim/versus.ts`): two brains in one dish with shared food; one fly alone through it is tested to match the engine tick for tick.
-- **Duels** (`sim/challenge.ts`): a challenger gets the day's founding body and the official dish, and is ranked against the eight flies. Ties go to the flies.
-- **Brain School** (`sim/levels.ts`): every level has a stored three-star solution, and the tests check that solution earns all three stars and that the starting brain earns none.
-- **The board** (`sim/board.ts`, `challengers/`): `npm run board -- --check` validates the entries and the index. Scores are always recomputed from the circuits.
-- **Practice and official** (`sim/identity.ts`): an entry with a `tapeout` record (processor, circuit ID) is official once `npm run board -- --chain` has asked its circuit all 4,096 questions on chain; CI runs it.
-- **Seasons** (`sim/seasons.ts`, `challengers/seasons.json`): a season is a Monday-to-Sunday week. When one ends it is written into a ledger and frozen; the best player's fly takes the trophy (house baselines never do), and `--check` recomputes every recorded season.
-- **Lineage** (`sim/lineage.json`): each day's champion is tomorrow's founding body. The file is a committed ledger, advanced by a daily workflow and checked by recomputation.
-
-## Getting on the board
-
-1. Build a brain at `/build`.
-2. Press **Enter it on the board** and save the file it gives you as `challengers/<your-github-handle>/<name>.json`.
-3. Open a pull request.
-
-CI validates the file and recomputes everything. Netlists work too, as JSON or as TapeOut hex.
-
-## Honest state
-
-- The official brain is **live on BNB Chain** as circuit #1 on the TapeFly processor (`0x6Ac12D578e29D340f178E18eB2C297C7915E011C`). All 4,096 answers and the stored bytes were checked against the committed netlist.
-- `npm run tapeout -- verify --processor … --id …` asks the live circuit all 4,096 questions through the free `eval` call and compares the answers.
-- The byte format follows public reverse-engineering notes and has been exercised successfully against the live TapeOut contract.
-- There is no token, no database and no account system.
-
-## Commands
-
-| | |
+| Judging signal | Evidence in TapeFly |
 |---|---|
-| `npm test` | engine, compiler, duels, versus, levels, manual mode, board, lineage, records |
-| `npm run check` | typecheck, tests, ledger check, board check, bytes check, build |
-| `npm run board [-- --check] [--show]` | rebuild / check the board index; print scores |
-| `npm run tapeout -- bytes \| verify` | TapeOut bytes; on-chain check |
-| `npm run replay -- YYYY-MM-DD [--check]` | one day; prove it replays identical |
-| `npm run lineage [-- --check]` | extend / recompute the ledger |
-| `npm run record` / `verify-record` | seal / check an agent record |
+| User value and commercial potential | A free, wallet-less game loop turns the abstract TapeOut circuit market into a character users can understand, customize and share. |
+| Innovation | Behaviour itself is the verifiable object: one circuit, one complete truth table, one replayable daily transcript. |
+| TapeOut ecosystem use | Real processor, NAND consumption, circuit NFT path, free on-chain `eval`, netlist bytes and verifiable ownership. |
+| Completeness and UX | Chinese-first interface, one-screen instinct controls, eight Brain School levels, friend challenges, season board and share links. |
+| Lower technical barrier | A player edits rules rather than gates; the compiler emits TapeOut-compatible NAND bytes automatically. |
+| Openness | MIT source, 95 tests, public CI, deterministic ledgers and reproducible on-chain checks. |
 
-Deploying: `DEPLOY.md`. (The project was first called One Fly.) Design notes are in `docs/DESIGN.md`, and the plan and status are in `docs/PLAN.md`.
+## Live proof snapshot
 
-MIT.
+| Property | Verified value |
+|---|---|
+| Official brain | `FFW-NAND/1` |
+| Inputs → outputs | `12 → 3` |
+| NAND gates | `50` |
+| Circuit depth | `9` |
+| Serialized size | `350 bytes` |
+| Netlist SHA-256 | `a763117011fe4c4be7106d9b0d2c78fe79b81c15ccc2a6531c9263b4f443d4dd` |
+| On-chain circuit | TapeFly processor circuit `#1` |
+| Exhaustive check | `4,096 / 4,096` answers identical |
+| Stored byte check | Identical |
+| Test suite | `95 / 95` passing |
+
+Run the live proof yourself:
+
+```bash
+npm ci
+npm run tapeout -- verify \
+  --processor 0x6Ac12D578e29D340f178E18eB2C297C7915E011C \
+  --id 1
+```
+
+The verifier compares the committed 350 bytes with `netlist(1)`, then asks the chain's free read-only `eval(1, input)` function all 4,096 possible inputs.
+
+## Product
+
+<table>
+  <tr>
+    <td width="50%"><img src="./docs/assets/brain-builder.jpg" alt="TapeFly brain builder"></td>
+    <td width="50%"><img src="./docs/assets/season-board.jpg" alt="TapeFly season board"></td>
+  </tr>
+  <tr>
+    <td align="center">Turn instincts into a NAND circuit</td>
+    <td align="center">Compare brains across a seven-day season</td>
+  </tr>
+</table>
+
+### One loop, three levels of participation
+
+1. **Watch.** See eight sibling flies share one dish and one brain. Their routes, senses, decisions and deaths are deterministic.
+2. **Build.** Flip four instincts or write ordered rules. The compiler tests the result on every possible 12-bit input and emits TapeOut bytes.
+3. **Own.** Tape the brain out from a wallet. The new circuit becomes an NFT and can be checked against its committed bytes and complete truth table.
+
+### Product surface
+
+| Route | Purpose |
+|---|---|
+| `/` | Today's dish, live character simulation and instinct switches |
+| `/play` | “Be the fly” tutorial plus eight Brain School levels |
+| `/build` | Rule editor → compiled NAND circuit → shareable brain link |
+| `/vs` | Two-player challenge with a shared dish and deterministic rounds |
+| `/board` | Seven-day season ranking; scores are recomputed from circuits |
+| `/calibrate` | 64×64 board showing all 4,096 decisions and disagreements |
+| `/verify` | Rebuild a sealed transcript's hash chain in the browser |
+| `/lineage` | Champion lineage and optional on-chain anchors |
+| `/tapeout` | Buy NAND, simulate, tape out and verify all 4,096 answers |
+| `/agents` | Open JSON API for outside agents |
+
+## Architecture
+
+```mermaid
+graph TD
+    D["UTC date"] --> S["Deterministic seed"]
+    S --> W["Shared dish + eight bodies"]
+    W --> E["Integer-only engine"]
+    E --> I["12-bit sense word"]
+    I --> C["50-gate NAND circuit"]
+    C --> A["Move + escape reflex"]
+    A --> H["SHA-256 tick chain"]
+    H --> R["Replayable daily transcript"]
+
+    P["Player rules"] --> K["Rule compiler"]
+    K --> V["Exhaustive 4,096-input equivalence"]
+    V --> B["TapeOut netlist bytes"]
+    B --> T["TapeOut processor on chain"]
+    T --> Q["Circuit NFT + free eval"]
+```
+
+### Runtime sequence
+
+```mermaid
+sequenceDiagram
+    actor Player
+    participant App as TapeFly web app
+    participant Sim as Deterministic simulator
+    participant Wallet
+    participant Chain as TapeOut on BNB Chain
+
+    Player->>App: Open today's dish
+    App->>Sim: date + body + brain
+    Sim-->>App: ticks + decisions + hash chain
+    Player->>App: Design instincts / rules
+    App->>Sim: Compile to NAND + test 4,096 inputs
+    Sim-->>Player: Shareable brain
+    Player->>Wallet: Request tape-out
+    Wallet->>Chain: Buy NAND + tapeout(bytes, 12, 3)
+    Chain-->>App: Circuit ID + transaction
+    App->>Chain: Compare stored bytes + eval every input
+    Chain-->>Player: Verifiable circuit NFT
+```
+
+## What makes TapeFly different
+
+| Typical on-chain AI/game project | TapeFly |
+|---|---|
+| A model or server decides; users trust the output | A 50-gate circuit decides; every possible input can be checked |
+| “AI agent” is a broad claim with a hidden runtime | The brain is a small artifact with exact bytes and a complete truth table |
+| Game state requires a private database | A date reproduces the public transcript; every tick is hash-chained |
+| Users buy an asset without understanding it | Users design a visible rule set, then choose whether to own its circuit |
+| Circuit tools require electronics knowledge | Rules compile to TapeOut-compatible NAND gates automatically |
+
+## Verification
+
+```bash
+npm ci
+npm run typecheck
+npm test
+npm run lineage -- --check
+npm run board -- --check
+npm run anchor -- --check
+npm run tapeout -- bytes
+npm run build
+```
+
+`npm run check` runs the complete sequence. CI performs the same checks and additionally asks every official on-chain circuit all 4,096 questions through `eval`.
+
+The committed behavioral certificate compares the official brain with `FLY-LIF/0`, a separate reference implementation of the documented reflex rules. Its current agreement is **85.30%**. This is an internal calibration distance, not a third-party scientific certification.
+
+## Repository map
+
+```text
+app/             Next.js app, pages, share cards and open API
+sim/             deterministic world, circuits, compiler and ledgers
+scripts/         replay, lineage, board, calibration and tape-out tools
+tests/           engine, circuit, game, ledger and chain-format tests
+config/          committed processor and circuit proof
+docs/            architecture, agent protocol, design and fidelity research
+challengers/     public brains and frozen season records
+anchors/         optional daily lineage anchors
+```
+
+## Submission assets
+
+| Asset | Location |
+|---|---|
+| Live product | [tapefly.xyz](https://tapefly.xyz) |
+| Public source | [github.com/tapefly/tapefly](https://github.com/tapefly/tapefly) |
+| Product documentation | [tapefly.xyz/docs](https://tapefly.xyz/docs) |
+| 3-minute demo script | [docs/DEMO.md](./docs/DEMO.md) |
+| On-chain proof | [TapeOut circuit #1](https://tapefly.xyz/tapeout) |
+| API for agents | [tapefly.xyz/agents](https://tapefly.xyz/agents) |
+
+## Local development
+
+Requirements: **Node.js 22**.
+
+```bash
+npm ci
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+Useful commands:
+
+```bash
+npm run replay -- 2026-10-16 --check
+npm run lineage -- --check
+npm run board -- --show
+npm run tapeout -- bytes
+```
+
+Production deployment is documented in [DEPLOY.md](./DEPLOY.md).
+
+## How to enter a brain
+
+1. Open `/build` and create a brain.
+2. Export the entry JSON.
+3. Add it under `challengers/<github-handle>/<name>.json`.
+4. Open a pull request. CI recomputes every score from the circuit.
+
+Netlist JSON and TapeOut hex are accepted as well as rule programs.
+
+## Team
+
+Independent project by **Richard**, built for the TapeOut ecosystem. TapeFly is not an official TapeOut, Binance, OKX or X Layer product.
+
+## License
+
+[MIT](./LICENSE)

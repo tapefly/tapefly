@@ -1,11 +1,11 @@
 # Deploying TapeFly
 
-TapeFly is a plain Next.js 14 app. It has no database, no accounts and no secrets: every page is
-computed from the date and from files committed in this repository.
+TapeFly is a plain Next.js app. It has no database, no accounts and no required secrets: every
+page is computed from the date and from files committed in this repository.
 
 ## Run it on your machine
 
-Requires Node.js 20 or newer (CI uses 22).
+Requires Node.js 22, matching CI and production.
 
 ```
 npm ci
@@ -22,14 +22,28 @@ npm start              # http://localhost:3000; set PORT=8080 to change the port
 `npm run check` runs everything CI runs: typecheck, tests, the ledger and board checks, the
 TapeOut bytes check and the build.
 
-## Deploy to Vercel
+## Production server
 
-1. Push this repository to GitHub, then import it at vercel.com/new (framework: Next.js; no
-   build settings to change). Or, without GitHub: `npx vercel` from this folder, then
-   `npx vercel --prod`.
-2. Optional: set `NEXT_PUBLIC_SITE_URL` to your domain (for example `https://tapefly.example`)
-   in the project's environment variables. Share cards and the sitemap use it. Until it is set,
-   Vercel's own URL for the deployment is used.
+The public deployment at [tapefly.xyz](https://tapefly.xyz) runs as one Node process behind a
+reverse proxy with HTTPS. Do not use cluster mode: the app must remain a single process.
+
+```bash
+npm ci
+npm run check
+npm run build
+NEXT_PUBLIC_SITE_URL=https://tapefly.xyz PORT=3000 npm start
+```
+
+Use a process manager such as PM2 in `fork` mode to keep the single process alive. A typical
+reverse proxy should:
+
+- terminate HTTPS;
+- preserve the original client address in `X-Real-IP`;
+- limit request bodies to `1m`;
+- proxy to the one local Node process.
+
+The site can also run on any Node 22 host that satisfies the same constraints. Vercel is
+supported as an alternate host but is not the production deployment.
 
 ## What keeps itself current
 
@@ -46,8 +60,10 @@ TapeOut bytes check and the build.
 
 | Name | Needed | What it does |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | optional | The public address, used for share cards and the sitemap |
+| `NEXT_PUBLIC_SITE_URL` | recommended in production | Public address used by share cards and the sitemap |
 | `PORT` | optional | Port for `npm start` (default 3000) |
 
-There are no keys. The tape-out step uses the owner's own wallet, outside this app; no private
-key ever belongs in this repository or its environment.
+No private key belongs in this repository or its environment. The tape-out step uses the
+owner's own wallet outside the app. The optional daily anchor workflow reads a dedicated
+`ANCHOR_PRIVATE_KEY` from GitHub Actions secrets; without it, the workflow still advances the
+ledger and skips the transaction.
