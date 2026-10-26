@@ -6840,6 +6840,52 @@
       "lived": 150,
       "alive": true,
       "hash": "0800a1dbde4756a619a7c0894a12dc230809c425a54892f4cfff48497ae7c65a"
+    },
+    {
+      "d": "2026-10-25",
+      "founding": {
+        "hStep": 9,
+        "hFood": 553,
+        "senseDecay": 212,
+        "visitDecay": 366,
+        "startX": 6,
+        "startY": -3
+      },
+      "champion": {
+        "hStep": 9,
+        "hFood": 553,
+        "senseDecay": 190,
+        "visitDecay": 375,
+        "startX": 6,
+        "startY": -2
+      },
+      "name": "mossy-falcon",
+      "lived": 150,
+      "alive": true,
+      "hash": "c8d4d3e52f4dd06622f084e75036b818ce187a97a157ed2ab2db0ce3ba4a18ae"
+    },
+    {
+      "d": "2026-10-26",
+      "founding": {
+        "hStep": 9,
+        "hFood": 553,
+        "senseDecay": 209,
+        "visitDecay": 375,
+        "startX": 6,
+        "startY": -2
+      },
+      "champion": {
+        "hStep": 12,
+        "hFood": 518,
+        "senseDecay": 224,
+        "visitDecay": 389,
+        "startX": 4,
+        "startY": -2
+      },
+      "name": "copper-magpie",
+      "lived": 150,
+      "alive": true,
+      "hash": "da410b5064d725c43abbb435d2886243db0407bdf58989947a8ba9cbff572c4c"
     }
   ]
 }
