@@ -41,6 +41,46 @@
     }
    ],
    "champion": ""
+  },
+  {
+   "n": 2,
+   "from": "2026-10-19",
+   "through": "2026-10-25",
+   "entrants": [
+    "house/Greedy",
+    "house/Official FFW-NAND/1",
+    "house/Wanderer"
+   ],
+   "table": [
+    {
+     "id": "house/Greedy",
+     "survived": 3,
+     "lived": 632,
+     "meals": 66,
+     "cost": 48,
+     "official": false,
+     "house": true
+    },
+    {
+     "id": "house/Wanderer",
+     "survived": 2,
+     "lived": 649,
+     "meals": 35,
+     "cost": 216,
+     "official": false,
+     "house": true
+    },
+    {
+     "id": "house/Official FFW-NAND/1",
+     "survived": 1,
+     "lived": 803,
+     "meals": 25,
+     "cost": 36450,
+     "official": false,
+     "house": true
+    }
+   ],
+   "champion": ""
   }
  ]
 }
