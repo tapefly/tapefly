@@ -6840,6 +6840,167 @@
       "lived": 150,
       "alive": true,
       "hash": "0800a1dbde4756a619a7c0894a12dc230809c425a54892f4cfff48497ae7c65a"
+    },
+    {
+      "d": "2026-10-25",
+      "founding": {
+        "hStep": 9,
+        "hFood": 553,
+        "senseDecay": 212,
+        "visitDecay": 366,
+        "startX": 6,
+        "startY": -3
+      },
+      "champion": {
+        "hStep": 9,
+        "hFood": 553,
+        "senseDecay": 190,
+        "visitDecay": 375,
+        "startX": 6,
+        "startY": -2
+      },
+      "name": "mossy-falcon",
+      "lived": 150,
+      "alive": true,
+      "hash": "c8d4d3e52f4dd06622f084e75036b818ce187a97a157ed2ab2db0ce3ba4a18ae"
+    },
+    {
+      "d": "2026-10-26",
+      "founding": {
+        "hStep": 9,
+        "hFood": 553,
+        "senseDecay": 209,
+        "visitDecay": 375,
+        "startX": 6,
+        "startY": -2
+      },
+      "champion": {
+        "hStep": 12,
+        "hFood": 518,
+        "senseDecay": 224,
+        "visitDecay": 389,
+        "startX": 4,
+        "startY": -2
+      },
+      "name": "copper-magpie",
+      "lived": 150,
+      "alive": true,
+      "hash": "da410b5064d725c43abbb435d2886243db0407bdf58989947a8ba9cbff572c4c"
+    },
+    {
+      "d": "2026-10-27",
+      "founding": {
+        "hStep": 13,
+        "hFood": 518,
+        "senseDecay": 228,
+        "visitDecay": 389,
+        "startX": 4,
+        "startY": -2
+      },
+      "champion": {
+        "hStep": 13,
+        "hFood": 518,
+        "senseDecay": 228,
+        "visitDecay": 389,
+        "startX": 4,
+        "startY": 0
+      },
+      "name": "mossy-siskin",
+      "lived": 109,
+      "alive": false,
+      "hash": "55421d4abfb2512a1f23534dade49d02f9e82d1052f0de4346d851b93d0ad6a6"
+    },
+    {
+      "d": "2026-10-28",
+      "founding": {
+        "hStep": 13,
+        "hFood": 518,
+        "senseDecay": 252,
+        "visitDecay": 400,
+        "startX": 2,
+        "startY": -1
+      },
+      "champion": {
+        "hStep": 13,
+        "hFood": 518,
+        "senseDecay": 252,
+        "visitDecay": 400,
+        "startX": 0,
+        "startY": -3
+      },
+      "name": "spare-cinder",
+      "lived": 150,
+      "alive": true,
+      "hash": "22147e11b0274f49a2ad8ac80e94bbc51e0a6d93cc3c6b0c1aa15d5a135b02fa"
+    },
+    {
+      "d": "2026-10-29",
+      "founding": {
+        "hStep": 13,
+        "hFood": 518,
+        "senseDecay": 252,
+        "visitDecay": 400,
+        "startX": 0,
+        "startY": -2
+      },
+      "champion": {
+        "hStep": 11,
+        "hFood": 518,
+        "senseDecay": 260,
+        "visitDecay": 400,
+        "startX": 0,
+        "startY": -2
+      },
+      "name": "eager-cinder",
+      "lived": 150,
+      "alive": true,
+      "hash": "1dfeced4039aaab6878ca4db49d2d1871f13e972417925db7ecac72b18f06c51"
+    },
+    {
+      "d": "2026-10-30",
+      "founding": {
+        "hStep": 10,
+        "hFood": 518,
+        "senseDecay": 260,
+        "visitDecay": 369,
+        "startX": 1,
+        "startY": -2
+      },
+      "champion": {
+        "hStep": 10,
+        "hFood": 518,
+        "senseDecay": 255,
+        "visitDecay": 369,
+        "startX": 1,
+        "startY": -3
+      },
+      "name": "stark-heron",
+      "lived": 150,
+      "alive": true,
+      "hash": "e6c422181def2317da02a5d50e5386bb37efa0524549189a67e35e6cf007cb50"
+    },
+    {
+      "d": "2026-10-31",
+      "founding": {
+        "hStep": 10,
+        "hFood": 508,
+        "senseDecay": 255,
+        "visitDecay": 369,
+        "startX": 1,
+        "startY": -5
+      },
+      "champion": {
+        "hStep": 11,
+        "hFood": 542,
+        "senseDecay": 230,
+        "visitDecay": 374,
+        "startX": 1,
+        "startY": -4
+      },
+      "name": "vague-ember",
+      "lived": 150,
+      "alive": true,
+      "hash": "acc84c672b4529a1707c1e878c6badd3559389eb5e3fed7c17fe1cc2ba0f3aa9"
     }
   ]
 }
