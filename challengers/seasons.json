@@ -41,6 +41,126 @@
     }
    ],
    "champion": ""
+  },
+  {
+   "n": 2,
+   "from": "2026-10-19",
+   "through": "2026-10-25",
+   "entrants": [
+    "house/Greedy",
+    "house/Official FFW-NAND/1",
+    "house/Wanderer"
+   ],
+   "table": [
+    {
+     "id": "house/Greedy",
+     "survived": 3,
+     "lived": 632,
+     "meals": 66,
+     "cost": 48,
+     "official": false,
+     "house": true
+    },
+    {
+     "id": "house/Wanderer",
+     "survived": 2,
+     "lived": 649,
+     "meals": 35,
+     "cost": 216,
+     "official": false,
+     "house": true
+    },
+    {
+     "id": "house/Official FFW-NAND/1",
+     "survived": 1,
+     "lived": 803,
+     "meals": 25,
+     "cost": 36450,
+     "official": false,
+     "house": true
+    }
+   ],
+   "champion": ""
+  },
+  {
+   "n": 3,
+   "from": "2026-10-26",
+   "through": "2026-11-01",
+   "entrants": [
+    "house/Greedy",
+    "house/Official FFW-NAND/1",
+    "house/Wanderer"
+   ],
+   "table": [
+    {
+     "id": "house/Wanderer",
+     "survived": 2,
+     "lived": 904,
+     "meals": 32,
+     "cost": 216,
+     "official": false,
+     "house": true
+    },
+    {
+     "id": "house/Official FFW-NAND/1",
+     "survived": 2,
+     "lived": 841,
+     "meals": 13,
+     "cost": 36450,
+     "official": false,
+     "house": true
+    },
+    {
+     "id": "house/Greedy",
+     "survived": 1,
+     "lived": 349,
+     "meals": 50,
+     "cost": 48,
+     "official": false,
+     "house": true
+    }
+   ],
+   "champion": ""
+  },
+  {
+   "n": 4,
+   "from": "2026-11-02",
+   "through": "2026-11-08",
+   "entrants": [
+    "house/Greedy",
+    "house/Official FFW-NAND/1",
+    "house/Wanderer"
+   ],
+   "table": [
+    {
+     "id": "house/Official FFW-NAND/1",
+     "survived": 7,
+     "lived": 1050,
+     "meals": 40,
+     "cost": 36450,
+     "official": false,
+     "house": true
+    },
+    {
+     "id": "house/Wanderer",
+     "survived": 3,
+     "lived": 857,
+     "meals": 60,
+     "cost": 216,
+     "official": false,
+     "house": true
+    },
+    {
+     "id": "house/Greedy",
+     "survived": 3,
+     "lived": 689,
+     "meals": 82,
+     "cost": 48,
+     "official": false,
+     "house": true
+    }
+   ],
+   "champion": ""
   }
  ]
 }
