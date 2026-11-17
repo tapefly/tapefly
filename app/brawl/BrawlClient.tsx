@@ -88,7 +88,9 @@ export default function BrawlClient({ today }: { today: string }) {
 
   if (watch) {
     return <FightView f={watch.f} practice={watch.practice} mine={linesOfChips(run.chips)} myGear={run.gear} flyName={flyName} muted={muted} toggleMute={toggleMute} onBack={() => setWatch(null)}
-      backLabel={watch.practice ? t("回去调整", "Back to adjust") : run.over ? t("看结算", "See the result") : t("回商店", "Back to the shop")} coach={!coachOff && run.history.length < 3} />;
+      backLabel={watch.practice ? t("回去调整", "Back to adjust") : run.over ? t("看结算", "See the result") : t("回商店", "Back to the shop")}
+      coach={!coachOff && run.history.length < 3}
+      claim={watch.practice ? null : { date: run.date, actions: run.actions, eligible: run.wins > 0 }} />;
   }
   if (run.over) return <Summary run={run} today={today} flyName={flyName} best={best} onRestart={restart} flash={flash} toast={toast} />;
   return <Shop run={run} setRun={setRun} today={today} onFight={go} onPractice={tryOut} onRestart={restart} muted={muted} toggleMute={toggleMute} friend={friend} onFriend={vsFriend} coach={!coachOff} endCoach={endCoach} />;

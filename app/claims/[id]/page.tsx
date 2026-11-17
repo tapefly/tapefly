@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { SiteFooter, SiteNav } from "../../components/ui/Shell";
 import { readCircuitClaim } from "@/app/api/v1/claims/read";
 import { CLAIM_MODE } from "@/sim/circuit-claims";
-import { WLEVELS } from "@/sim/workshop/levels";
 
 export const dynamic = "force-dynamic";
 
@@ -30,14 +29,13 @@ export default async function CircuitClaimPage({ params }: { params: Promise<{ i
   if (!claim) notFound();
 
   const workshop = claim.mode === CLAIM_MODE.workshop;
-  const level = workshop ? WLEVELS[claim.activityCode - 1] : undefined;
   const date = workshop ? undefined : brawlDate(claim.activityCode);
   const title = workshop
-    ? level?.title.en ?? `Workshop stage ${claim.activityCode}`
+    ? "Workshop · Three-Level Circuit Passport"
     : `Brain Brawl · ${date}`;
   const destination = workshop ? "/workshop" : "/brawl";
   const shareText = workshop
-    ? `I cleared ${level?.title.en ?? `Workshop stage ${claim.activityCode}`} with a ${claim.gateCount}-gate NAND brain in TapeFly.`
+    ? `I cleared three Workshop levels with three verified NAND brains in TapeFly.`
     : `I finished the ${date} Brain Brawl with a ${claim.gateCount}-gate NAND brain in TapeFly.`;
   const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(`https://tapefly.xyz/claims/${id}`)}`;
 
@@ -61,11 +59,11 @@ export default async function CircuitClaimPage({ params }: { params: Promise<{ i
             <div className="claim-page-stats">
               <div><small>Mode</small><b>{workshop ? "Workshop" : "Brain Brawl"}</b></div>
               <div><small>Season</small><b>{claim.seasonId}</b></div>
-              <div><small>{workshop ? "Stage" : "Date"}</small><b>{workshop ? claim.activityCode : date}</b></div>
+              <div><small>{workshop ? "Levels cleared" : "Date"}</small><b>{workshop ? claim.activityCode : date}</b></div>
               <div><small>NAND gates</small><b>{claim.gateCount}</b></div>
               <div><small>Logic depth</small><b>{claim.depth}</b></div>
               <div><small>State bits</small><b>{claim.stateBits}</b></div>
-              <div><small>{workshop ? "Clear time" : "Wins"}</small><b>{workshop ? `${(claim.score / 10).toFixed(1)}s` : claim.score}</b></div>
+              <div><small>{workshop ? "Total clear time" : "Wins"}</small><b>{workshop ? `${(claim.score / 10).toFixed(1)}s` : claim.score}</b></div>
             </div>
             <div className="claim-page-hash">
               <small>Circuit bytes hash</small>

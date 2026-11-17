@@ -17,6 +17,9 @@ import {
   replayRunActions,
   type RunAction,
 } from "../sim/arena";
+import { encodeDesign } from "../sim/workshop/codec";
+import { WSOLUTIONS } from "../sim/workshop/solutions";
+import { POST as requestVoucher } from "../app/api/v1/claims/voucher/route";
 
 process.env.TAPEFLY_CLAIM_SIGNER_KEY = `0x${"11".repeat(32)}`;
 process.env.NEXT_PUBLIC_TAPEFLY_CLAIMS_CONTRACT = "0x1000000000000000000000000000000000000001";
@@ -98,5 +101,28 @@ test("claim vouchers bind the recipient and token id to the signer", async () =>
     signature: first.signature,
   });
   assert.equal(recovered.toLowerCase(), account.address.toLowerCase());
+});
+
+test("a Workshop claim verifies three cleared levels", async () => {
+  const levels = ["liftoff", "curve", "eyes"].map((level) => ({
+    level,
+    code: encodeDesign(WSOLUTIONS[level]),
+  }));
+  const request = new Request("http://tapefly.test/api/v1/claims/voucher", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      address: "0x2000000000000000000000000000000000000002",
+      mode: "workshop",
+      payload: { levels },
+    }),
+  });
+  const response = await requestVoucher(request);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.summary.clearedLevels, 3);
+  assert.equal(body.summary.levels.length, 3);
+  assert.equal(body.claim.activityCode, 3);
+  assert.equal(typeof body.claim.circuitHash, "string");
 });
 

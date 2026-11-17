@@ -18,16 +18,16 @@ TapeFly Workshop and Brain Brawl now share one optional X Layer claim flow.
 
 ### Workshop
 
-1. The player clears a level.
-2. The result dialog runs the existing exhaustive Workshop seal check.
-3. The claim button appears only when the circuit is eligible.
-4. The server re-runs the level and the complete circuit check.
+1. The player clears three different Workshop levels.
+2. The claim card appears on the level map and in the result dialog.
+3. The server re-runs all three levels and exhaustively checks each stored design.
+4. The three individual circuit hashes are combined into one season passport.
 5. The server signs an EIP-712 voucher.
 6. The wallet switches to X Layer and calls `claim`.
 
 ### Brain Brawl
 
-1. The player finishes a daily run.
+1. The player wins at least one non-practice fight in a daily run.
 2. Brawl submits the order of shop purchases, sells, moves, rerolls and fights.
 3. The server reconstructs the run from `newRun(date)` and replays every action.
 4. The final brain is compiled again and its NAND bytes are hashed.
@@ -128,8 +128,11 @@ Workshop:
   "address": "0x...",
   "mode": "workshop",
   "payload": {
-    "level": "level-id",
-    "code": "encoded-design"
+    "levels": [
+      { "level": "level-id-1", "code": "encoded-design-1" },
+      { "level": "level-id-2", "code": "encoded-design-2" },
+      { "level": "level-id-3", "code": "encoded-design-3" }
+    ]
   }
 }
 ```

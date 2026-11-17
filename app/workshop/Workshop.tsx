@@ -188,6 +188,16 @@ function LevelView({ level, save, update, t, onExit, onNext, shared, rival, pare
   const bits = chipInfo.state.length;
   const loose = useMemo(() => looseParts(design), [design]);
   const grade = useMemo(() => (view === "fly" ? gradeDesign(level, design) : null), [view, level, design]);
+  const workshopClaimLevels = useMemo(() => {
+    const ids = LEVELS.filter((candidate) =>
+      !!save.best[candidate.id] ||
+      (candidate.id === level.id && !!grade?.cleared && grade.problems.length === 0)
+    ).slice(0, 3);
+    return ids.flatMap((candidate) => {
+      const candidateDesign = candidate.id === level.id ? design : save.designs[candidate.id];
+      return candidateDesign ? [{ level: candidate.id, code: encodeDesign(candidateDesign) }] : [];
+    });
+  }, [save.best, save.designs, level.id, design, grade]);
   const sel = design.parts.find((p) => p.id === selected);
 
   const nextId = (k: PartKind) => { let i = 1; while (design.parts.some((p) => p.id === `${k}${i}`)) i++; return `${k}${i}`; };
@@ -784,8 +794,15 @@ function LevelView({ level, save, update, t, onExit, onNext, shared, rival, pare
                 </>
               )}
             </div>}
-            {!portalMode && sealResult?.seal.eligible && (
-              <CircuitClaimButton payload={{ mode: "workshop", level: level.id, code: encodeDesign(design) }} />
+            {!portalMode && (
+              <p className={`ws-claim-progress ${workshopClaimLevels.length >= 3 ? "ready" : ""}`}>
+                {workshopClaimLevels.length >= 3
+                  ? t("已累计通关 3 关：可以领取工坊纪念电路 NFT。", "Three levels cleared: the Workshop commemorative circuit NFT can be claimed.")
+                  : t(`累计通关 3 关即可领取纪念 NFT；还差 ${Math.max(0, 3 - workshopClaimLevels.length)} 关。`, `Clear three levels total to claim the commemorative NFT; ${Math.max(0, 3 - workshopClaimLevels.length)} more to go.`)}
+              </p>
+            )}
+            {!portalMode && workshopClaimLevels.length >= 3 && (
+              <CircuitClaimButton payload={{ mode: "workshop", levels: workshopClaimLevels }} />
             )}
             <p className="fine">{portalMode ? t("三个分数各自都能刷：更少的零件、更少的门、更快。试着找到这一关最简洁、最稳定的大脑。", "Each score can be pushed on its own: fewer parts, fewer gates, faster. Find the simplest, most reliable brain for this level.") : t("三个分数各自都能刷：更少的零件、更少的门、更快。你接的神经是一块真的 NAND 电路；只有上面显示“可上链流片”时，字节才通过了全量核对。", "Each score can be pushed on its own: fewer parts, fewer gates, faster. Your nerves are a real NAND circuit; the bytes pass only when the seal check above says “Eligible for tape-out”.")}</p>
             <div className="acts">
@@ -868,6 +885,10 @@ export default function Workshop({ portalMode = false }: { portalMode?: boolean 
   };
   const level = levelId ? WLEVELS.find((l) => l.id === levelId) : undefined;
   const cleared = LEVELS.filter((l) => save.best[l.id]).length;
+  const workshopClaimLevels = LEVELS
+    .filter((l) => save.best[l.id] && save.designs[l.id])
+    .slice(0, 3)
+    .map((l) => ({ level: l.id, code: encodeDesign(save.designs[l.id]) }));
 
   const tools = (
     <div className="ws-top">
@@ -920,6 +941,16 @@ export default function Workshop({ portalMode = false }: { portalMode?: boolean 
         <h1>{t("用零件搭一只机器果蝇。", "Build a robot fly from parts.")}</h1>
         <p className="lede">{t("翅膀装在哪，它就往哪歪；眼睛接到哪只翅膀，它就往哪转。你接的神经就是它的大脑，也是一块真的 NAND 芯片：从反射，到记忆，到计数器。", "Where you mount a wing decides how it leans; which wing an eye is wired to decides where it turns. Your nerves are its brain and a real NAND chip: from reflexes, to memory, to counters.")}</p>
         <p className="progress">{t(`已过 ${cleared} / ${LEVELS.length} 关`, `${cleared} / ${LEVELS.length} levels cleared`)}</p>
+        {!portalMode && (
+          <p className={`ws-claim-progress ${workshopClaimLevels.length >= 3 ? "ready" : ""}`}>
+            {workshopClaimLevels.length >= 3
+              ? t("已累计通关 3 关：可以领取工坊纪念电路 NFT。", "Three levels cleared: the Workshop commemorative circuit NFT can be claimed.")
+              : t(`累计通关 3 关即可领取纪念 NFT；还差 ${Math.max(0, 3 - workshopClaimLevels.length)} 关。`, `Clear three levels total to claim the commemorative NFT; ${Math.max(0, 3 - workshopClaimLevels.length)} more to go.`)}
+          </p>
+        )}
+        {!portalMode && workshopClaimLevels.length >= 3 && (
+          <CircuitClaimButton payload={{ mode: "workshop", levels: workshopClaimLevels }} />
+        )}
         {!portalMode && <p><a className="ws-link" href="/workshop/gallery">{t("看看大家发布的设计和每关排行 →", "See what players published and each level's board →")}</a></p>}
       </header>
       {CHAPTERS.map(([ch, zh, en, dzh, den]) => (

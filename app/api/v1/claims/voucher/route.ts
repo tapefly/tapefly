@@ -114,31 +114,61 @@ export async function POST(req: Request) {
   if (!body.payload || typeof body.payload !== "object") return bad("payload is required");
 
   if (body.mode === "workshop" || body.mode === CLAIM_MODE.workshop) {
-    const payload = body.payload as { level?: unknown; code?: unknown };
-    const level = typeof payload.level === "string" ? WLEVELS.find((candidate) => candidate.id === payload.level) : undefined;
-    const design = typeof payload.code === "string" ? decodeDesign(payload.code) : null;
-    if (!level) return bad("unknown Workshop level");
-    if (!design) return bad("the Workshop design does not decode");
-
-    const evaluation = gradeDesign(level, design);
-    if (!evaluation.cleared || evaluation.problems.length > 0) return bad("the Workshop level is not cleared", 422);
-
-    const seal = sealWorkshopBrain(level, design);
-    if (!seal.eligible || seal.mismatch || seal.checkedInputs !== (1 << seal.nIn)) {
-      return bad("the Workshop circuit did not pass exhaustive verification", 422);
+    const payload = body.payload as { levels?: unknown };
+    if (!Array.isArray(payload.levels) || payload.levels.length < 3) {
+      return bad("three unique cleared Workshop levels are required");
     }
 
-    const depth = gateDepth(compileWiring(design)).cols.length - 1;
+    const input = payload.levels.slice(0, 3).map((item) => {
+      const entry = item && typeof item === "object" ? item as { level?: unknown; code?: unknown } : {};
+      const level = typeof entry.level === "string" ? WLEVELS.find((candidate) => candidate.id === entry.level) : undefined;
+      const design = typeof entry.code === "string" ? decodeDesign(entry.code) : null;
+      return { level, design };
+    });
+    if (input.some((item) => !item.level || !item.design)) {
+      return bad("each Workshop entry must contain a known level and a decodable design");
+    }
+    if (new Set(input.map((item) => item.level!.id)).size !== 3) {
+      return bad("the three Workshop levels must be unique");
+    }
+
+    let totalSeconds = 0;
+    let totalGates = 0;
+    let maxDepth = 0;
+    let stateBits = 0;
+    const proofHashes: string[] = [];
+    const levels: { level: string; title: { zh: string; en: string }; gates: number; depth: number; checkedInputs: number }[] = [];
+
+    for (const item of input) {
+      const level = item.level!;
+      const design = item.design!;
+      const evaluation = gradeDesign(level, design);
+      if (!evaluation.cleared || evaluation.problems.length > 0) {
+        return bad(`${level.id} is not cleared`, 422);
+      }
+      const seal = sealWorkshopBrain(level, design);
+      if (!seal.eligible || seal.mismatch || seal.checkedInputs !== (1 << seal.nIn)) {
+        return bad(`${level.id} did not pass exhaustive verification`, 422);
+      }
+      const depth = gateDepth(compileWiring(design)).cols.length - 1;
+      totalSeconds += evaluation.seconds;
+      totalGates += seal.gates;
+      maxDepth = Math.max(maxDepth, depth);
+      stateBits += seal.state.length;
+      proofHashes.push(seal.bytesSha256);
+      levels.push({ level: level.id, title: level.title, gates: seal.gates, depth, checkedInputs: seal.checkedInputs });
+    }
+
     const voucher = await signCircuitClaim({
       recipient: address,
       mode: CLAIM_MODE.workshop,
-      activityCode: WLEVELS.findIndex((candidate) => candidate.id === level.id) + 1,
-      activityId: `0x${sha256Hex(`tapefly:workshop:v1:${level.id}`)}`,
-      circuitHash: `0x${seal.bytesSha256}`,
-      gateCount: seal.gates,
-      depth,
-      stateBits: seal.state.length,
-      score: Math.min(65_535, Math.round(evaluation.seconds * 10)),
+      activityCode: 3,
+      activityId: `0x${sha256Hex("tapefly:workshop:v2:season:1:three-levels")}`,
+      circuitHash: `0x${sha256Hex(stableStringify(proofHashes))}`,
+      gateCount: totalGates,
+      depth: maxDepth,
+      stateBits,
+      score: Math.min(65_535, Math.round(totalSeconds * 10)),
     });
 
     return NextResponse.json({
@@ -146,14 +176,12 @@ export async function POST(req: Request) {
       chainId: 196,
       summary: {
         mode: "workshop",
-        level: level.id,
-        title: level.title,
-        cleared: true,
-        gates: seal.gates,
-        depth,
-        stateBits: seal.state.length,
-        checkedInputs: seal.checkedInputs,
-        seconds: evaluation.seconds,
+        levels,
+        clearedLevels: 3,
+        gates: totalGates,
+        depth: maxDepth,
+        stateBits,
+        seconds: totalSeconds,
       },
     });
   }
@@ -170,7 +198,9 @@ export async function POST(req: Request) {
     } catch (error) {
       return bad(error instanceof Error ? error.message : "the Brawl action log does not replay", 422);
     }
-    if (!run.over || run.history.length === 0) return bad("the Brawl run has not finished", 422);
+    if (run.history.length === 0 || run.wins === 0) {
+      return bad("win at least one verified Brawl fight before claiming", 422);
+    }
 
     const compiled = compileFighter(programOf(run.chips));
     const stats = report(run.chips);

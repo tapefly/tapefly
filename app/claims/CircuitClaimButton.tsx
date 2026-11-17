@@ -18,7 +18,7 @@ import type { RunAction } from "@/sim/arena";
 import { useLang } from "../i18n/client";
 
 type ClaimPayload =
-  | { mode: "workshop"; level: string; code: string }
+  | { mode: "workshop"; levels: { level: string; code: string }[] }
   | { mode: "brawl"; date: string; actions: RunAction[] };
 
 type VoucherResponse = {
@@ -50,7 +50,26 @@ export default function CircuitClaimButton({ payload }: { payload: ClaimPayload 
   const [error, setError] = useState("");
   const [result, setResult] = useState<{ hash: `0x${string}`; tokenId: string } | null>(null);
 
-  if (!contract) return null;
+  if (!contract) {
+    return (
+      <section className="claim-card claim-pending" aria-live="polite">
+        <div>
+          <p className="kicker">{t("纪念电路 · X Layer", "Commemorative circuit · X Layer")}</p>
+          <h3>{t("这次结果已记录，纪念 NFT 即将开放", "Result recorded. The commemorative NFT is coming.")}</h3>
+          <p className="fine">
+            {t(
+              "工坊累计通关 3 关或 Brawl 获胜后，服务器会重算结果。X Layer 领取合约部署后，这里会变成正式的领取按钮。",
+              "After clearing three Workshop levels or winning a Brawl fight, the server recomputes the result. This becomes a live claim button once the X Layer contract is deployed.",
+            )}
+          </p>
+        </div>
+        <div className="claim-actions">
+          <button type="button" className="btn primary" disabled>{t("纪念 NFT 即将开放", "NFT claim coming soon")}</button>
+          <a className="btn small" href="/claims">{t("查看纪念电路说明", "See how circuit claims work")}</a>
+        </div>
+      </section>
+    );
+  }
 
   const claim = async () => {
     const ethereum = provider();
@@ -100,7 +119,7 @@ export default function CircuitClaimButton({ payload }: { payload: ClaimPayload 
           address: account,
           mode: payload.mode,
           payload: payload.mode === "workshop"
-            ? { level: payload.level, code: payload.code }
+            ? { levels: payload.levels }
             : { date: payload.date, actions: payload.actions },
         }),
       });
@@ -176,7 +195,7 @@ export default function CircuitClaimButton({ payload }: { payload: ClaimPayload 
           <button type="button" className="btn primary" onClick={claim} disabled={busy}>
             {busy ? t("处理中…", "Working…") : t("领取纪念电路", "Claim circuit receipt")}
           </button>
-          <span className="fine">{t("用户支付 X Layer gas；每个钱包每个关卡或每日一局限领一次。", "You pay X Layer gas; one claim per wallet per level or daily run.")}</span>
+          <span className="fine">{t("用户支付 X Layer gas；每个钱包每个工坊赛季或每日一局限领一次。", "You pay X Layer gas; one claim per wallet per Workshop season or daily Brawl run.")}</span>
         </div>
       )}
       {error && <p className="bad">{error}</p>}

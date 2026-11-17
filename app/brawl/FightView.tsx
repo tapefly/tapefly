@@ -4,19 +4,25 @@
    sound controls, and the result with its reason. Used by a run and by the editor. */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import FightCanvas from "./FightCanvas";
 import { C } from "../components/ui/tokens";
 import { useLang } from "../i18n/client";
 import type { Fight } from "@/sim/arena";
+import type { RunAction } from "@/sim/arena";
 import { bodyOf, MOVES, T, type GearId, type FlyFrame } from "@/sim/duel";
 import { linesOfRival, otherwiseText, type BrainLine, type ZhEn } from "./describe";
+
+const CircuitClaimButton = dynamic(() => import("@/app/claims/CircuitClaimButton"), { ssr: false });
 
 const HUES: [string, string] = [C.agar, C.frost];
 const MOVE_ZH: Record<string, string> = { press: "逼近", back: "后撤", circle: "绕圈", guard: "举盾" };
 
-export default function FightView({ f, practice: isPractice, mine, myGear, flyName, muted, toggleMute, onBack, backLabel, coach, mineOtherwise }: {
+export default function FightView({ f, practice: isPractice, mine, myGear, flyName, muted, toggleMute, onBack, backLabel, coach, mineOtherwise, claim }: {
   f: Fight; practice: boolean; mine: BrainLine[]; myGear: readonly GearId[]; flyName: string; muted: boolean; toggleMute: () => void; onBack: () => void; backLabel: string; coach?: boolean;
   /** what the brain does when no rule fits (default: walk in) */ mineOtherwise?: ZhEn;
+  /** a completed non-practice run can unlock the daily Brawl circuit claim */
+  claim?: { date: string; actions: RunAction[]; eligible: boolean } | null;
 }) {
   const { t, lang } = useLang();
   const zh = lang === "zh";
@@ -92,6 +98,9 @@ export default function FightView({ f, practice: isPractice, mine, myGear, flyNa
           </>
         ) : <p className="brawl-wait">{t("蓄力时会发光：看你的芯片在哪一刻亮起来。", "Wind-ups glow: watch which chip lights up, and when.")}</p>}
       </section>
+      {done && claim?.eligible && (
+        <CircuitClaimButton payload={{ mode: "brawl", date: claim.date, actions: claim.actions }} />
+      )}
     </div>
   );
 }

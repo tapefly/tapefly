@@ -1,4 +1,3 @@
-import { WLEVELS } from "@/sim/workshop/levels";
 import { CLAIM_MODE } from "@/sim/circuit-claims";
 import { readCircuitClaim } from "../../read";
 
@@ -24,10 +23,9 @@ export async function GET(
   if (!claim) return new Response("not found", { status: 404 });
 
   const workshop = claim.mode === CLAIM_MODE.workshop;
-  const level = workshop ? WLEVELS[claim.activityCode - 1] : undefined;
   const dateText = String(claim.activityCode);
-  const label = workshop ? `WORKSHOP / STAGE ${String(claim.activityCode).padStart(2, "0")}` : `BRAWL / ${dateText.slice(0, 4)}.${dateText.slice(4, 6)}.${dateText.slice(6, 8)}`;
-  const title = escapeXml(workshop ? (level?.title.en ?? "VERIFIED CIRCUIT") : "VERIFIED BATTLE BRAIN");
+  const label = workshop ? `WORKSHOP / ${claim.activityCode} LEVELS` : `BRAWL / ${dateText.slice(0, 4)}.${dateText.slice(4, 6)}.${dateText.slice(6, 8)}`;
+  const title = escapeXml(workshop ? "THREE-LEVEL CIRCUIT PASSPORT" : "VERIFIED BATTLE BRAIN");
   const hash = escapeXml(claim.circuitHash.slice(2, 18).toUpperCase());
   const score = workshop ? `${(claim.score / 10).toFixed(1)}s` : `${claim.score} WINS`;
 
@@ -59,7 +57,7 @@ export async function GET(
     <text x="400" y="1105" fill="#f4f3e8" font-size="46">${claim.depth}</text>
     <text x="650" y="1050" fill="#88a7a1" font-size="22">STATE BITS</text>
     <text x="650" y="1105" fill="#f4f3e8" font-size="46">${claim.stateBits}</text>
-    <text x="920" y="1050" fill="#88a7a1" font-size="22">${workshop ? "CLEAR TIME" : "RUN RESULT"}</text>
+    <text x="920" y="1050" fill="#88a7a1" font-size="22">${workshop ? "TOTAL TIME" : "RUN RESULT"}</text>
     <text x="920" y="1105" fill="#63e7c0" font-size="42">${score}</text>
     <text x="84" y="1160" fill="#6e8e88" font-size="18">COMMEMORATIVE RECEIPT · NOT A TAPEOUT CIRCUIT NFT</text>
   </g>
