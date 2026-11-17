@@ -107,6 +107,20 @@ export default function CircuitClaimButton({ payload }: { payload: ClaimPayload 
       const voucher = await response.json() as VoucherResponse;
       if (!response.ok) throw new Error(voucher.error || "could not prepare the claim");
 
+      const client = createPublicClient({
+        transport: http(XLAYER_CLAIM_CHAIN.rpcUrls.default.http[0]),
+      });
+      const supply = await client.readContract({
+        address: contract,
+        abi: CIRCUIT_CLAIMS_ABI,
+        functionName: "totalSupply",
+        args: [BigInt(voucher.tokenId)],
+      });
+      if (supply > 0n) {
+        setResult({ hash: "0x", tokenId: voucher.tokenId });
+        return;
+      }
+
       const wallet = createWalletClient({
         account,
         chain: XLAYER_CLAIM_CHAIN,
@@ -120,9 +134,6 @@ export default function CircuitClaimButton({ payload }: { payload: ClaimPayload 
         account,
       });
 
-      const client = createPublicClient({
-        transport: http(XLAYER_CLAIM_CHAIN.rpcUrls.default.http[0]),
-      });
       const receipt = await client.waitForTransactionReceipt({ hash });
       if (receipt.status !== "success") throw new Error("the claim transaction reverted");
       setResult({ hash, tokenId: voucher.tokenId });
@@ -151,9 +162,11 @@ export default function CircuitClaimButton({ payload }: { payload: ClaimPayload 
       </div>
       {result ? (
         <div className="claim-actions">
-          <a className="btn small" href={`https://www.okx.com/web3/explorer/xlayer/tx/${result.hash}`} target="_blank" rel="noreferrer">
-            {t("查看交易", "View transaction")}
-          </a>
+          {result.hash !== "0x" && (
+            <a className="btn small" href={`https://www.okx.com/web3/explorer/xlayer/tx/${result.hash}`} target="_blank" rel="noreferrer">
+              {t("查看交易", "View transaction")}
+            </a>
+          )}
           <a className="btn small" href={`/claims/${result.tokenId}`}>
             {t("打开纪念页", "Open claim page")}
           </a>
