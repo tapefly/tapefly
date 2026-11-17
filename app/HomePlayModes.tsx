@@ -85,17 +85,61 @@ export default function HomePlayModes() {
           <p className="kicker">{t("全人群互动实验室 · 5 秒看懂", "Universal circuit lab · understand it in five seconds")}</p>
           <h2 id="home-modes-title">{t("先选一种玩法，再看两颗大脑自己行动。", "Pick a game, then watch two brains act on their own.")}</h2>
         </div>
+      </div>
+
+      <div className="home-mode-switch">
+        <div className="home-mode-switch-label">
+          <small>{t("选择游戏", "Choose game")}</small>
+          <b aria-live="polite">
+            <span>{mode === "workshop" ? "01" : "02"}</span>
+            {mode === "workshop" ? t("工坊闯关", "Workshop") : t("零件对战", "Brain Brawl")}
+          </b>
+        </div>
         <div className="home-mode-tabs" role="tablist" aria-label={t("选择玩法", "Choose a mode")}>
-          <button type="button" role="tab" aria-selected={mode === "workshop"} className={mode === "workshop" ? "on" : ""} onClick={() => selectMode("workshop")}>
-            <span>01</span>{t("工坊闯关", "Workshop")}
+          <button
+            type="button"
+            role="tab"
+            id="mode-tab-workshop"
+            aria-controls="mode-panel-workshop"
+            aria-selected={mode === "workshop"}
+            tabIndex={mode === "workshop" ? 0 : -1}
+            className={`mode-tab-workshop ${mode === "workshop" ? "on" : ""}`}
+            onClick={() => selectMode("workshop")}
+          >
+            <span className="home-mode-tab-index">01</span>
+            <span className="home-mode-tab-copy">
+              <b>{t("工坊闯关", "Workshop")}</b>
+              <small>{t("PvE · 拼装与逻辑", "PvE · build and logic")}</small>
+            </span>
+            <span className="home-mode-tab-state">{mode === "workshop" ? t("当前游戏", "Playing") : t("切换", "Switch")}</span>
           </button>
-          <button type="button" role="tab" aria-selected={mode === "brawl"} className={mode === "brawl" ? "on" : ""} onClick={() => selectMode("brawl")}>
-            <span>02</span>{t("零件对战", "Brain Brawl")}
+          <button
+            type="button"
+            role="tab"
+            id="mode-tab-brawl"
+            aria-controls="mode-panel-brawl"
+            aria-selected={mode === "brawl"}
+            tabIndex={mode === "brawl" ? 0 : -1}
+            className={`mode-tab-brawl ${mode === "brawl" ? "on" : ""}`}
+            onClick={() => selectMode("brawl")}
+          >
+            <span className="home-mode-tab-index">02</span>
+            <span className="home-mode-tab-copy">
+              <b>{t("零件对战", "Brain Brawl")}</b>
+              <small>{t("PvP · 自动战斗", "PvP · auto battle")}</small>
+            </span>
+            <span className="home-mode-tab-state">{mode === "brawl" ? t("当前游戏", "Playing") : t("切换", "Switch")}</span>
           </button>
         </div>
       </div>
 
-      <div className={`home-mode-body mode-${mode}`} role="tabpanel">
+      <div
+        key={mode}
+        id={`mode-panel-${mode}`}
+        aria-labelledby={`mode-tab-${mode}`}
+        className={`home-mode-body mode-${mode}`}
+        role="tabpanel"
+      >
         <div className="home-mode-visual">
           {runId === 0 ? (
             <div className="home-mode-idle">

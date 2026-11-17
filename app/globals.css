@@ -1778,14 +1778,37 @@ details.mind > summary:hover { color: var(--chalk); border-color: var(--fog); }
 @media (max-width: 560px) { .claim-art-preview { min-height: 440px; padding: 18px; } .claim-art-foot { grid-template-columns: repeat(2, 1fr); } .claims-how ol { grid-template-columns: 1fr; } }
 
 .home-modes { padding-block: 72px; }
-.home-modes-head { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 22px; }
+.home-modes-head { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 18px; }
 .home-modes-head h2 { margin: 8px 0 0; max-width: 760px; font-size: clamp(32px, 5vw, 58px); line-height: 1.02; letter-spacing: -.035em; }
-.home-mode-tabs { display: flex; gap: 8px; padding: 6px; border-radius: 14px; background: var(--slide); border: 1px solid var(--line); }
-.home-mode-tabs button { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 8px; min-width: 132px; padding: 10px 14px; border-radius: 10px; color: var(--fog); font: 700 13px var(--sans); }
-.home-mode-tabs button span { color: var(--mute); font: 700 10px var(--mono); }
-.home-mode-tabs button.on { color: #082019; background: var(--mint); }
-.home-mode-tabs button.on span { color: rgba(8,32,25,.56); }
-.home-mode-body { display: grid; grid-template-columns: minmax(280px, .72fr) minmax(0, 1.28fr); min-height: 430px; overflow: hidden; border-radius: 28px; border: 1px solid var(--line-2); background: linear-gradient(145deg, var(--slide), color-mix(in srgb, var(--panel) 86%, black)); }
+.home-mode-switch { display: grid; grid-template-columns: 170px minmax(0, 1fr); align-items: stretch; gap: 10px; margin-bottom: 18px; padding: 10px; border-radius: 20px; border: 1px solid var(--line-2); background: linear-gradient(135deg, color-mix(in srgb, var(--slide) 88%, black), var(--slide-2)); box-shadow: 0 18px 48px rgba(0,0,0,.22); }
+.home-mode-switch-label { display: grid; align-content: center; gap: 5px; padding: 10px 14px; border-right: 1px solid var(--line); }
+.home-mode-switch-label small { color: var(--mute); font: 700 10px var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+.home-mode-switch-label b { display: flex; align-items: center; gap: 8px; color: var(--chalk); font-size: 17px; line-height: 1.1; }
+.home-mode-switch-label b span { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: color-mix(in srgb, var(--mint) 16%, transparent); color: var(--mint); font: 800 10px var(--mono); }
+.home-mode-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0; border: 0; background: transparent; }
+.home-mode-tabs button { all: unset; position: relative; box-sizing: border-box; min-width: 0; cursor: pointer; display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line-2); color: var(--chalk); background: rgba(8, 20, 23, .72); overflow: hidden; transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease; }
+.home-mode-tabs button::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--line-2); transition: background .18s ease, box-shadow .18s ease; }
+.home-mode-tabs button:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--mint) 48%, var(--line-2)); background: rgba(15, 38, 36, .78); }
+.home-mode-tabs button:focus-visible { outline: 3px solid color-mix(in srgb, var(--mint) 72%, white); outline-offset: 3px; }
+.home-mode-tab-index { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--line-2); color: var(--fog); background: rgba(255,255,255,.035); font: 800 12px var(--mono); }
+.home-mode-tab-copy { display: grid; gap: 3px; min-width: 0; }
+.home-mode-tab-copy b { font-size: 16px; line-height: 1.15; }
+.home-mode-tab-copy small { color: var(--fog); font: 650 11px var(--mono); letter-spacing: .03em; }
+.home-mode-tab-state { padding: 5px 8px; border-radius: 999px; color: var(--fog); background: rgba(255,255,255,.05); font: 700 10px var(--mono); letter-spacing: .04em; white-space: nowrap; }
+.home-mode-tabs .mode-tab-workshop.on { color: #082019; border-color: var(--mint); background: var(--mint); box-shadow: 0 12px 34px rgba(99,231,192,.24), inset 0 0 0 1px rgba(255,255,255,.24); transform: translateY(-2px); }
+.home-mode-tabs .mode-tab-workshop.on::before { background: #082019; box-shadow: 0 0 18px rgba(8,32,25,.45); }
+.home-mode-tabs .mode-tab-workshop.on .home-mode-tab-index { color: #082019; border-color: rgba(8,32,25,.22); background: rgba(8,32,25,.12); }
+.home-mode-tabs .mode-tab-workshop.on .home-mode-tab-copy small { color: rgba(8,32,25,.68); }
+.home-mode-tabs .mode-tab-workshop.on .home-mode-tab-state { color: #082019; background: rgba(8,32,25,.14); }
+.home-mode-tabs .mode-tab-brawl.on { color: #fff4f3; border-color: var(--eye); background: linear-gradient(135deg, color-mix(in srgb, var(--eye) 88%, #ff8e90), color-mix(in srgb, var(--eye) 76%, black)); box-shadow: 0 12px 34px rgba(230,59,69,.25), inset 0 0 0 1px rgba(255,255,255,.16); transform: translateY(-2px); }
+.home-mode-tabs .mode-tab-brawl.on::before { background: #fff4f3; box-shadow: 0 0 18px rgba(255,244,243,.5); }
+.home-mode-tabs .mode-tab-brawl.on .home-mode-tab-index { color: #fff4f3; border-color: rgba(255,244,243,.28); background: rgba(255,244,243,.13); }
+.home-mode-tabs .mode-tab-brawl.on .home-mode-tab-copy small { color: rgba(255,244,243,.72); }
+.home-mode-tabs .mode-tab-brawl.on .home-mode-tab-state { color: #fff4f3; background: rgba(255,244,243,.16); }
+.home-mode-body { display: grid; grid-template-columns: minmax(280px, .72fr) minmax(0, 1.28fr); min-height: 430px; overflow: hidden; border-radius: 28px; border: 1px solid var(--line-2); background: linear-gradient(145deg, var(--slide), color-mix(in srgb, var(--panel) 86%, black)); animation: home-mode-enter .3s cubic-bezier(.2,.8,.2,1) both; }
+.mode-workshop { border-color: color-mix(in srgb, var(--mint) 38%, var(--line-2)); }
+.mode-brawl { border-color: color-mix(in srgb, var(--eye) 44%, var(--line-2)); }
+@keyframes home-mode-enter { from { opacity: .48; transform: translateY(12px) scale(.995); } to { opacity: 1; transform: none; } }
 .home-mode-visual { position: relative; min-height: 430px; overflow: hidden; background: radial-gradient(circle at 50% 50%, rgba(99,231,192,.18), transparent 44%), #071215; }
 .mode-brawl .home-mode-visual { background: radial-gradient(circle at 50% 50%, rgba(230,59,69,.2), transparent 44%), #120b0c; }
 .home-mode-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -1840,5 +1863,7 @@ details.mind > summary:hover { color: var(--chalk); border-color: var(--fog); }
 .home-mode-after { display: flex; flex-wrap: wrap; gap: 8px 18px; padding-top: 12px; border-top: 1px solid var(--line); }
 .home-mode-after a { color: var(--fog); font-size: 13px; text-decoration: none; }
 .home-mode-after a:hover { color: var(--mint); }
-@media (max-width: 900px) { .home-modes-head { display: grid; } .home-mode-body { grid-template-columns: 1fr; } .home-mode-visual { min-height: 290px; } .home-mode-orbit.o1 { width: 200px; height: 200px; } .home-mode-orbit.o2 { width: 330px; height: 330px; } }
-@media (max-width: 560px) { .home-mode-tabs { width: 100%; } .home-mode-tabs button { flex: 1; min-width: 0; justify-content: center; } .home-mode-body { border-radius: 20px; } .home-mode-copy { padding: 24px 18px; } }
+@media (max-width: 900px) { .home-modes-head { display: grid; } .home-mode-switch { grid-template-columns: 1fr; } .home-mode-switch-label { grid-template-columns: auto 1fr; align-items: center; border-right: 0; border-bottom: 1px solid var(--line); } .home-mode-body { grid-template-columns: 1fr; } .home-mode-visual { min-height: 290px; } .home-mode-orbit.o1 { width: 200px; height: 200px; } .home-mode-orbit.o2 { width: 330px; height: 330px; } }
+@media (max-width: 640px) { .home-mode-tabs { grid-template-columns: 1fr; } .home-mode-tabs button { grid-template-columns: 38px minmax(0, 1fr) auto; padding: 12px; } .home-mode-tab-index { width: 38px; height: 38px; } }
+@media (max-width: 560px) { .home-mode-switch { padding: 8px; border-radius: 16px; } .home-mode-switch-label { padding: 6px 8px; } .home-mode-tabs button { border-radius: 12px; } .home-mode-tab-state { display: none; } .home-mode-body { border-radius: 20px; } .home-mode-copy { padding: 24px 18px; } }
+@media (prefers-reduced-motion: reduce) { .home-mode-tabs button, .home-mode-body { transition: none; animation: none; } }
