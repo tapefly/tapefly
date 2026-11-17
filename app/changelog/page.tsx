@@ -4,6 +4,7 @@ import { SiteNav, SiteFooter } from "../components/ui/Shell";
 export const metadata: Metadata = { title: "更新记录 — TapeFly" };
 
 const updates = [
+  ["2026-11-17", "纪念电路 NFT 开发版", "工坊通关和 Brawl 结算现在可以基于服务端重算结果生成电路纪念凭证；主网合约部署后开放领取。"],
   ["2026-11-13", "Workshop 成为网页主游戏", "首页、导航、设计库和版本元数据统一到 Workshop；旧玩法归入实验室。"],
   ["2026-11-13", "TapeOut 独立导航", "流片、Proof、Verify、Lineage 和 Calibrate 集中到 TapeOut 生态。"],
   ["2026-11-13", "发布基础增强", "加入存档导出/导入、匿名产品事件、错误恢复、隐私与支持页面。"],

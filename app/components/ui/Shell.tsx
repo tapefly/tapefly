@@ -48,6 +48,7 @@ const MENUS: { id: string; label: [string, string]; items: Item[] }[] = [
   ] },
   { id: "tapeout", label: ["TapeOut", "TapeOut"], items: [
     ["/tapeout", "TapeOut 流片", "TapeOut", "把大脑流片到 TapeOut，核对全部输入答案", "Tape a brain out on TapeOut and verify every input answer"],
+    ["/claims", "纪念电路", "Circuit claims", "领取工坊通关和对战纪念凭证", "Claim Workshop and Brawl commemorative receipts"],
     ["/proof", "Proof", "Proof", "每一种核查方法，一页列全", "Every way to verify the project, on one page"],
     ["/verify", "Verify", "Verify", "贴一段记录，自己重算哈希链", "Paste a record and recompute its hash chain"],
     ["/lineage", "Lineage", "Lineage", "从第一天起连续记录并锚定的行为血统", "The continuously recorded and anchored behaviour lineage"],
@@ -146,6 +147,7 @@ export function SiteFooter() {
           <div>
             <h4>{t("TapeOut 生态", "TapeOut ecosystem")}</h4>
             <Link href="/tapeout">{t("TapeOut 流片", "TapeOut")}</Link>
+            <Link href="/claims">{t("纪念电路", "Circuit claims")}</Link>
             <Link href="/verify">{t("核查记录", "Verify a record")}</Link>
             <Link href="/proof">{t("怎么证明没作假", "How we prove it")}</Link>
             <Link href="/lineage">{t("行为血统", "Behaviour lineage")}</Link>
