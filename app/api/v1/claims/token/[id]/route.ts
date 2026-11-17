@@ -34,7 +34,7 @@ export async function GET(
         ? `A commemorative receipt for a Workshop design that cleared its level and passed exhaustive circuit verification. Owned by ${shortRecipient}. This is not a TapeOut Circuit NFT.`
         : `A commemorative receipt for a completed deterministic Brain Brawl run. Owned by ${shortRecipient}. This is not a TapeOut Circuit NFT.`,
       image: `https://tapefly.xyz/api/v1/claims/image/${id}`,
-      external_url: workshop ? "https://tapefly.xyz/workshop" : "https://tapefly.xyz/brawl",
+      external_url: `https://tapefly.xyz/claims/${id}`,
       attributes: [
         { trait_type: "Mode", value: workshop ? "Workshop" : "Brain Brawl" },
         { trait_type: "Season", value: claim.seasonId },

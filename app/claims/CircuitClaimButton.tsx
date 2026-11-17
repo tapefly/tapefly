@@ -154,8 +154,8 @@ export default function CircuitClaimButton({ payload }: { payload: ClaimPayload 
           <a className="btn small" href={`https://www.okx.com/web3/explorer/xlayer/tx/${result.hash}`} target="_blank" rel="noreferrer">
             {t("查看交易", "View transaction")}
           </a>
-          <a className="btn small" href={`/api/v1/claims/token/${result.tokenId}`} target="_blank" rel="noreferrer">
-            {t("查看元数据", "View metadata")}
+          <a className="btn small" href={`/claims/${result.tokenId}`}>
+            {t("打开纪念页", "Open claim page")}
           </a>
         </div>
       ) : (
