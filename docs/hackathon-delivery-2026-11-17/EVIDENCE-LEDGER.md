@@ -95,6 +95,6 @@ npm run check
 1. English three-minute video.
 2. Circuit #2 proof page and transaction.
 3. TapeFly processor creation transaction, with known issue disclosed.
-4. Dated activity-period commits.
+4. Public GitHub release `v0.3.0`, commit `7fa96b1`.
 5. Business model one-pager.
 6. itch playable build.

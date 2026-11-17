@@ -46,6 +46,14 @@ Workshop is the only primary product for this submission. Brain Brawl, Evolution
 - “Steam or AI hardware is live.”
 - “TapeFly produces physical silicon through TapeOut.”
 
-## Remaining owner action
+## GitHub publication
 
-The latest 11 November–16 November development snapshot exists locally but is not represented on the public GitHub `main` branch. Publish the reviewed source under dated commits before submission so judges can audit the activity-period work.
+The November development snapshot is public:
+
+- Main commit: `7fa96b1`
+- Release branch: `release/tapefly-2026-11-17`
+- Tag: `v0.3.0`
+
+The final release passed 160/160 tests, the production build, the full X Layer
+`4,096 / 4,096` on-chain verification and a zero-vulnerability production
+dependency audit.

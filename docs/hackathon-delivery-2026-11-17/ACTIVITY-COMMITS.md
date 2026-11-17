@@ -4,25 +4,28 @@ Audit date: 2026-11-17
 Activity window used: 2026-10-16 through 2026-12-07  
 Repository: <https://github.com/tapefly/tapefly>
 
-## Finding
+## Finding and resolution
 
-The public repository has strong evidence for 2026-10-24, plus automated daily lineage branches after that date. The main branch has not received the later Workshop, X Layer processor, Circuit #2, Agent API or presentation work.
+The public repository had strong evidence for 2026-10-24, plus automated daily lineage branches after that date. The later Workshop, X Layer processor, Circuit #2, Agent API and presentation work existed only in a local release snapshot during the audit.
 
-This means:
+Resolved on 2026-11-17:
 
-- The October release can be fully audited.
-- Daily lineage continuity can be audited.
-- The November product development is implemented locally but does not yet have public GitHub commits on `main`.
-- Judges should not be told that the November work is already publicly committed when it is not.
+- Release commit: `7fa96b1`
+- Branch: `release/tapefly-2026-11-17`
+- Default branch: `main`
+- Tag: `v0.3.0`
+
+The release commit was fast-forwarded to `main` and both the branch and tag were
+pushed to the public repository.
 
 ## Public main history
 
-The public `main` HEAD is:
+The public `main` HEAD is now:
 
 ```text
-625dadbd7844899e502cc1121efb1f2b34e3d999
-2026-10-24
-Record the BehaviorKit project thesis
+7fa96b1
+2026-11-17
+Ship Workshop and the X Layer verifiable-brain release
 ```
 
 The tagged `v0.1.0` release points to:
@@ -85,9 +88,9 @@ The repository contains separate branches from 2026-10-25 through 2026-11-16. Th
 
 These are continuity evidence, not substitutes for commits containing the product features.
 
-## Local changes not publicly committed
+## November release included on main
 
-The 2026-11-16 local release contains:
+Commit `7fa96b1` publishes:
 
 - Workshop as the main game.
 - Memory, toggle and metronome parts.
@@ -98,30 +101,22 @@ The 2026-11-16 local release contains:
 - Updated navigation and documentation.
 - itch and Steam release materials.
 
-The newer release folder has no `.git` metadata. Therefore exact commit dates for these changes cannot be reconstructed locally.
+The commit changes 276 files, with 22,823 insertions and 654 deletions.
 
-## Required publication step
+## Verification completed before release
 
-Before submission:
-
-1. Start from a clean clone of the public repository.
-2. Copy the reviewed November source over it.
-3. Scan for secrets and generated runtime data.
-4. Create logical commits by feature and date where evidence exists.
-5. Run `npm run check`.
-6. Create a `v0.2.0` or later release.
-7. Push `main` and the new tag.
-8. Update this file with the real commit hashes.
-
-Suggested commits:
+The following checks passed on the published source:
 
 ```text
-Release Workshop chapters 2 and 3 with memory and counting
-Add Workshop design gallery, scoring and lineage
-Unify all chain features on X Layer
-Make Workshop the primary product experience
-Add stateful Workshop seal proof and Agent proof API
-Record X Layer processor deployment and Circuit #2 verification
-Add itch.io and Steam release packages
-Update hackathon submission and evidence ledger
+npm run check          PASS
+tests                  160 / 160
+next build             PASS
+npm run verify:onchain 4,096 / 4,096 + stored bytes match
+npm audit --omit=dev   0 vulnerabilities
 ```
+
+The release evidence is now:
+
+- Main commit: <https://github.com/tapefly/tapefly/commit/7fa96b1>
+- Release branch: <https://github.com/tapefly/tapefly/tree/release/tapefly-2026-11-17>
+- Tag: <https://github.com/tapefly/tapefly/releases/tag/v0.3.0>
