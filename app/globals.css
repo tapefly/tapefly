@@ -1789,6 +1789,13 @@ details.mind > summary:hover { color: var(--chalk); border-color: var(--fog); }
 .home-mode-visual { position: relative; min-height: 430px; overflow: hidden; background: radial-gradient(circle at 50% 50%, rgba(99,231,192,.18), transparent 44%), #071215; }
 .mode-brawl .home-mode-visual { background: radial-gradient(circle at 50% 50%, rgba(230,59,69,.2), transparent 44%), #120b0c; }
 .home-mode-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.home-real-preview { position: absolute; inset: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; background: #061013; }
+.home-real-preview > canvas { display: block; width: 100%; height: 100%; min-height: 0; }
+.home-real-preview > .ws-arena { width: 100%; height: 100%; min-height: 0; border: 0; border-radius: 0; }
+.home-real-preview > .ws-arena canvas { display: block; }
+.home-real-preview-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border-top: 1px solid var(--line); }
+.home-real-preview-meta span { display: grid; gap: 2px; padding: 9px 12px; background: rgba(5,16,18,.94); color: var(--mute); font: 600 10px var(--mono); text-align: center; }
+.home-real-preview-meta b { color: var(--mint); font: 700 13px var(--mono); }
 .home-mode-idle, .home-mode-result { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%,-50%); display: grid; justify-items: center; gap: 8px; pointer-events: none; }
 .home-mode-idle b { color: var(--mint); font: 900 48px var(--mono); letter-spacing: -.08em; }
 .mode-brawl .home-mode-idle b { color: var(--eye); }
