@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
 const root = process.cwd();
-const roots = ["README.md", "CONTRIBUTING.md", "CHANGELOG.md", "docs", "app", "public", "deweb-proof"];
+const roots = ["README.md", "CONTRIBUTING.md", "CHANGELOG.md", "docs", "app", "contracts", "public", "sim", "tests", "deweb-proof"];
 const forbidden: { name: string; re: RegExp }[] = [
   { name: "forbidden chain name", re: /\b(?:bnb|binance)\b/i },
   { name: "superseded circuit", re: /(?:circuit|电路)\s*#?\s*1\b/i },
