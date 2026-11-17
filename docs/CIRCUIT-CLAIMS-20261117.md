@@ -4,6 +4,16 @@ TapeFly Workshop and Brain Brawl now share one optional X Layer claim flow.
 
 > A claim is a commemorative ERC-1155 receipt that references a verified circuit hash. It is not a TapeOut Circuit NFT and does not add an on-chain `eval` function.
 
+## Status on 2026-11-17
+
+- Gameplay integration: implemented.
+- Server-side Workshop and Brawl verification: implemented.
+- EIP-712 voucher signing: implemented.
+- ERC-1155 contract and Foundry tests: implemented and passing.
+- Shareable claim page and metadata API: implemented.
+- X Layer mainnet deployment: **not yet performed**.
+- Production UI remains hidden until the deployed contract address and claim signer key are configured.
+
 ## Player flow
 
 ### Workshop
