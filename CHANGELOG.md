@@ -2,6 +2,16 @@
 
 Notable public changes to TapeFly are recorded here.
 
+## [0.4.0] - 2026-11-17
+
+### Added
+
+- Commemorative circuit claims for Workshop clears and completed Brain Brawl runs.
+- Server replay of the complete Brawl shop/fight action log before issuing a claim.
+- EIP-712 recipient-bound vouchers, one claim per wallet per level or daily run.
+- `TapeFlyCircuitClaims` ERC-1155 contract with pause controls, signer rotation, unique token IDs and metadata APIs.
+- Dynamic circuit-card metadata and SVG image endpoints.
+
 ## [0.3.0] - 2026-11-17
 
 ### Added

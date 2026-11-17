@@ -1,6 +1,6 @@
 {
   "name": "tapefly",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "TAPEFLY — today's fly, the same one for everyone. Its whole brain is 50 NAND gates, and every tick is sealed.",
   "license": "MIT",
@@ -22,6 +22,8 @@
     "verify:onchain": "npm run tapeout -- verify",
     "judge:check": "npm run content:check && npm run typecheck && npm test && npm run lineage -- --check && npm run board -- --check && npm run anchor -- --check && npm run arena:ghosts -- --check && npm run build",
     "check": "npm run content:check && npm run typecheck && npm test && npm run lineage -- --check && npm run board -- --check && npm run anchor -- --check && npm run arena:ghosts -- --check && npm run tapeout -- bytes > /dev/null && npm run build",
+    "contracts:build": "forge build --root contracts",
+    "contracts:test": "forge test --root contracts -vv",
     "board": "tsx scripts/board.ts",
     "tapeout": "tsx scripts/tapeout.ts",
     "anchor": "tsx scripts/anchor.ts",
@@ -42,6 +44,7 @@
     "viem": "^2.57.7"
   },
   "devDependencies": {
+    "@openzeppelin/contracts": "^5.6.1",
     "@types/node": "26.6.2",
     "@types/react": "18.3.24",
     "@types/react-dom": "18.3.7",

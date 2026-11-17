@@ -89,6 +89,12 @@ export default function WorkshopDocs() {
         </section>
 
         <section className="docs-sec">
+          <h2>纪念电路领取</h2>
+          <p><code>POST /api/v1/claims/voucher</code> 会在通关并完成全量核对后签发一份 EIP-712 领取凭证。浏览器随后切换 X Layer，由用户钱包调用纪念合约。</p>
+          <p>领取的是带电路哈希、门数、深度和状态位信息的纪念凭证，不是可直接调用 <code>eval</code> 的 TapeOut Circuit NFT。每个钱包在同一关只能领取一次。</p>
+        </section>
+
+        <section className="docs-sec">
           <h2>可运行示例</h2>
           <pre><code>{example}</code></pre>
           <p>仓库内还有一个完整示例：<code>npm run agent:workshop</code>。它会发现接口、评估一份参考设计，并可加 <code>-- --submit</code> 提交。</p>

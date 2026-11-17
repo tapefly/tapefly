@@ -28,7 +28,9 @@ const ENDPOINTS: [string, string, string][] = [
   ["GET /api/v1/brawl?chips=a,b,c&gear=x", "fight your brain and body against every rival (or ?program=p1.… for any rule list)", "用你的大脑和身体打完整个对手阶梯（或用 ?program=p1.… 提交任意规则）"],
   ["GET /api/v1/workshop/agent", "the Workshop agent task, workflow, limits and honest transaction boundary", "工坊 Agent 任务、流程、限制，以及不发交易的明确边界"],
   ["POST /api/v1/workshop/agent", "evaluate and exhaustively prove one {level, code} design in one call", "一次请求完成 {level, code} 的关卡评分与全量电路证明"],
-  ["POST /api/v1/workshop/submit", "separately publish a proven design to the public Workshop library", "把已证明的设计另行发布到公开工坊"]
+  ["POST /api/v1/workshop/submit", "separately publish a proven design to the public Workshop library", "把已证明的设计另行发布到公开工坊"],
+  ["POST /api/v1/claims/voucher", "re-run a Workshop or Brawl result and sign an X Layer commemorative claim", "重跑工坊或大乱斗结果，并签发 X Layer 纪念电路领取凭证"],
+  ["GET /api/v1/claims/token/{id}", "commemorative claim metadata and verified circuit attributes", "纪念电路领取元数据与已验证电路属性"]
 ];
 
 const AGENT_PROMPT = `Design a brain for TapeFly Workshop.

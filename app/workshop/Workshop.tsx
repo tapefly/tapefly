@@ -4,6 +4,7 @@
    it go. The wiring is a NAND circuit, the same kind TapeOut tapes out. */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { WLEVELS, type WLevel } from "@/sim/workshop/levels";
 import { coreOnly, isSink, isSource, isWing, looseParts, massProps, designCost, PARTS, type Design, type PartKind, type Wire } from "@/sim/workshop/parts";
 import { gradeDesign, goalMet, type WOutcome } from "@/sim/workshop/game";
@@ -28,6 +29,8 @@ import { mergeBest, useWSave, type WSave } from "./store";
 import { track } from "../lib/telemetry";
 import SaveTools from "./SaveTools";
 import type { SealReport } from "@/sim/workshop/seal";
+
+const CircuitClaimButton = dynamic(() => import("@/app/claims/CircuitClaimButton"), { ssr: false });
 
 type SealResult = {
   level: string;
@@ -781,6 +784,9 @@ function LevelView({ level, save, update, t, onExit, onNext, shared, rival, pare
                 </>
               )}
             </div>}
+            {!portalMode && sealResult?.seal.eligible && (
+              <CircuitClaimButton payload={{ mode: "workshop", level: level.id, code: encodeDesign(design) }} />
+            )}
             <p className="fine">{portalMode ? t("三个分数各自都能刷：更少的零件、更少的门、更快。试着找到这一关最简洁、最稳定的大脑。", "Each score can be pushed on its own: fewer parts, fewer gates, faster. Find the simplest, most reliable brain for this level.") : t("三个分数各自都能刷：更少的零件、更少的门、更快。你接的神经是一块真的 NAND 电路；只有上面显示“可上链流片”时，字节才通过了全量核对。", "Each score can be pushed on its own: fewer parts, fewer gates, faster. Your nerves are a real NAND circuit; the bytes pass only when the seal check above says “Eligible for tape-out”.")}</p>
             <div className="acts">
               <button type="button" className="ws-ghost" onClick={() => setResults(false)}>{t("继续优化", "Keep improving")}</button>

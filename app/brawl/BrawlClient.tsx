@@ -12,6 +12,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import FightView from "./FightView";
 import { linesOfChips, linesOfRival } from "./describe";
 import { C } from "../components/ui/tokens";
@@ -23,6 +24,8 @@ import {
 import { bodyOf, type GearId } from "@/sim/duel";
 import { encodeProgram, decodeProgram, type Program } from "@/sim/program";
 import { defaultFlyName } from "@/sim/identity";
+
+const CircuitClaimButton = dynamic(() => import("@/app/claims/CircuitClaimButton"), { ssr: false });
 
 const RUN_KEY = "tapefly.arena.run";
 const BEST_KEY = "tapefly.arena.best";
@@ -50,7 +53,9 @@ export default function BrawlClient({ today }: { today: string }) {
 
   useEffect(() => {
     const saved = load<Run>(RUN_KEY);
-    if (saved && saved.date === today && Array.isArray(saved.chips) && Array.isArray(saved.gear)) setRun(saved);
+    if (saved && saved.date === today && Array.isArray(saved.chips) && Array.isArray(saved.gear)) {
+      setRun({ ...saved, actions: Array.isArray(saved.actions) ? saved.actions : [] });
+    }
     setBest(load<Best>(BEST_KEY));
     setMuted(load<boolean>(MUTE_KEY) ?? false);
     try { setName(localStorage.getItem("tapefly.name") || ""); } catch { /* ignore */ }
@@ -302,6 +307,9 @@ function Summary({ run, today, flyName, best, onRestart, flash, toast }: { run: 
           </section>
         </div>
       </div>
+      {run.actions.length > 0 && (
+        <CircuitClaimButton payload={{ mode: "brawl", date: run.date, actions: run.actions }} />
+      )}
       <div className={`toast ${toast ? "show" : ""}`} role="status">{toast}</div>
     </div>
   );

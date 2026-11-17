@@ -119,6 +119,14 @@ export function isPart(s: string): s is GearId { return (PART_IDS as readonly st
 
 export type Offer = { kind: "chip"; id: TacticId } | { kind: "part"; id: GearId } | null;
 
+export type RunAction =
+  | { kind: "buy"; slot: number }
+  | { kind: "sellChip"; index: number }
+  | { kind: "sellPart"; index: number }
+  | { kind: "move"; index: number; dir: -1 | 1 }
+  | { kind: "reroll" }
+  | { kind: "fight" };
+
 export interface Run {
   date: string;
   fight: number;
@@ -131,10 +139,12 @@ export interface Run {
   rerolls: number;
   history: { rival: string; ai: boolean; winner: number; gates: number; how: "ko" | "time" }[];
   over: null | "cleared" | "out";
+  /** deterministic input log for server-side claim verification; practice fights are excluded */
+  actions: RunAction[];
 }
 
 export function newRun(date: string): Run {
-  const r: Run = { date, fight: 0, gold: RUN.startGold, lives: RUN.lives, wins: 0, chips: [], gear: [], shop: [], rerolls: 0, history: [], over: null };
+  const r: Run = { date, fight: 0, gold: RUN.startGold, lives: RUN.lives, wins: 0, chips: [], gear: [], shop: [], rerolls: 0, history: [], over: null, actions: [] };
   r.shop = rollShop(r);
   return r;
 }
@@ -160,29 +170,29 @@ export function buy(r: Run, slot: number): Run {
   if (o.kind === "part" && (r.gear.includes(o.id) || r.gear.length >= BODY_SLOTS)) return r;
   const shop = r.shop.slice(); shop[slot] = null;
   return o.kind === "chip"
-    ? { ...r, gold: r.gold - priceOf(o), chips: [...r.chips, o.id], shop }
-    : { ...r, gold: r.gold - priceOf(o), gear: [...r.gear, o.id], shop };
+    ? { ...r, gold: r.gold - priceOf(o), chips: [...r.chips, o.id], shop, actions: [...r.actions, { kind: "buy", slot }] }
+    : { ...r, gold: r.gold - priceOf(o), gear: [...r.gear, o.id], shop, actions: [...r.actions, { kind: "buy", slot }] };
 }
 
 /** Selling returns half the price, rounded down. */
 export function sellChip(r: Run, i: number): Run {
   if (r.over || i < 0 || i >= r.chips.length) return r;
-  return { ...r, gold: r.gold + Math.floor(TACTICS[r.chips[i]].price / 2), chips: r.chips.filter((_, j) => j !== i) };
+  return { ...r, gold: r.gold + Math.floor(TACTICS[r.chips[i]].price / 2), chips: r.chips.filter((_, j) => j !== i), actions: [...r.actions, { kind: "sellChip", index: i }] };
 }
 export function sellPart(r: Run, i: number): Run {
   if (r.over || i < 0 || i >= r.gear.length) return r;
-  return { ...r, gold: r.gold + Math.floor(PARTS[r.gear[i]].price / 2), gear: r.gear.filter((_, j) => j !== i) };
+  return { ...r, gold: r.gold + Math.floor(PARTS[r.gear[i]].price / 2), gear: r.gear.filter((_, j) => j !== i), actions: [...r.actions, { kind: "sellPart", index: i }] };
 }
 export function move(r: Run, i: number, dir: -1 | 1): Run {
   const j = i + dir;
   if (r.over || j < 0 || j >= r.chips.length || i < 0 || i >= r.chips.length) return r;
   const chips = r.chips.slice(); [chips[i], chips[j]] = [chips[j], chips[i]];
-  return { ...r, chips };
+  return { ...r, chips, actions: [...r.actions, { kind: "move", index: i, dir }] };
 }
 export function reroll(r: Run): Run {
   if (r.over || r.gold < RUN.reroll) return r;
   const next = { ...r, gold: r.gold - RUN.reroll, rerolls: r.rerolls + 1 };
-  return { ...next, shop: rollShop(next) };
+  return { ...next, shop: rollShop(next), actions: [...r.actions, { kind: "reroll" }] };
 }
 
 export function canFight(r: Run) {
@@ -229,7 +239,8 @@ export function fight(r: Run): { run: Run; fight: Fight } {
   const next: Run = {
     ...r, fight: r.fight + 1, wins, lives, rerolls: 0, over,
     gold: r.gold + RUN.goldPerFight + (won ? RUN.goldPerWin : 0),
-    history: [...r.history, { rival: f.rival.name, ai: f.rival.ai, winner: f.winner, gates: f.gates, how: f.result.how }]
+    history: [...r.history, { rival: f.rival.name, ai: f.rival.ai, winner: f.winner, gates: f.gates, how: f.result.how }],
+    actions: [...r.actions, { kind: "fight" }]
   };
   next.shop = over ? [] : rollShop(next);
   return { run: next, fight: f };
@@ -238,6 +249,38 @@ export function fight(r: Run): { run: Run; fight: Fight } {
 /** A free practice fight against the next rival, with a seed the real fight never uses. */
 export function practice(r: Run, n: number): Fight {
   return fightRival(r.chips, r.gear, rivalFor(r.fight), practiceSeedFor(r.date, r.fight, n), r.fight);
+}
+
+/** Strictly replay the submitted run log. Invalid and no-op actions are rejected. */
+export function replayRunActions(date: string, actions: readonly RunAction[]): Run {
+  let run = newRun(date);
+  for (const action of actions) {
+    if (run.over) throw new Error("actions continue after the run ended");
+    const before = run;
+    switch (action.kind) {
+      case "buy":
+        run = buy(run, action.slot);
+        break;
+      case "sellChip":
+        run = sellChip(run, action.index);
+        break;
+      case "sellPart":
+        run = sellPart(run, action.index);
+        break;
+      case "move":
+        run = move(run, action.index, action.dir);
+        break;
+      case "reroll":
+        run = reroll(run);
+        break;
+      case "fight":
+        if (!canFight(run).ok) throw new Error("fight action does not fit the current budget");
+        run = fight(run).run;
+        break;
+    }
+    if (run === before) throw new Error(`invalid or no-op action: ${action.kind}`);
+  }
+  return run;
 }
 
 /* ── what happened, in a sentence and a hint ─────────────────────────────── */

@@ -252,10 +252,11 @@ anchors/         optional daily lineage anchors
 | X launch copy | [docs/X-LAUNCH-POST.md](./docs/X-LAUNCH-POST.md) |
 | On-chain proof | [X Layer circuit #2](https://tapefly.xyz/tapeout) |
 | API for agents | [tapefly.xyz/agents](https://tapefly.xyz/agents) |
+| Commemorative circuit claims | [docs/CIRCUIT-CLAIMS-20261117.md](./docs/CIRCUIT-CLAIMS-20261117.md) |
 
 ## Local development
 
-Requirements: **Node.js 22**.
+Requirements: **Node.js 22**. Contract tests also require Foundry.
 
 ```bash
 npm ci

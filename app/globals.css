@@ -1708,3 +1708,28 @@ details.mind > summary:hover { color: var(--chalk); border-color: var(--fog); }
 @media (max-width: 1080px) { .home2-built { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .home2-built { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .home2-tile:hover { transform: none; } }
+
+.claim-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  margin: 18px 0;
+  padding: 18px;
+  border: 1px solid color-mix(in srgb, var(--mint) 38%, transparent);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 92% 10%, color-mix(in srgb, var(--mint) 16%, transparent), transparent 38%),
+    color-mix(in srgb, var(--panel) 88%, black);
+}
+.claim-card h3 { margin: 4px 0 6px; font-size: 20px; }
+.claim-card .claim-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 220px; }
+.claim-card .claim-actions .fine { max-width: 250px; text-align: right; }
+.claim-card .claim-contract { justify-self: end; color: var(--dim); font-family: var(--mono); font-size: 11px; }
+.claim-card.claimed { border-color: color-mix(in srgb, var(--mint) 70%, transparent); }
+@media (max-width: 720px) {
+  .claim-card { grid-template-columns: 1fr; }
+  .claim-card .claim-actions { align-items: stretch; min-width: 0; }
+  .claim-card .claim-actions .fine { max-width: none; text-align: left; }
+  .claim-card .claim-contract { justify-self: start; }
+}
