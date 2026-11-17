@@ -2,6 +2,9 @@
 
 Date: 2026-11-14
 
+Related product reference:
+`docs/GOLDEN-SPATULA-PRODUCT-REFERENCE-20261117.md`.
+
 ## Decision
 
 TapeFly will stop presenting Workshop, Brain Brawl and lineage as three unrelated
