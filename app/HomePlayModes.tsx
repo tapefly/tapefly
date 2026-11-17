@@ -88,12 +88,27 @@ export default function HomePlayModes() {
       </div>
 
       <div className="home-mode-switch">
-        <div className="home-mode-switch-label">
-          <small>{t("选择游戏", "Choose game")}</small>
-          <b aria-live="polite">
-            <span>{mode === "workshop" ? "01" : "02"}</span>
-            {mode === "workshop" ? t("工坊闯关", "Workshop") : t("零件对战", "Brain Brawl")}
-          </b>
+        <div className="home-mode-switch-top">
+          <div className="home-mode-switch-label">
+            <small>{t("选择游戏", "Choose game")}</small>
+            <b aria-live="polite">
+              <span>{mode === "workshop" ? "01" : "02"}</span>
+              {mode === "workshop" ? t("工坊闯关", "Workshop") : t("零件对战", "Brain Brawl")}
+            </b>
+          </div>
+          <div className="home-mode-claim-callout">
+            <span className="home-mode-claim-mark">NFT</span>
+            <div>
+              <b>{t("两个游戏都能领纪念电路 NFT", "Both games unlock a commemorative circuit NFT")}</b>
+              <small>
+                {t(
+                  "通关工坊或完成整局对战后，服务器重算结果，再到 X Layer 领取。",
+                  "Clear Workshop or finish a full Brawl run, then claim the verified circuit on X Layer.",
+                )}
+              </small>
+            </div>
+            <em>{claimsLive ? t("领取已开放", "Claims live") : t("合约部署后开放", "Opens after deployment")}</em>
+          </div>
         </div>
         <div className="home-mode-tabs" role="tablist" aria-label={t("选择玩法", "Choose a mode")}>
           <button
@@ -111,7 +126,7 @@ export default function HomePlayModes() {
               <b>{t("工坊闯关", "Workshop")}</b>
               <small>{t("PvE · 拼装与逻辑", "PvE · build and logic")}</small>
             </span>
-            <span className="home-mode-tab-state">{mode === "workshop" ? t("当前游戏", "Playing") : t("切换", "Switch")}</span>
+            <span className="home-mode-tab-state">{mode === "workshop" ? t("正在玩", "Playing now") : t("点此切换 →", "Switch →")}</span>
           </button>
           <button
             type="button"
@@ -128,7 +143,7 @@ export default function HomePlayModes() {
               <b>{t("零件对战", "Brain Brawl")}</b>
               <small>{t("PvP · 自动战斗", "PvP · auto battle")}</small>
             </span>
-            <span className="home-mode-tab-state">{mode === "brawl" ? t("当前游戏", "Playing") : t("切换", "Switch")}</span>
+            <span className="home-mode-tab-state">{mode === "brawl" ? t("正在玩", "Playing now") : t("点此切换 →", "Switch →")}</span>
           </button>
         </div>
       </div>
