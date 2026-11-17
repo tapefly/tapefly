@@ -1,0 +1,1 @@
+TapeFly is a game about building a machine fly. You assemble its body, place the wings and senses, then wire a brain using only NAND gates. When the design is ready, you press Fly and let go. There is no hidden AI endpoint and no personality slider. The wiring is the character.

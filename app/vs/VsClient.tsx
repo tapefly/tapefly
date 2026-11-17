@@ -141,7 +141,7 @@ function Match({ a, b, date, mode, mine, rival, setRival, tab, setTab, toast, se
   const origin = typeof window !== "undefined" ? window.location.origin : "";
   const challengeLink = `${origin}/vs?${challengeQuery({ a, b: null, through: date })}`;
   const matchLink = `${origin}/vs?${challengeQuery({ a, b, through: date })}`;
-  const answerHref = `/?vs=${encodeURIComponent(challengeQuery({ a, b: null, through: date }))}`;
+  const answerHref = `/forage?vs=${encodeURIComponent(challengeQuery({ a, b: null, through: date }))}`;
 
   const headline =
     m.winner === -1
@@ -205,7 +205,7 @@ function Match({ a, b, date, mode, mine, rival, setRival, tab, setTab, toast, se
             </p>
             <div className="row">
               <button className="btn primary" onClick={() => copy(challengeLink, t("挑战链接", "Challenge link"))}>{t("复制挑战链接", "Copy a challenge link")}</button>
-              <Link className="btn" href="/">{mine ? t("调整我的果蝇", "Change my fly") : t("造我的果蝇", "Build my fly")}</Link>
+              <Link className="btn" href="/forage">{mine ? t("调整我的果蝇", "Change my fly") : t("造我的果蝇", "Build my fly")}</Link>
             </div>
           </>
         )}

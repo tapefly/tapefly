@@ -1,14 +1,13 @@
 import { ImageResponse } from "next/og";
-import { daySeed, dayString } from "@/sim/engine";
-import { colony } from "@/sim/colony";
-import { foundingOn } from "@/sim/lineage";
+import { dayString } from "@/sim/engine";
+import { RIVALS, TACTIC_IDS, budgetFor, report } from "@/sim/arena";
 
-/* The card that stands in for the day when a link is shared: today's champion,
-   how long it lived, what it ate, and the head of its sealed hash. */
+/* The card that stands in for TapeFly when a link is shared: Brain Brawl, today's
+   ladder, and the one fact that makes it TapeFly: the brain is a real NAND circuit. */
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const alt = "TapeFly — today's clutch";
+export const alt = "TapeFly Brain Brawl — two flies fight, you write the brain";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -16,51 +15,32 @@ const BG = "#06191e";
 const PANEL = "#0c252b";
 const INK = "#e8f0eb";
 const MUTED = "#8ba9a5";
-const ACID = "#f2b64b";
-const AMBER = "#a3e36a";
+const AGAR = "#f2b64b";
+const FROST = "#86a7d6";
+const EYE = "#f0454f";
 
 export default function Image() {
-  const now = new Date();
-  const date = dayString(now);
-  const c = colony(daySeed(now), date, foundingOn(date));
-  const m = c.members[c.champion];
-
+  const date = dayString(new Date());
+  const boss = RIVALS[RIVALS.length - 1];
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: "100%", height: "100%", display: "flex", flexDirection: "column",
-          background: BG, color: INK, padding: 56, fontFamily: "sans-serif"
-        }}
-      >
+      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: BG, color: INK, padding: 56, fontFamily: "sans-serif" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ color: ACID, fontSize: 24, letterSpacing: 8, fontFamily: "monospace" }}>TAPEFLY</div>
+          <div style={{ color: AGAR, fontSize: 24, letterSpacing: 8, fontFamily: "monospace" }}>TAPEFLY · BRAIN BRAWL</div>
           <div style={{ color: MUTED, fontSize: 22, fontFamily: "monospace" }}>{`${date} · UTC`}</div>
         </div>
-
-        <div style={{ display: "flex", flexDirection: "column", marginTop: 32 }}>
-          <div style={{ color: MUTED, fontSize: 24, fontFamily: "monospace" }}>today&rsquo;s champion</div>
-          <div style={{ fontSize: 72, fontWeight: 800, letterSpacing: -2, marginTop: 4 }}>{m.name}</div>
+        <div style={{ display: "flex", flexDirection: "column", marginTop: 40 }}>
+          <div style={{ fontSize: 76, fontWeight: 800, letterSpacing: -2, lineHeight: 1.05 }}>Two flies fight.</div>
+          <div style={{ fontSize: 76, fontWeight: 800, letterSpacing: -2, lineHeight: 1.05, color: AGAR }}>You write the brain.</div>
         </div>
-
-        <div style={{ display: "flex", marginTop: 24, gap: 18 }}>
-          <Stat n={String(m.lived)} label="ticks lived" color={ACID} />
-          <Stat n={String(m.meals)} label="meals" color={AMBER} />
-          <Stat n={String(m.gf)} label="giant fibre" color="#f0454f" />
-          <Stat n={String(c.members.length)} label="flies, one dish" color={INK} />
+        <div style={{ display: "flex", marginTop: 40, gap: 18 }}>
+          <Stat n={String(TACTIC_IDS.length)} label="tactic chips" color={AGAR} />
+          <Stat n={String(RIVALS.length)} label="rivals today" color={FROST} />
+          <Stat n={`${budgetFor(0)}-${budgetFor(RIVALS.length - 1)}`} label="NAND gate budget" color={INK} />
+          <Stat n={String(report(boss.chips).gates)} label={`gates in ${boss.name}, the last`} color={EYE} />
         </div>
-
-        <div style={{
-          display: "flex", flexDirection: "column", marginTop: 24,
-          background: PANEL, borderRadius: 16, padding: 20
-        }}>
-          <div style={{ color: MUTED, fontSize: 19, fontFamily: "monospace" }}>{`sealed hash · ${m.day.ticks.length} ticks folded into one`}</div>
-          <div style={{ color: ACID, fontSize: 23, fontFamily: "monospace", marginTop: 8 }}>
-            {`${m.day.hash.slice(0, 48)}…`}
-          </div>
-          <div style={{ color: MUTED, fontSize: 20, marginTop: 12 }}>
-            a brain of 50 NAND gates · no server state · replayable from the date alone
-          </div>
+        <div style={{ color: MUTED, fontSize: 22, marginTop: 36 }}>
+          Every brain compiles to one real NAND circuit, the gates people tape out on TapeOut. Free, no wallet.
         </div>
       </div>
     ),
@@ -70,10 +50,7 @@ export default function Image() {
 
 function Stat({ n, label, color }: { n: string; label: string; color: string }) {
   return (
-    <div style={{
-      display: "flex", flexDirection: "column", background: PANEL, borderRadius: 14,
-      padding: "14px 22px", minWidth: 170
-    }}>
+    <div style={{ display: "flex", flexDirection: "column", background: PANEL, borderRadius: 14, padding: "14px 22px", minWidth: 220 }}>
       <div style={{ fontSize: 42, fontWeight: 800, color, fontFamily: "monospace" }}>{n}</div>
       <div style={{ fontSize: 19, color: MUTED, marginTop: 2 }}>{label}</div>
     </div>

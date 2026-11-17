@@ -16,7 +16,7 @@ export default async function ProofPage() {
   const ITEMS: { href: string; title: string; line: string }[] = [
     { href: "/verify", title: t("重放任意一天", "Replay any day"), line: t("每一天只由日期决定，每一步都折进一个哈希。在浏览器里重放一天，对比哈希。", "Each day is a pure function of its date, and every step is folded into a hash. Replay a day in your browser and compare the hash.") },
     { href: "/lineage", title: t("血统账本", "The lineage ledger"), line: t("每个结束的日子都和前一天链在一起，所以过去的任何一天都没法被悄悄改掉。", "Every finished day is chained to the one before it, so no past day can be quietly changed.") },
-    { href: "/tapeout#bytes", title: t("大脑的字节", "The brain's bytes"), line: t("官方大脑按 TapeOut 自己的电路格式逐字节列出，以及上链前必须通过的检查。", "The official brain in TapeOut's own circuit format, byte for byte, with the checks it has to pass before it goes on chain.") },
+    { href: "/tapeout#bytes", title: t("大脑的字节", "The brain's bytes"), line: t("官方大脑按 TapeOut 自己的电路格式逐字节列出，并附上 X Layer Circuit #2 的链上核对结果。", "The official brain in TapeOut's own circuit format, byte for byte, together with the completed X Layer Circuit #2 check.") },
     { href: "/calibrate", title: t("这颗大脑公平吗？", "Is the brain fair?"), line: t("官方大脑是照着参考果蝇的行为调的。逐个决定看看它有多接近。", "The official brain was tuned to act like a reference fly. See how close it gets, decision by decision.") },
     { href: "/agents", title: t("给 AI 智能体", "For AI agents"), line: t("智能体可以抓取并核查的签名记录，规则和人用的一样。", "Signed records an agent can fetch and check, with the same rules a person uses.") },
     { href: "/lab", title: t("实验室", "The lab"), line: t("手动设定果蝇感觉到什么，看门电路怎么做决定，一次一个输入。", "Set what the fly senses by hand and watch the gates decide, one input at a time.") },

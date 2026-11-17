@@ -1,0 +1,97 @@
+{
+  "voice_track": "/Users/yanqing/Documents/fashion-trending-services/docs/tapefly-hackathon-delivery-2026-11-17/work/voice-track.wav",
+  "video_duration": 170.20675000000003,
+  "cue_count": 10,
+  "cues": [
+    {
+      "index": 1,
+      "start": 0.5,
+      "end": 13.249791666666667,
+      "duration": 12.749791666666667,
+      "chapter": "01 / PROBLEM",
+      "en": "Most game characters are black boxes. You can see what they do, but not why they do it. TapeFly starts with a different promise: the whole decision layer should be visible, replayable, and provable.",
+      "zh": "大多数游戏角色都是黑盒。你能看到它们做了什么，却看不到为什么。TapeFly 的承诺不同：整个决策层都应该可见、可回放、可证明。"
+    },
+    {
+      "index": 2,
+      "start": 14.049791666666668,
+      "end": 32.19264583333333,
+      "duration": 18.142854166666666,
+      "chapter": "02 / BUILD",
+      "en": "TapeFly is a game about building a machine fly. You assemble its body, place the wings and senses, then wire a brain using only NAND gates. When the design is ready, you press Fly and let go. There is no hidden AI endpoint and no personality slider. The wiring is the character.",
+      "zh": "TapeFly 是一款拼装机器果蝇的游戏。玩家组装身体、安装翅膀和感官，再用 NAND 门连接出大脑。设计完成后按下飞行，松开手。没有隐藏的 AI 接口，也没有人格滑杆；接线就是角色本身。"
+    },
+    {
+      "index": 3,
+      "start": 32.99264583333333,
+      "end": 50.300124999999994,
+      "duration": 17.307479166666667,
+      "chapter": "03 / PLAY",
+      "en": "The fly searches for sugar, avoids walls, and escapes a spider on its own. The world runs on deterministic physics, so the same design in the same world always produces the same run. If two players see the same challenge, they can reproduce exactly the same result.",
+      "zh": "果蝇会自己寻找糖、避开墙并躲开蜘蛛。世界使用确定性物理，所以同一个设计在同一个世界里总会得到同一次运行。两个玩家看到同一个挑战，就能复现完全相同的结果。"
+    },
+    {
+      "index": 4,
+      "start": 51.10012499999999,
+      "end": 67.94514583333333,
+      "duration": 16.845020833333333,
+      "chapter": "04 / DIAGNOSE",
+      "en": "Failure is where the game begins. When the fly hits a wall, TapeFly rewinds to the exact tick. You can inspect what it sensed, which gates fired, and which wire produced the mistake. Change one connection, compile again, and watch the behavior change.",
+      "zh": "失败才是游戏的开始。果蝇撞墙后，TapeFly 会回到出错的那一帧。你可以检查它感知到了什么、哪些门被触发、哪根线造成了错误。改一根连接，重新编译，再看行为如何变化。"
+    },
+    {
+      "index": 5,
+      "start": 68.74514583333332,
+      "end": 87.70056249999999,
+      "duration": 18.955416666666668,
+      "chapter": "05 / COMPILE",
+      "en": "The editor sits on top of a real compiler. Your wiring becomes TapeOut-compatible NAND bytes. The compiler does not sample a few cases. It checks every possible input. For the official twelve-bit brain, that is four thousand ninety-six cases, and all four thousand ninety-six must match.",
+      "zh": "编辑器下面是一套真实编译器。接线会变成 TapeOut 兼容的 NAND 字节。它不是抽查几个样例，而是检查每一种可能输入。官方 12 位大脑共有 4096 种输入，4096 种结果必须全部一致。"
+    },
+    {
+      "index": 6,
+      "start": 88.50056249999999,
+      "end": 107.69977083333332,
+      "duration": 19.199208333333335,
+      "chapter": "06 / X LAYER",
+      "en": "The official fifty-gate brain is live on X Layer as Circuit number two. Its three hundred fifty bytes are stored on chain through an external TapeOut test processor. Anyone can call the free read-only eval function and compare every answer. You do not need to trust our dashboard. You can verify the circuit yourself.",
+      "zh": "官方 50 门大脑已经作为 Circuit #2 上线 X Layer。350 字节通过外部 TapeOut 测试处理器保存在链上。任何人都可以调用免费只读 eval，比较每一种答案。你不需要相信我们的面板，可以直接验证电路。"
+    },
+    {
+      "index": 7,
+      "start": 108.49977083333332,
+      "end": 126.87535416666665,
+      "duration": 18.375583333333335,
+      "chapter": "07 / AGENTS",
+      "en": "The same task is open to AI agents. An agent can read the Workshop specification, submit a design, run the measured level, and receive the complete circuit proof through one API. Human and machine-designed brains can therefore compete under the same gate budget and the same deterministic rules.",
+      "zh": "同一套任务也向 AI Agent 开放。Agent 可以读取 Workshop 规格、提交设计、运行关卡，并通过一个 API 获取完整电路证明。人类和机器设计的大脑因此可以在相同门数预算和相同确定性规则下竞争。"
+    },
+    {
+      "index": 8,
+      "start": 127.67535416666665,
+      "end": 146.29475,
+      "duration": 18.619395833333332,
+      "chapter": "08 / BUSINESS",
+      "en": "The business model is built around continued play. Entry is free. A paid four-week challenge season adds new level packs, verified rankings, and optional tape-out ownership. Sponsors pay for themed circuit challenges because they receive real participation and results that anyone can recompute.",
+      "zh": "商业模式围绕持续游玩展开。入门免费；付费四周挑战赛季提供新关卡包、经过验证的排行榜和可选流片权益。赞助方为主题电路挑战付费，因为他们获得真实参与和任何人都能复算的结果。"
+    },
+    {
+      "index": 9,
+      "start": 147.09475,
+      "end": 164.94789583333335,
+      "duration": 17.853145833333333,
+      "chapter": "09 / DISTRIBUTION",
+      "en": "The first public release is a wallet-free game on the web and itch. Steam is the next distribution step for traditional players. Later, the same verified brain can move into desktop hardware. Each channel brings new users into TapeOut without pretending those future products are already live.",
+      "zh": "首个公开版本是网页和 itch 上的无钱包游戏。Steam 是面向传统玩家的下一步发行渠道。之后，同一套可验证大脑可以进入桌面硬件。每个渠道都为 TapeOut 带来新用户，但不会把未来产品说成已经上线。"
+    },
+    {
+      "index": 10,
+      "start": 165.74789583333336,
+      "end": 169.00675000000004,
+      "duration": 3.2588541666666666,
+      "chapter": "10 / TAPEFLY",
+      "en": "TapeFly. Build a brain. Prove it on-chain.",
+      "zh": "TapeFly。搭建大脑，在链上证明。"
+    }
+  ]
+}

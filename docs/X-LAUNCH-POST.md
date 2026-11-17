@@ -1,6 +1,6 @@
 # TapeFly X launch post
 
-Attach the 1:58 Chinese-narration demo:
+Attach the 57-second Chinese-narration launch film:
 <https://tapefly.xyz/tapefly-demo.mp4>
 
 ## Main long post — 中文
@@ -24,7 +24,7 @@ TapeFly 想解决这个问题。
 
 这不是概念图。
 
-官方大脑已经作为 TapeOut Circuit #1 流片：
+官方大脑已经在 X Layer 上流片为 Circuit #2：
 · 链上网表与公开源码一致
 · 4,096 / 4,096 个答案逐一验证
 · 每一天都能重放
@@ -49,10 +49,9 @@ TapeFly 想解决这个问题。
 而是让行为第一次可以被完整比较：
 谁更有效、谁更节省、谁更稳定，全部公开可查。
 
-下一步是 X Layer。
+X Layer 上的流片已经完成。
 
-我们会在 X Layer 上流片果蝇大脑，
-用公开区块数据生成每天的世界种子，
+下一阶段会使用公开的 X Layer 区块数据生成每天的世界种子，
 开放智能体 API，
 并运营一个人类和 AI 都能免费参加的果蝇大脑竞技场。
 
@@ -64,7 +63,7 @@ TapeFly 让行为可以被理解、验证、比较和拥有。
 这一次，我们不是又交一个“看起来很聪明”的黑盒，
 而是把完整证明一起交上来。
 
-1 分 58 秒 Demo 👇
+57 秒 Demo 👇
 https://tapefly.xyz/tapefly-demo.mp4
 
 来养今天的果蝇：
@@ -88,7 +87,7 @@ Because the input space is exactly 4,096 cases, anyone can verify every possible
 
 This is not a concept video.
 
-The official brain is already taped out as TapeOut Circuit #1:
+The official brain is live on X Layer as Circuit #2:
 • the on-chain netlist matches the public source
 • all 4,096 answers were verified
 • every day can be replayed
@@ -105,16 +104,16 @@ Players can challenge friends, join weekly seasons and optionally tape out a bra
 
 The same open API is available to AI agents. Human-designed and AI-designed brains can compete under one public ruleset: which behavior is more effective, smaller or more robust?
 
-Next: X Layer.
+X Layer tape-out is complete.
 
-We will tape out the fly brain on X Layer, use public X Layer block data for the daily world seed, expose the same agent API, and operate one free arena shared by human- and AI-designed brains.
+Next, we will use public X Layer block data for the daily world seed, expose the same agent API, and operate one free arena shared by human- and AI-designed brains.
 
 TapeOut makes circuits permanent.
 TapeFly makes behavior understandable, verifiable, playable and ownable.
 
 I'm Richard, founder of TapeFly and a previous X Layer hackathon second-prize winner. This time, we are not shipping another black box that only looks intelligent. We are shipping the proof with it.
 
-Watch the 1:58 demo:
+Watch the 57-second demo:
 https://tapefly.xyz/tapefly-demo.mp4
 
 Meet today's fly:
@@ -130,7 +129,7 @@ One number matters most:
 
 4,096 / 4,096.
 
-Not sampled. Not a benchmark subset. Every possible input to the official TapeOut Circuit #1 returns the same answer on chain as it does in the public source.
+Not sampled. Not a benchmark subset. Every possible input to official X Layer Circuit #2 returns the same answer on chain as it does in the public source.
 
 That is the product.
 ```
@@ -147,7 +146,7 @@ That is the foundation for a much larger idea: human- and AI-designed behavior c
 
 ## Asset guidance
 
-- Primary: post the 1:58 Chinese-narration demo.
+- Primary: post the 57-second Chinese-narration launch film, using the 9:16 cut for mobile-first posts.
 - Secondary: attach the `tapefly-demo-poster.jpg` cover.
 - If the post needs a still image instead, use the circuit proof card rather
   than a decorative fly illustration.

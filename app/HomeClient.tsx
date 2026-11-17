@@ -6,6 +6,7 @@
    dish. Below: the circuit itself, what it would take to put it on chain, and
    one button to race a friend. */
 
+import { EXPLORER } from "@/sim/onchain";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import Arena from "./components/ui/Arena";
@@ -20,7 +21,21 @@ import type { Tick } from "@/sim/engine";
 
 const START: Switches = { ...NO_SWITCHES, eat: true };
 
-export default function HomeClient({ today, through }: { today: string; through: string }) {
+export default function HomeClient({
+  today,
+  through,
+  chainLive,
+  circuitId,
+  verifiedAnswers,
+  lineageDays
+}: {
+  today: string;
+  through: string;
+  chainLive: boolean;
+  circuitId: number;
+  verifiedAnswers: number;
+  lineageDays: number;
+}) {
   const { t } = useLang();
   const [program, setProgram] = useState<Program>(programFromSwitches(START));
   const [name, setName] = useState("");
@@ -51,6 +66,7 @@ export default function HomeClient({ today, through }: { today: string; through:
   const c = useMemo(() => card(brain.netlist), [brain]);
   const wk = useMemo(() => week(brain, through), [brain, through]);
   const dates = useMemo(() => [today], [today]);
+  const activeCount = switches ? SWITCHES.filter((s) => switches[s.id]).length : 0;
   const flyName = cleanName(name, defaultFlyName(code));
 
   const flip = (id: SwitchId) => {
@@ -65,8 +81,46 @@ export default function HomeClient({ today, through }: { today: string; through:
 
   return (
     <div className="home">
+      <section className="protocol-bus" aria-label={t("TapeFly 运行状态", "TapeFly run status")}>
+        <a className="protocol-brand" href={EXPLORER} target="_blank" rel="noreferrer">
+          <span className="xl-mark" aria-hidden>X</span>
+          <span>
+            <small>{t("网络", "Network")}</small>
+            <b>X Layer</b>
+          </span>
+          <span className="protocol-live" aria-label={t("已连接", "Connected")} />
+        </a>
+        <div className="protocol-cell">
+          <small>{t("实验日", "Run date")}</small>
+          <b>{today}</b>
+          <span>UTC</span>
+        </div>
+        <div className="protocol-cell">
+          <small>{t("官方大脑", "Official brain")}</small>
+          <b>Circuit #{circuitId}</b>
+          <span>{chainLive ? t("已上链", "Live onchain") : t("待验证", "Pending")}</span>
+        </div>
+        <div className="protocol-cell">
+          <small>{t("答案验证", "Answer checks")}</small>
+          <b>{chainLive ? `${verifiedAnswers.toLocaleString()} / ${verifiedAnswers.toLocaleString()}` : "—"}</b>
+          <span>{chainLive ? t("全部一致", "all matched") : t("未配置", "not configured")}</span>
+        </div>
+        <div className="protocol-cell">
+          <small>{t("公开血统", "Public lineage")}</small>
+          <b>{lineageDays.toLocaleString()}</b>
+          <span>{t("天记录", "days recorded")}</span>
+        </div>
+        <Link className="protocol-action" href="/tapeout">
+          {t("打开证据", "Open proof")} <span aria-hidden>↗</span>
+        </Link>
+      </section>
+
       <section className="home-top">
         <div className="home-dish">
+          <div className="dish-console-head">
+            <span><i aria-hidden />{t("标本实时运行", "Specimen live")}</span>
+            <span>{today} / UTC</span>
+          </div>
           <Arena brain={brain} dates={dates} onTick={setTick} onResult={(d) => setResult(d[0] ?? null)} compact solo />
           <p className="dish-legend">
             <span><i className="lg-food" />{t("食物", "food")}</span>
@@ -83,18 +137,27 @@ export default function HomeClient({ today, through }: { today: string; through:
               <Link className="btn primary small" href={`/vs?${challengeQuery({ a: rival.a, b: { program, name: flyName }, through: rival.through })}`}>{t(`和 ${rival.a.name} 对战`, `Race ${rival.a.name}`)}</Link>
             </p>
           )}
-          <p className="kicker">{t("基于 TapeOut · 独立游戏", "Built on TapeOut · an independent game")}</p>
+          <div className="panel-console-head">
+            <span>SPECIMEN CONTROL</span>
+            <span>{t("本地确定性运行", "Deterministic local run")}</span>
+          </div>
+          <p className="kicker">{t("TapeOut · X Layer · 独立游戏", "TapeOut · X Layer · an independent game")}</p>
           <h1>{t("用 TapeOut 的门电路，造一颗果蝇大脑。", "Build a fly’s brain from TapeOut gates.")}</h1>
           <p className="lede">
             {t("拨动它的本能开关。这些本能会编译成一个由 NAND 门组成的电路，就是大家在 TapeOut 上流片的那种门。然后看你的果蝇能不能在今天的培养皿里活到天黑。",
                "Flip its instincts. They compile into a circuit of NAND gates, the same gates people tape out on TapeOut. Then watch your fly try to survive today’s dish until dusk.")}
           </p>
 
+          <div className="rack-head">
+            <span>INSTINCT MATRIX</span>
+            <span>{activeCount} / {SWITCHES.length} {t("启用", "active")}</span>
+          </div>
           <div className="switches" role="group" aria-label={t("果蝇的本能", "Your fly's instincts")}>
-            {SWITCHES.map((s) => {
+            {SWITCHES.map((s, i) => {
               const on = !!switches?.[s.id];
               return (
                 <button key={s.id} type="button" role="switch" aria-checked={on} className={`sw ${on ? "on" : ""}`} onClick={() => flip(s.id)} disabled={!switches && !ready}>
+                  <span className="sw-index" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
                   <span className="sw-knob" aria-hidden />
                   <span className="sw-text"><b>{t(s.zh, s.label)}</b><span>{t(s.zhLine, s.line)}</span></span>
                 </button>
@@ -108,23 +171,29 @@ export default function HomeClient({ today, through }: { today: string; through:
             </p>
           )}
 
-          <div className="result" aria-live="polite">
-            <div>
-              <span>{t("今天", "Today")}</span>
-              <b>{result ? (result.day.alive ? t("活下来了", "Survived") : t("死了", "Died")) : "…"}</b>
-              <em>{result
-                ? (result.day.alive ? t(`撑到天黑 · 吃了 ${result.meals} 口`, `made it to dusk · ${result.meals} meal${result.meals === 1 ? "" : "s"}`) : t(`第 ${result.lived - 1} 步 · 吃了 ${result.meals} 口`, `at step ${result.lived - 1} · ${result.meals} meal${result.meals === 1 ? "" : "s"}`))
-                : t("运行中", "running")}</em>
+          <div className="readout">
+            <div className="readout-head">
+              <span>RUN OUTPUT</span>
+              <span className={result ? "sealed" : "running"}>{result ? t("本次结束", "Run ended") : t("实时运行", "Live run")}</span>
             </div>
-            <div>
-              <span>{t("最近 7 天", "Last 7 days")}</span>
-              <b>{wk.survived}/7</b>
-              <em>{t("活到天黑的天数", "days it reached dusk")}</em>
-            </div>
-            <div>
-              <span>{t("大脑", "Brain")}</span>
-              <b>{c.gates} NAND</b>
-              <em>{t("个 TapeOut 门", "gates on TapeOut")}</em>
+            <div className="result" aria-live="polite">
+              <div>
+                <span>{t("今天", "Today")}</span>
+                <b>{result ? (result.day.alive ? t("活下来了", "Survived") : t("死了", "Died")) : "…"}</b>
+                <em>{result
+                  ? (result.day.alive ? t(`撑到天黑 · 吃了 ${result.meals} 口`, `made it to dusk · ${result.meals} meal${result.meals === 1 ? "" : "s"}`) : t(`第 ${result.lived - 1} 步 · 吃了 ${result.meals} 口`, `at step ${result.lived - 1} · ${result.meals} meal${result.meals === 1 ? "" : "s"}`))
+                  : t("运行中", "running")}</em>
+              </div>
+              <div>
+                <span>{t("最近 7 天", "Last 7 days")}</span>
+                <b>{wk.survived}/7</b>
+                <em>{t("活到天黑的天数", "days it reached dusk")}</em>
+              </div>
+              <div>
+                <span>{t("大脑", "Brain")}</span>
+                <b>{c.gates} NAND</b>
+                <em>{t("个 TapeOut 门", "gates on TapeOut")}</em>
+              </div>
             </div>
           </div>
 
@@ -141,6 +210,7 @@ export default function HomeClient({ today, through }: { today: string; through:
 
       <section className="home-circuit">
         <div className="hc-copy">
+          <div className="hc-meta"><span>CIRCUIT TRACE</span><span>{c.gates}G / {c.depth}D</span></div>
           <p className="kicker">{t("你的果蝇大脑，按 TapeOut 的方式搭出来", "Your fly’s brain, as TapeOut would build it")}</p>
           <h2>{t(`${c.gates} 个 NAND 门，${c.depth} 层深`, `${c.gates} NAND gates, ${c.depth} layers deep`)}</h2>
           <p>

@@ -1,5 +1,5 @@
 /* npm run anchor -- --check        recompute every head in anchors/anchors.json (offline)
-   npm run anchor -- --chain        …and read each transaction on BNB Chain
+   npm run anchor -- --chain        …and read each transaction on X Layer
    npm run anchor -- --dry-run      print the anchor for yesterday (UTC) without sending
    npm run anchor                   send it: needs ANCHOR_PRIVATE_KEY in the environment
                                     (a CI secret or a local shell variable; never a file in
@@ -10,17 +10,16 @@
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { ANCHORS, anchorData, anchorText, checkAnchors, headOn, txCarries, yesterdayUTC, type AnchorFile } from "../sim/anchor";
-import { BSC_RPC } from "../sim/onchain";
+import { CHAIN, CHAIN_RPC } from "../sim/onchain";
 
 const file = join(__dirname, "..", "anchors", "anchors.json");
 const arg = (k: string) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : undefined; };
 const has = (k: string) => process.argv.includes(`--${k}`);
-const rpc = arg("rpc") ?? process.env.BSC_RPC ?? BSC_RPC;
+const rpc = arg("rpc") ?? process.env.XLAYER_RPC ?? CHAIN_RPC;
 
 async function client() {
   const { createPublicClient, http } = await import("viem");
-  const { bsc } = await import("viem/chains");
-  return createPublicClient({ chain: bsc, transport: http(rpc) });
+  return createPublicClient({ chain: CHAIN, transport: http(rpc) });
 }
 
 async function main() {
@@ -50,9 +49,8 @@ async function main() {
   if (!key) { console.error("ANCHOR_PRIVATE_KEY is not set. Anchor from the browser at /lineage/anchor instead, or set it as a CI secret."); process.exit(2); }
   const { createWalletClient, http } = await import("viem");
   const { privateKeyToAccount } = await import("viem/accounts");
-  const { bsc } = await import("viem/chains");
   const account = privateKeyToAccount((key.startsWith("0x") ? key : `0x${key}`) as `0x${string}`);
-  const w = createWalletClient({ account, chain: bsc, transport: http(rpc) });
+  const w = createWalletClient({ account, chain: CHAIN, transport: http(rpc) });
   const c = await client();
   const hash = await w.sendTransaction({ to: account.address, value: 0n, data });
   console.log(`sent ${hash}`);

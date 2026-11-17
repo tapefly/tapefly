@@ -6,8 +6,7 @@
 
 import { useMemo, useState } from "react";
 import { createPublicClient, createWalletClient, custom, http, type PublicClient } from "viem";
-import { bsc } from "viem/chains";
-import { BSC_RPC } from "@/sim/onchain";
+import { CHAIN, CHAIN_RPC, txUrl } from "@/sim/onchain";
 import { anchorData, anchorText } from "@/sim/anchor";
 import { useLang } from "../../i18n/client";
 
@@ -15,7 +14,7 @@ type Eth = { request: (a: { method: string; params?: unknown[] }) => Promise<unk
 
 export default function AnchorClient({ date, head, done }: { date: string; head: string; done: boolean }) {
   const { t } = useLang();
-  const pub = useMemo(() => createPublicClient({ chain: bsc, transport: http(BSC_RPC) }) as PublicClient, []);
+  const pub = useMemo(() => createPublicClient({ chain: CHAIN, transport: http(CHAIN_RPC) }) as PublicClient, []);
   const [msg, setMsg] = useState("");
   const [entry, setEntry] = useState("");
 
@@ -24,10 +23,10 @@ export default function AnchorClient({ date, head, done }: { date: string; head:
     const e = (window as unknown as { ethereum?: Eth }).ethereum;
     if (!e) { setMsg(t("这个浏览器里没找到钱包。", "No wallet found in this browser.")); return; }
     try {
-      const w = createWalletClient({ chain: bsc, transport: custom(e) });
+      const w = createWalletClient({ chain: CHAIN, transport: custom(e) });
       const [account] = await w.requestAddresses();
-      try { await w.switchChain({ id: bsc.id }); } catch { await w.addChain({ chain: bsc }); }
-      setMsg(t("请在钱包里确认（0 BNB 发给自己，只花 gas）…", "Confirm in your wallet (0 BNB to yourself, gas only)…"));
+      try { await w.switchChain({ id: CHAIN.id }); } catch { await w.addChain({ chain: CHAIN }); }
+      setMsg(t("请在钱包里确认（0 OKB 发给自己，只花 gas）…", "Confirm in your wallet (0 OKB to yourself, gas only)…"));
       const hash = await w.sendTransaction({ account, to: account, value: 0n, data: anchorData(date, head) });
       setMsg(t("等待链上确认…", "Waiting for the chain…"));
       const r = await pub.waitForTransactionReceipt({ hash });
@@ -40,7 +39,7 @@ export default function AnchorClient({ date, head, done }: { date: string; head:
   return (
     <div className="panel tp">
       <p className="kicker">{t("运营者专用", "For the operator")}</p>
-      <h2>{t(`把 ${date} 的血统写上 BNB Chain`, `Write ${date}’s lineage onto BNB Chain`)}</h2>
+      <h2>{t(`把 ${date} 的血统写上 X Layer`, `Write ${date}’s lineage onto X Layer`)}</h2>
       <p>{t("这笔交易从你的钱包发给你自己，金额 0，只花一点 gas。交易数据是下面这行字，它把从第一天到这一天的所有果蝇、它们的身体和每一步记忆，折成了一个哈希。",
             "This transaction goes from your wallet to itself with zero value, costing only gas. Its data is the line below, which folds every fly from the first day to this one, their bodies and every step they took, into one hash.")}</p>
       <pre className="cmd" style={{ marginTop: 12, whiteSpace: "pre-wrap", wordBreak: "break-all" }}>{anchorText(date, head)}</pre>
@@ -54,7 +53,7 @@ export default function AnchorClient({ date, head, done }: { date: string; head:
           <code>{entry}</code>
         </div>
       )}
-      <p className="dim" style={{ marginTop: 14 }}>{t("想每天自动做：在 GitHub 仓库的 Secrets 里加一个 ANCHOR_PRIVATE_KEY（一个只放少量 BNB 做 gas 的钱包），每日任务就会自己锚定并提交。", "To do this daily without clicking: add an ANCHOR_PRIVATE_KEY repository secret (a wallet holding a little BNB for gas) and the daily job anchors and commits on its own.")}</p>
+      <p className="dim" style={{ marginTop: 14 }}>{t("想每天自动做：在 GitHub 仓库的 Secrets 里加一个 ANCHOR_PRIVATE_KEY（一个只放少量 OKB 做 gas 的钱包），每日任务就会自己锚定并提交。", "To do this daily without clicking: add an ANCHOR_PRIVATE_KEY repository secret (a wallet holding a little OKB for gas) and the daily job anchors and commits on its own.")}</p>
     </div>
   );
 }

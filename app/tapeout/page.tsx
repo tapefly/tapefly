@@ -1,10 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import { SiteNav, SiteFooter } from "@/app/components/ui/Shell";
 import HexView from "@/app/components/ui/HexView";
 import { BRAIN } from "@/sim/netlist";
 import { netlistBytes, bytesLength } from "@/sim/tapeout";
 import { netDepth, cost } from "@/sim/compile";
+import { txUrl } from "@/sim/onchain";
 import config from "@/config/tapeout.json";
 import TapeoutPanel from "./TapeoutPanel";
 import { serverT } from "../i18n/server";
@@ -15,7 +15,7 @@ export async function generateMetadata() {
   const t = await serverT();
   return {
     title: t("上链 — TapeFly", "On TapeOut — TapeFly"),
-    description: t("TapeFly 的大脑就是 TapeOut 电路：NAND 门，流片在 BNB Chain 上。", "TapeFly brains are TapeOut circuits: NAND gates, taped out on BNB Chain.")
+    description: t("TapeFly 的大脑就是 TapeOut 电路：NAND 门，流片在 X Layer 上。", "TapeFly brains are TapeOut circuits: NAND gates, taped out on X Layer.")
   };
 }
 
@@ -35,32 +35,13 @@ export default async function TapeOutPage() {
       <SiteNav here="/tapeout" />
       <div className="page">
         <header className="page-head">
-          <p className={`status-pill ${live ? "live" : ""}`}>{live ? t("已上链", "Live on chain") : t("链上状态未同步", "On-chain status not synced")}</p>
+          <p className={`status-pill ${live ? "live" : ""}`}>{live ? t("已上链", "Live on chain") : t("等待可核对电路", "Awaiting verifiable circuit")}</p>
           <h1>{t("TapeFly 建立在 TapeOut 之上", "TapeFly is built on TapeOut")}</h1>
           <p>
-            {t("TapeOut 是 BNB Chain 上的一个协议，大家用 NAND 门搭电路，再把电路放上链。TapeFly 的每一颗大脑就是这样一个电路。下面是一分钟看懂 TapeOut、它对你的果蝇意味着什么，以及亲手流片的面板。",
-               "TapeOut is a protocol on BNB Chain where people build circuits out of NAND gates and put them on chain. A TapeFly brain is exactly such a circuit. Here is TapeOut in one minute, what it means for your fly, and a panel to tape one out yourself.")}
+            {t("TapeOut 是 X Layer 上的一个协议，大家用 NAND 门搭电路，再把电路放上链。TapeFly 的每一颗大脑就是这样一个电路。下面是一分钟看懂 TapeOut、它对你的果蝇意味着什么，以及亲手流片的面板。",
+               "TapeOut is a protocol on X Layer where people build circuits out of NAND gates and put them on chain. A TapeFly brain is exactly such a circuit. Here is TapeOut in one minute, what it means for your fly, and a panel to tape one out yourself.")}
           </p>
         </header>
-
-        {live && (
-          <figure className="to-live-shot">
-            <Image
-              src="/tapefly-circuit1-onchain.png"
-              alt={t("TapeFly 官方大脑电路 #1 已在 BNB Chain 上流片", "TapeFly official brain circuit #1 is live on BNB Chain")}
-              width={1080}
-              height={1080}
-              priority
-              sizes="(max-width: 760px) 100vw, 760px"
-            />
-            <figcaption>
-              {t(
-                <>官方大脑电路 #1 · TapeFly 处理器 · 全部 4,096 个答案核对一致</>,
-                <>Official brain circuit #1 · TapeFly processor · all 4,096 answers verified</>
-              )}
-            </figcaption>
-          </figure>
-        )}
 
         <section className="to-explain" aria-label={t("一分钟看懂 TapeOut", "TapeOut in one minute")}>
           <div><b>{t("NAND 门就是代币", "NAND gates are tokens")}</b><p>{t("NAND 门只有在两个输入都是 1 时才输出 0。任何计算都能用它搭出来。在 TapeOut 上，每个门是一个晶体管代币，在处理器上购买。", "A NAND gate outputs 0 only when both inputs are 1. Any computation can be built from it. On TapeOut each gate is a transistor token, bought on a processor.")}</p></div>
@@ -72,17 +53,17 @@ export default async function TapeOutPage() {
         <div className="panel to-yours">
           <h2>{t("这对你的果蝇意味着什么", "What it means for your fly")}</h2>
           <ol className="checklist">
-            <li className="done"><i aria-hidden>✓</i><div><b>{t("你的本能已经是一个电路", "Your instincts are already a circuit")}</b><p>{t("首页的开关会按 TapeOut 自己的格式编译成 NAND 门。你在那里看到的门数，就是流片要烧掉的晶体管数。", "The switches on the home page compile to NAND gates in TapeOut’s own format. The gate count you see there is the number of transistors a tape-out would burn.")}</p></div></li>
+            <li className="done"><i aria-hidden>✓</i><div><b>{t("你的本能已经是一个电路", "Your instincts are already a circuit")}</b><p>{t("大乱斗的战术芯片和觅食实验的开关，都会按 TapeOut 自己的格式编译成 NAND 门。你在那里看到的门数，就是流片要烧掉的晶体管数。", "Brain Brawl tactic chips and the forage switches compile to NAND gates in TapeOut’s own format. The gate count you see in either is the number of transistors a tape-out would burn.")}</p></div></li>
             <li><i aria-hidden>2</i><div><b>{t("用你自己的钱包流片", "Tape it out, from your own wallet")}</b><p>{t("用下面的面板：连接钱包，买够大脑需要的 NAND，流片。网站随后会向新电路问全部 4,096 个问题，证明它就是你的大脑。", "Use the panel below: connect a wallet, buy the NAND your brain needs, tape it out. The site then asks the new circuit all 4,096 questions to prove it is your brain.")}</p></div></li>
-            <li><i aria-hidden>3</i><div><b>{t("每周冠军上链", "The weekly champion goes on chain")}</b><p>{t("第一次流片已经核对通过。第一季竞技场开赛后，每周冠军的大脑由 TapeFly 流片，电路 NFT 送给冠军。", "The first tape-out has been verified. Once the first arena season opens, each week’s champion brain is taped out by TapeFly and its circuit NFT sent to the winner.")}</p></div></li>
+            <li className="done"><i aria-hidden>✓</i><div><b>{t(`官方大脑已在 X Layer 上流片`, `The official brain is live on X Layer`)}</b><p>{t(`官方 50 门大脑已成为 Sillu 处理器上的电路 #${String(config.circuitId)}，全部 4,096 个答案和链上保存的 350 字节均已核对一致。`, `The official 50-gate brain is circuit #${String(config.circuitId)} on the Sillu processor; all 4,096 answers and the stored 350 bytes match.`)}</p></div></li>
           </ol>
           <div className="row" style={{ marginTop: 16 }}>
-            <Link className="btn primary" href="/">{t("造一颗大脑", "Build a brain")}</Link>
+            <Link className="btn primary" href="/workshop">{t("开始造果蝇", "Build a fly")}</Link>
             <a className="btn" href="#tape-out">{t("现在流片", "Tape out now")}</a>
           </div>
         </div>
 
-        <TapeoutPanel tapeflyProcessor={config.tapeflyProcessor} />
+        <TapeoutPanel tapeflyProcessor={config.processor ?? config.tapeflyProcessor} />
 
         <h2 className="to-official">{t(`官方大脑：${bytesLength(BRAIN)} 字节`, `The official brain: ${bytesLength(BRAIN)} bytes`)}</h2>
         <div className="stats">
@@ -124,10 +105,10 @@ npm run tapeout -- verify --processor 0x… --id <circuit>  # ${t("全部 4,096 
             <h2>{t("如实说明", "The honest state")}</h2>
             <p>
               {live
-                ? t(<>官方大脑已上链：处理器 <code>{String(config.processor)}</code>，电路 #{String(config.circuitId)}。全部 4,096 个答案与链上电路一致，<a className="link" href={`https://bscscan.com/tx/${String(config.txHash)}`} target="_blank" rel="noreferrer">查看流片交易</a>。</>, <>The official brain is live on chain: processor <code>{String(config.processor)}</code>, circuit #{String(config.circuitId)}. All 4,096 answers match the on-chain circuit. <a className="link" href={`https://bscscan.com/tx/${String(config.txHash)}`} target="_blank" rel="noreferrer">See the tape-out transaction</a>.</>)
-                : t("链上状态还没有同步到网站配置；请以流片面板和链上核对结果为准。", "The on-chain status has not been synced to the site configuration yet; use the tape-out panel and on-chain verification as the source of truth.")}
+                ? t(<>官方大脑已上链：处理器 <code>{String(config.processor)}</code>，电路 #{String(config.circuitId)}。全部 4,096 个答案与链上电路一致，<a className="link" href={txUrl(String(config.txHash))} target="_blank" rel="noreferrer">查看流片交易</a>。</>, <>The official brain is live on chain: processor <code>{String(config.processor)}</code>, circuit #{String(config.circuitId)}. All 4,096 answers match the on-chain circuit. <a className="link" href={txUrl(String(config.txHash))} target="_blank" rel="noreferrer">See the tape-out transaction</a>.</>)
+                : t("当前配置尚未包含可核对的 X Layer 电路证明。", "The current configuration does not yet contain a verifiable X Layer circuit.")}
             </p>
-            <p>{t("TapeFly 的第一次流片已经完成并核对通过。流片面板会在每次新流片后向链上电路问完全部 4,096 个问题，并核对链上保存的字节。", "TapeFly’s first tape-out is complete and verified. After every new tape-out, the panel asks the on-chain circuit all 4,096 questions and checks the stored bytes.")}</p>
+            <p>{t("每次流片之后，面板都会向链上电路问完全部 4,096 个问题，并核对链上保存的字节。", "After every tape-out, the panel asks the on-chain circuit all 4,096 questions and checks the stored bytes.")}</p>
           </div>
         </div>
       </div>

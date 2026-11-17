@@ -1,0 +1,48 @@
+APP NAME
+TapeFly
+
+SHORT DESCRIPTION
+Build a tiny fruit fly, wire its instincts, and watch it live. Every crash can be rewound, inspected, and repaired.
+
+ABOUT THIS GAME
+Build the body. Wire the instincts. Watch the consequences.
+
+TapeFly is a build-and-observe simulation about a tiny fruit fly whose brain you assemble yourself.
+
+Choose a body, attach wings, sensors, and logic parts, then connect them into a working nervous system. Release your fly and watch it search for sugar, avoid walls, escape predators, crash into the world, and reveal exactly why.
+
+There is no personality slider and no hidden decision maker. Every movement comes from the parts and connections you chose.
+
+REWIND THE MISTAKE. CHANGE ONE WIRE. FLY AGAIN.
+
+Every run is deterministic. Pause the action, scrub back to the exact moment that caused a failure, inspect the signal path, and edit the circuit. The next flight starts from your revised design.
+
+BUILD FOR THE JOY OF UNDERSTANDING
+
+• Construct a fly from physical parts with mass, placement, and direction.
+• Wire senses and memory into a brain made from simple logic.
+• Watch autonomous flight driven entirely by your design.
+• Rewind, diagnose, and improve after every failure.
+• Compare designs under identical conditions.
+• Experiment freely in a sandbox built around cause and effect.
+
+A SELF-CONTAINED SINGLE-PLAYER EXPERIENCE
+
+The Steam edition is designed as a complete offline single-player game. No online account is required for the core experience.
+
+GENRES
+Simulation
+Strategy
+
+SUGGESTED TAGS
+Simulation, Sandbox, Automation, Programming, Physics, Puzzle, Artificial Intelligence, Singleplayer, Building, Steam Workshop, Steam Deck
+
+PLANNED LANGUAGES
+English
+Simplified Chinese
+
+WEBSITE
+https://tapefly.xyz
+
+CONTENT NOTES
+No mature content.

@@ -1,0 +1,39 @@
+1
+00:00:00,500 --> 00:00:13,250
+Most game characters are black boxes. You can see what they do, but not why they do it. TapeFly starts with a different promise: the whole decision layer should be visible, replayable, and provable.
+
+2
+00:00:14,050 --> 00:00:32,193
+TapeFly is a game about building a machine fly. You assemble its body, place the wings and senses, then wire a brain using only NAND gates. When the design is ready, you press Fly and let go. There is no hidden AI endpoint and no personality slider. The wiring is the character.
+
+3
+00:00:32,993 --> 00:00:50,300
+The fly searches for sugar, avoids walls, and escapes a spider on its own. The world runs on deterministic physics, so the same design in the same world always produces the same run. If two players see the same challenge, they can reproduce exactly the same result.
+
+4
+00:00:51,100 --> 00:01:07,945
+Failure is where the game begins. When the fly hits a wall, TapeFly rewinds to the exact tick. You can inspect what it sensed, which gates fired, and which wire produced the mistake. Change one connection, compile again, and watch the behavior change.
+
+5
+00:01:08,745 --> 00:01:27,701
+The editor sits on top of a real compiler. Your wiring becomes TapeOut-compatible NAND bytes. The compiler does not sample a few cases. It checks every possible input. For the official twelve-bit brain, that is four thousand ninety-six cases, and all four thousand ninety-six must match.
+
+6
+00:01:28,501 --> 00:01:47,700
+The official fifty-gate brain is live on X Layer as Circuit number two. Its three hundred fifty bytes are stored on chain through an external TapeOut test processor. Anyone can call the free read-only eval function and compare every answer. You do not need to trust our dashboard. You can verify the circuit yourself.
+
+7
+00:01:48,500 --> 00:02:06,875
+The same task is open to AI agents. An agent can read the Workshop specification, submit a design, run the measured level, and receive the complete circuit proof through one API. Human and machine-designed brains can therefore compete under the same gate budget and the same deterministic rules.
+
+8
+00:02:07,675 --> 00:02:26,295
+The business model is built around continued play. Entry is free. A paid four-week challenge season adds new level packs, verified rankings, and optional tape-out ownership. Sponsors pay for themed circuit challenges because they receive real participation and results that anyone can recompute.
+
+9
+00:02:27,095 --> 00:02:44,948
+The first public release is a wallet-free game on the web and itch. Steam is the next distribution step for traditional players. Later, the same verified brain can move into desktop hardware. Each channel brings new users into TapeOut without pretending those future products are already live.
+
+10
+00:02:45,748 --> 00:02:49,007
+TapeFly. Build a brain. Prove it on-chain.

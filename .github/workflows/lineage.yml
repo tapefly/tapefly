@@ -17,8 +17,8 @@ jobs:
   extend:
     runs-on: ubuntu-latest
     env:
-      # optional: set this repository secret to anchor each day's lineage head on BNB Chain.
-      # It is the key of a wallet holding a little BNB for gas, used only for zero-value
+      # optional: set this repository secret to anchor each day's lineage head on X Layer.
+      # It is the key of a wallet holding a little OKB for gas, used only for zero-value
       # self-sends. Without it, this job still extends the ledger and skips anchoring.
       ANCHOR_PRIVATE_KEY: ${{ secrets.ANCHOR_PRIVATE_KEY }}
     steps:
@@ -41,8 +41,8 @@ jobs:
       - name: record finished seasons
         run: npm run board && npm run board -- --check
 
-      # yesterday's lineage head, written onto BNB Chain (skipped without the secret)
-      - name: anchor yesterday on BNB Chain
+      # yesterday's lineage head, written onto X Layer (skipped without the secret)
+      - name: anchor yesterday on X Layer
         if: ${{ env.ANCHOR_PRIVATE_KEY != '' }}
         run: npm run anchor && npm run anchor -- --check
 

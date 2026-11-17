@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="TapeFly Workshop brain seal proof, prepared for an X Layer DeWEB container.">
+  <title>TapeFly · NAND Brain Seal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <p class="eyebrow">TAPEFLY / WORKSHOP SEAL / 1</p>
+      <h1>一颗从工坊走到链上的果蝇大脑。</h1>
+      <p class="lede">一个关卡设计被编译成纯 NAND 核心。感官与状态位作为输入，翅膀与下一状态作为输出。服务器穷举每一个输入，再与游戏大脑逐项比较。</p>
+      <p class="status">本地全量证明 · 官方 Circuit #2 已在 X Layer 上链并完成核对</p>
+    </header>
+
+    <section class="metrics" aria-label="Seal metrics">
+      <div><b>23</b><span>NAND gates</span></div>
+      <div><b>7 → 6</b><span>input bits → output bits</span></div>
+      <div><b>4</b><span>state bits</span></div>
+      <div><b>128</b><span>input words checked</span></div>
+      <div><b>161 B</b><span>TapeOut bytes</span></div>
+    </section>
+
+    <section class="proof">
+      <p class="label">EXACT BYTE IDENTITY</p>
+      <h2>SHA-256</h2>
+      <code>3da820cc456b3757eefec1e8727286e42f1e448251507635baef6dd069ca52ff</code>
+      <p>接口 profile <code>WORKSHOP-7x6/1</code>。两个翻转格展开为四个状态位，寄存器映射让游戏循环把“下一状态”喂回下一帧。</p>
+    </section>
+
+    <section class="split">
+      <article>
+        <p class="label">WHAT IS PROVEN</p>
+        <h2>已经成立</h2>
+        <ul>
+          <li>设计通过关卡规则与全部场景。</li>
+          <li>工坊接线被编译成 TapeOut 的 NAND 字节格式。</li>
+          <li>全部 128 种感官与状态组合都和游戏大脑一致。</li>
+          <li>翅膀输出与下一次状态分别核对。</li>
+          <li>字节长度、SHA-256 与寄存器映射被写进同一份证明。</li>
+        </ul>
+      </article>
+      <article>
+        <p class="label">WHAT IS NOT CLAIMED</p>
+        <h2>还没有发生</h2>
+        <ul>
+          <li>没有购买或燃烧 NAND，也没有发送 X Layer 交易。</li>
+          <li>这份工坊证明页面自身尚未绑定 processor、circuit ID 或交易。</li>
+          <li>官方觅食 Circuit #2 已上链，但本页不代表工坊设计也已流片。</li>
+          <li>完整游戏仍有服务器 API，不伪装成 100% 链上应用。</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="flow">
+      <p class="label">ONE BRAIN, FOUR USES</p>
+      <h2>学、比、存、证</h2>
+      <ol>
+        <li><b>工坊</b><span>搭感官、逻辑、记忆和翅膀。</span></li>
+        <li><b>竞技场</b><span>同关卡、同规则、同门数预算比较行为。</span></li>
+        <li><b>TapeOut</b><span>把通过全量核对的 NAND 核心存到 X Layer。</span></li>
+        <li><b>证明</b><span>重新读取字节，并逐项复算每一个输入。</span></li>
+      </ol>
+    </section>
+
+    <footer>
+      <p>This page has no scripts, remote fonts, analytics, API calls or external assets.</p>
+      <p>Deployment rule: publish this scaffold only after its container is activated, the stored bytes match, and every on-chain eval matches this Workshop circuit.</p>
+    </footer>
+  </main>
+</body>
+</html>

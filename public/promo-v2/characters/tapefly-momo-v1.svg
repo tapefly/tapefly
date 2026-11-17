@@ -1,0 +1,219 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1600" viewBox="0 0 1600 1600">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="75%">
+      <stop offset="0" stop-color="#174a4d"/>
+      <stop offset=".52" stop-color="#09262b"/>
+      <stop offset="1" stop-color="#041013"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#f1b64b" stop-opacity=".28"/>
+      <stop offset=".45" stop-color="#79efbd" stop-opacity=".07"/>
+      <stop offset="1" stop-color="#061519" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd596"/>
+      <stop offset=".45" stop-color="#e6a657"/>
+      <stop offset="1" stop-color="#ad642e"/>
+    </linearGradient>
+    <linearGradient id="belly" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffe2a5"/>
+      <stop offset="1" stop-color="#c47a36"/>
+    </linearGradient>
+    <radialGradient id="eye" cx="35%" cy="25%" r="75%">
+      <stop offset="0" stop-color="#ff9092"/>
+      <stop offset=".25" stop-color="#ed4d5a"/>
+      <stop offset=".72" stop-color="#9f1e31"/>
+      <stop offset="1" stop-color="#5b0d1d"/>
+    </radialGradient>
+    <linearGradient id="wing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e7fffa" stop-opacity=".68"/>
+      <stop offset=".48" stop-color="#89f5d1" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#4ccbaa" stop-opacity=".16"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a6e70"/>
+      <stop offset="1" stop-color="#173439"/>
+    </linearGradient>
+    <linearGradient id="sugar" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fffdf2"/>
+      <stop offset=".65" stop-color="#e9e1c8"/>
+      <stop offset="1" stop-color="#b8ab89"/>
+    </linearGradient>
+    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
+      <path d="M56 0H0V56" fill="none" stroke="#b9efdf" stroke-opacity=".055" stroke-width="1.5"/>
+    </pattern>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="13" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="24"/>
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="34" stdDeviation="30" flood-color="#000b0d" flood-opacity=".65"/>
+    </filter>
+    <clipPath id="bodyClip">
+      <path d="M800 716c-154 0-270 137-270 327 0 194 109 333 270 333s270-139 270-333c0-190-116-327-270-327Z"/>
+    </clipPath>
+    <clipPath id="eyeLeft">
+      <ellipse cx="622" cy="558" rx="151" ry="187"/>
+    </clipPath>
+    <clipPath id="eyeRight">
+      <ellipse cx="978" cy="558" rx="151" ry="187"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1600" height="1600" fill="url(#bg)"/>
+  <rect width="1600" height="1600" fill="url(#grid)"/>
+  <circle cx="800" cy="760" r="670" fill="url(#halo)"/>
+
+  <g opacity=".55" fill="#f1b64b">
+    <circle cx="214" cy="383" r="5"/>
+    <circle cx="1352" cy="742" r="4"/>
+    <circle cx="310" cy="1110" r="3"/>
+    <circle cx="1252" cy="1220" r="4"/>
+    <path d="M1322 280h12v12h-12zM260 756h9v9h-9zM1158 320h7v7h-7z"/>
+  </g>
+
+  <g opacity=".18" fill="none" stroke="#79efbd" stroke-width="3">
+    <path d="M96 620h142v108h92M1362 560h-124v162h-90M170 1266h168v-94h86M1438 1100h-180v78h-74"/>
+    <circle cx="330" cy="728" r="10"/><circle cx="1148" cy="722" r="10"/><circle cx="424" cy="1172" r="10"/><circle cx="1184" cy="1178" r="10"/>
+  </g>
+
+  <ellipse cx="800" cy="1328" rx="385" ry="78" fill="#00080a" opacity=".55" filter="url(#soft)"/>
+
+  <g filter="url(#shadow)">
+    <g transform="rotate(-3 800 900)">
+      <!-- wings -->
+      <g>
+        <path d="M720 840C547 654 328 594 233 704c-99 115 33 327 239 390 82 25 168 13 248-42Z"
+              fill="url(#wing)" stroke="#d4fff5" stroke-opacity=".7" stroke-width="8"/>
+        <path d="M880 840c173-186 392-246 487-136 99 115-33 327-239 390-82 25-168 13-248-42Z"
+              fill="url(#wing)" stroke="#d4fff5" stroke-opacity=".7" stroke-width="8"/>
+        <g fill="none" stroke="#e4fff9" stroke-opacity=".34" stroke-width="5" stroke-linecap="round">
+          <path d="M693 852C568 741 407 700 301 754M678 897c-105-53-229-67-332-21M713 937c-67-5-138 18-205 60"/>
+          <path d="M907 852c125-111 286-152 392-98M922 897c105-53 229-67 332-21M887 937c67-5 138 18 205 60"/>
+        </g>
+      </g>
+
+      <!-- rear legs -->
+      <g fill="none" stroke="#10292e" stroke-width="25" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M625 1074 546 1186 495 1308"/>
+        <path d="M659 1160 604 1287 628 1392"/>
+        <path d="M975 1074 1054 1186 1105 1308"/>
+        <path d="M941 1160 996 1287 972 1392"/>
+      </g>
+      <g fill="#f1b64b" stroke="#10292e" stroke-width="10">
+        <ellipse cx="486" cy="1319" rx="38" ry="23" transform="rotate(21 486 1319)"/>
+        <ellipse cx="627" cy="1402" rx="35" ry="22" transform="rotate(8 627 1402)"/>
+        <ellipse cx="1114" cy="1319" rx="38" ry="23" transform="rotate(-21 1114 1319)"/>
+        <ellipse cx="973" cy="1402" rx="35" ry="22" transform="rotate(-8 973 1402)"/>
+      </g>
+
+      <!-- abdomen -->
+      <path d="M800 716c-154 0-270 137-270 327 0 194 109 333 270 333s270-139 270-333c0-190-116-327-270-327Z"
+            fill="url(#body)" stroke="#10282d" stroke-width="18"/>
+      <path d="M800 764c-102 0-181 105-181 259 0 169 75 286 181 286s181-117 181-286c0-154-79-259-181-259Z"
+            fill="url(#belly)" opacity=".6"/>
+
+      <g clip-path="url(#bodyClip)" opacity=".28" fill="none" stroke="#fff2c9" stroke-width="4">
+        <path d="M509 983c128-45 258-40 385 15s213 69 338 39"/>
+        <path d="M532 1067c129-44 245-31 354 23s208 61 306 35"/>
+        <path d="M552 1150c118-30 220-13 316 33s179 55 261 38"/>
+      </g>
+
+      <!-- chest core -->
+      <circle cx="800" cy="990" r="112" fill="#071b1f" stroke="#10282d" stroke-width="17"/>
+      <circle cx="800" cy="990" r="86" fill="none" stroke="#f1b64b" stroke-opacity=".24" stroke-width="24" filter="url(#glow)"/>
+      <circle cx="800" cy="990" r="72" fill="#0c2b31" stroke="#f1b64b" stroke-width="8"/>
+      <path d="M757 956h31v29h-31zm55 29h31v29h-31zm-55 29h31v29h-31z"
+            fill="none" stroke="#79efbd" stroke-width="7" stroke-linejoin="round"/>
+      <circle cx="800" cy="990" r="10" fill="#f1b64b" filter="url(#glow)"/>
+
+      <!-- shoulder wires -->
+      <g fill="none" stroke="#0c252a" stroke-width="18" stroke-linecap="round">
+        <path d="M704 898c-75-38-127-4-147 63"/>
+        <path d="M896 898c75-38 127-4 147 63"/>
+      </g>
+
+      <!-- front arms -->
+      <path d="M620 910 489 928 414 866" fill="none" stroke="#10292e" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M980 910 1111 928 1186 866" fill="none" stroke="#10292e" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="405" cy="858" r="34" fill="#f1b64b" stroke="#10292e" stroke-width="10"/>
+      <circle cx="1195" cy="858" r="34" fill="#f1b64b" stroke="#10292e" stroke-width="10"/>
+
+      <!-- side backpack -->
+      <g transform="translate(1035 1008) rotate(8)">
+        <rect x="-83" y="-122" width="166" height="244" rx="54" fill="url(#metal)" stroke="#10292e" stroke-width="15"/>
+        <rect x="-45" y="-73" width="90" height="62" rx="18" fill="#071b1f"/>
+        <circle cx="0" cy="-42" r="12" fill="#79efbd" filter="url(#glow)"/>
+        <path d="M-28 52h56" stroke="#f1b64b" stroke-width="11" stroke-linecap="round"/>
+        <path d="M-28 78h32" stroke="#79efbd" stroke-width="8" stroke-linecap="round"/>
+      </g>
+
+      <!-- head -->
+      <g>
+        <path d="M800 255c-174 0-301 126-301 300 0 181 125 301 301 301s301-120 301-301c0-174-127-300-301-300Z"
+              fill="url(#body)" stroke="#10282d" stroke-width="18"/>
+
+        <!-- antennae -->
+        <g fill="none" stroke="#10292e" stroke-width="19" stroke-linecap="round">
+          <path d="M697 300c-99-84-171-97-217-50"/>
+          <path d="M903 300c99-84 171-97 217-50"/>
+        </g>
+        <g fill="#79efbd" stroke="#10292e" stroke-width="10" filter="url(#glow)">
+          <circle cx="474" cy="242" r="30"/>
+          <circle cx="1126" cy="242" r="30"/>
+        </g>
+
+        <!-- eyes -->
+        <ellipse cx="622" cy="558" rx="151" ry="187" fill="url(#eye)" stroke="#10282d" stroke-width="16"/>
+        <ellipse cx="978" cy="558" rx="151" ry="187" fill="url(#eye)" stroke="#10282d" stroke-width="16"/>
+        <g clip-path="url(#eyeLeft)" fill="#ffd7d8" opacity=".23">
+          <circle cx="558" cy="491" r="18"/><circle cx="618" cy="474" r="15"/><circle cx="679" cy="498" r="13"/>
+          <circle cx="538" cy="557" r="14"/><circle cx="599" cy="542" r="17"/><circle cx="663" cy="565" r="12"/>
+          <circle cx="561" cy="622" r="15"/><circle cx="627" cy="616" r="13"/><circle cx="685" cy="640" r="11"/>
+        </g>
+        <g clip-path="url(#eyeRight)" fill="#ffd7d8" opacity=".23">
+          <circle cx="914" cy="491" r="18"/><circle cx="974" cy="474" r="15"/><circle cx="1035" cy="498" r="13"/>
+          <circle cx="894" cy="557" r="14"/><circle cx="955" cy="542" r="17"/><circle cx="1019" cy="565" r="12"/>
+          <circle cx="917" cy="622" r="15"/><circle cx="983" cy="616" r="13"/><circle cx="1041" cy="640" r="11"/>
+        </g>
+        <ellipse cx="570" cy="512" rx="39" ry="62" fill="#fff" opacity=".72" transform="rotate(24 570 512)"/>
+        <ellipse cx="926" cy="512" rx="39" ry="62" fill="#fff" opacity=".72" transform="rotate(24 926 512)"/>
+        <circle cx="556" cy="489" r="12" fill="#fff"/>
+        <circle cx="912" cy="489" r="12" fill="#fff"/>
+
+        <!-- face -->
+        <ellipse cx="743" cy="720" rx="34" ry="18" fill="#e65758" opacity=".22"/>
+        <ellipse cx="857" cy="720" rx="34" ry="18" fill="#e65758" opacity=".22"/>
+        <path d="M774 690c13 19 39 19 52 0" fill="none" stroke="#10282d" stroke-width="13" stroke-linecap="round"/>
+        <path d="M798 700c-3 25 5 42 25 51" fill="none" stroke="#10282d" stroke-width="8" stroke-linecap="round" opacity=".7"/>
+        <circle cx="800" cy="646" r="10" fill="#fff1c5" opacity=".8"/>
+
+        <!-- head seam -->
+        <path d="M800 270v126" stroke="#9b5928" stroke-width="8" stroke-linecap="round" opacity=".35"/>
+        <path d="M748 275c7 55 7 91 0 128M852 275c-7 55-7 91 0 128" fill="none" stroke="#ffdf9e" stroke-width="5" opacity=".28"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- sugar cube -->
+  <g transform="translate(1268 548) rotate(8)" filter="url(#shadow)">
+    <path d="M0 38 121 0l121 38-121 45z" fill="#fffdf3" stroke="#10282d" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M0 38v124l121 54 121-54V38L121 83Z" fill="url(#sugar)" stroke="#10282d" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M121 83v133" stroke="#10282d" stroke-width="9" opacity=".6"/>
+    <path d="M24 62v91l97 43V83Z" fill="#fff" opacity=".35"/>
+    <g fill="#f1b64b" opacity=".7">
+      <circle cx="68" cy="47" r="5"/><circle cx="169" cy="57" r="4"/><circle cx="85" cy="120" r="4"/>
+    </g>
+  </g>
+
+  <!-- identity plate -->
+  <g transform="translate(800 1489)">
+    <rect x="-392" y="-74" width="784" height="148" rx="10" fill="#061519" stroke="#f1b64b" stroke-opacity=".54" stroke-width="3"/>
+    <text x="0" y="-16" fill="#f1b64b" font-family="SFMono-Regular, Menlo, monospace" font-size="19" font-weight="700" letter-spacing="5" text-anchor="middle">TAPEFLY / UNIT 01</text>
+    <text x="0" y="38" fill="#eff4ec" font-family="Songti SC, STSong, serif" font-size="58" font-weight="600" letter-spacing="2" text-anchor="middle">倔强一号</text>
+    <text x="0" y="63" fill="#8da29d" font-family="SFMono-Regular, Menlo, monospace" font-size="14" letter-spacing="2" text-anchor="middle">CLUMSY · CURIOUS · SOMETIMES MAKES IT HOME</text>
+  </g>
+</svg>

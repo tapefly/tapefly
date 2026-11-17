@@ -1,12 +1,12 @@
 /* ── sim/anchor.ts ───────────────────────────────────────────────────────────
-   Writing the fly's memory onto BNB Chain.
+   Writing the fly's memory onto X Layer.
 
    The lineage (sim/lineage.ts) is a chain of days: every day's champion, its
    body, how long it lived, and the sealed hash of every step it took. The
    *head* folds all of it, from the founder to a given date, into one hash.
    Change any step of any fly on any day and every head after it changes.
 
-   An anchor is an ordinary BNB Chain transaction, sent by the operator to
+   An anchor is an ordinary X Layer transaction, sent by the operator to
    their own address with no value, whose data is the text
 
        TAPEFLY-ANCHOR/1 <date> <head>

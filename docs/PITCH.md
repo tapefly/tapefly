@@ -47,10 +47,11 @@ tested, compared, recombined and owned.
 | Evidence | Verified value |
 | --- | --- |
 | Official brain | `FFW-NAND/1`, 50 NAND gates, depth 9 |
-| Circuit | TapeOut Circuit `#1` |
+| Circuit | X Layer Circuit `#2` |
+| Processor | External Sillu test processor |
 | Netlist | 350 bytes, on-chain bytes match source |
 | Behavior | 4,096 / 4,096 answers verified |
-| Quality | 95 tests, green CI and CodeQL |
+| Quality | 160 tests, green CI and CodeQL |
 | Dependencies | 0 npm audit advisories |
 | Product | Live at [tapefly.xyz](https://tapefly.xyz) |
 
@@ -78,15 +79,15 @@ No betting, yield promise or pay-to-win mechanic is required.
 
 ## Xccelerate
 
-TapeFly is applying to Xccelerate to bring the verified loop to X Layer:
+TapeFly already runs the verified loop on X Layer:
 
-1. Tape out the brain on X Layer.
-2. Use public X Layer block data as the daily world seed.
-3. Verify all 4,096 decisions on the X Layer circuit.
-4. Open the same agent API.
-5. Operate one free arena for human- and AI-designed brains.
+1. Official brain taped out as X Layer Circuit #2.
+2. All 4,096 decisions verified on chain.
+3. The same agent API is live.
+4. The next step is public X Layer block data as the daily world seed.
+5. Then operate one free arena for human- and AI-designed brains.
 
-X Layer is the next milestone, not a claim about the current deployment.
+X Layer is the current deployment, with the processor and transaction publicly linked.
 
 ## Team
 
@@ -99,5 +100,5 @@ verification, website, API, tests, CI and on-chain tooling.
 - Product: <https://tapefly.xyz>
 - GitHub: <https://github.com/tapefly/tapefly>
 - Proof: <https://tapefly.xyz/tapeout>
-- 1:58 Chinese demo: <https://tapefly.xyz/tapefly-demo.mp4>
+- 2:50 English demo: <https://tapefly.xyz/tapefly-demo-en.mp4>
 - Release: <https://github.com/tapefly/tapefly/releases/tag/v0.1.0>

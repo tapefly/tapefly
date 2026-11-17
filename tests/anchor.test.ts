@@ -25,7 +25,7 @@ test("the head commits to every day before it", () => {
 
 test("recorded anchors must recompute", () => {
   const date = LEDGER.days[10].d;
-  const good = { version: ANCHOR_VERSION, chainId: 56, entries: [{ date, head: headOn(date), tx: "0x" + "1".repeat(64), from: "0xabc" }] };
+  const good = { version: ANCHOR_VERSION, chainId: 196, entries: [{ date, head: headOn(date), tx: "0x" + "1".repeat(64), from: "0xabc" }] };
   assert.equal(checkAnchors(good), null);
   const bad = { ...good, entries: [{ ...good.entries[0], head: "0".repeat(64) }] };
   assert.match(checkAnchors(bad)!, /recorded head/);

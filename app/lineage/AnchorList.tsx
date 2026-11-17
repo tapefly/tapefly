@@ -1,19 +1,18 @@
 "use client";
 
-/* The lineage's anchors on BNB Chain, each checkable from this browser:
+/* The lineage's anchors on X Layer, each checkable from this browser:
    read the transaction, decode its data, and compare with the head the
    page computed from the dates alone. */
 
 import { useMemo, useState } from "react";
 import { createPublicClient, http, type PublicClient } from "viem";
-import { bsc } from "viem/chains";
-import { BSC_RPC } from "@/sim/onchain";
+import { CHAIN, CHAIN_RPC, txUrl } from "@/sim/onchain";
 import { txCarries, type Anchor } from "@/sim/anchor";
 import { useLang } from "../i18n/client";
 
 export default function AnchorList({ anchors, heads }: { anchors: Anchor[]; heads: Record<string, string> }) {
   const { t } = useLang();
-  const pub = useMemo(() => createPublicClient({ chain: bsc, transport: http(BSC_RPC) }) as PublicClient, []);
+  const pub = useMemo(() => createPublicClient({ chain: CHAIN, transport: http(CHAIN_RPC) }) as PublicClient, []);
   const [state, setState] = useState<Record<string, string>>({});
 
   const check = async (a: Anchor) => {
@@ -42,7 +41,7 @@ export default function AnchorList({ anchors, heads }: { anchors: Anchor[]; head
             <tr key={a.date}>
               <td className="dim">{a.date}</td>
               <td><code>{a.head.slice(0, 16)}…</code></td>
-              <td><a className="link" href={`https://bscscan.com/tx/${a.tx}`} target="_blank" rel="noreferrer">{a.tx.slice(0, 10)}…</a></td>
+              <td><a className="link" href={txUrl(a.tx)} target="_blank" rel="noreferrer">{a.tx.slice(0, 10)}…</a></td>
               <td>
                 {state[a.date]
                   ? <span className={state[a.date].startsWith("✓") ? "ok-text" : state[a.date].startsWith("✗") ? "bad-text" : "dim"}>{state[a.date]}</span>

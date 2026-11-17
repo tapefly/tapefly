@@ -1,0 +1,1254 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#061519">
+  <meta name="description" content="TapeFly 众筹概念页：给世界做一只没用的 AI。你亲手接出它的本能，也能看见它为什么这么笨。">
+  <title>TapeFly — 给世界做一只没用的 AI</title>
+  <style>
+    :root {
+      --bench: #061519;
+      --bench-2: #0a2227;
+      --bench-3: #10343a;
+      --paper: #eeeade;
+      --paper-deep: #d9d5c7;
+      --ink: #07171a;
+      --chalk: #eff4ec;
+      --fog: #aabdb7;
+      --mute: #718b88;
+      --amber: #f1b64b;
+      --amber-deep: #c8811d;
+      --mint: #79efbd;
+      --red: #e74c55;
+      --blue: #a9b9e4;
+      --line: rgba(226, 240, 234, .14);
+      --line-dark: rgba(6, 22, 25, .17);
+      --serif: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", Georgia, serif;
+      --sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+      --mono: "SFMono-Regular", "JetBrains Mono", "Roboto Mono", Menlo, monospace;
+      --page: min(1240px, calc(100vw - 48px));
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bench); }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--chalk);
+      background:
+        radial-gradient(circle at 75% 8%, rgba(51, 115, 109, .17), transparent 28rem),
+        radial-gradient(circle at 15% 46%, rgba(241, 182, 75, .07), transparent 34rem),
+        var(--bench);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: .12;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+    }
+    img, video { display: block; max-width: 100%; }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    ::selection { background: var(--amber); color: var(--bench); }
+
+    .progress {
+      position: fixed;
+      inset: 0 0 auto;
+      height: 2px;
+      z-index: 90;
+      background: rgba(255, 255, 255, .05);
+    }
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--amber);
+      box-shadow: 0 0 18px rgba(241, 182, 75, .65);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: rgba(6, 21, 25, .84);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+    }
+    .topbar-inner {
+      width: var(--page);
+      margin: 0 auto;
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font: 800 15px/1 var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      border: 1px solid rgba(241, 182, 75, .58);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(241, 182, 75, .08);
+    }
+    .brand-mark svg { width: 20px; height: 20px; }
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-left: auto;
+      font: 600 12px/1 var(--mono);
+      letter-spacing: .04em;
+      color: var(--fog);
+    }
+    .topnav a { text-decoration: none; transition: color .2s ease; }
+    .topnav a:hover { color: var(--amber); }
+    .top-cta, .button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 18px;
+      text-decoration: none;
+      border: 1px solid transparent;
+      font-weight: 750;
+      font-size: 13px;
+      letter-spacing: .02em;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .top-cta {
+      color: var(--bench);
+      background: var(--amber);
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .top-cta:hover, .button:hover { transform: translateY(-2px); }
+    .button.primary { color: var(--bench); background: var(--amber); border-color: var(--amber); }
+    .button.secondary { color: var(--chalk); border-color: var(--line); background: rgba(255, 255, 255, .025); }
+    .button.secondary:hover { border-color: rgba(241, 182, 75, .7); }
+    .button.paper { color: var(--paper); border-color: rgba(238, 234, 222, .34); }
+    .button.paper:hover { background: var(--paper); color: var(--ink); }
+
+    .shell { width: var(--page); margin: 0 auto; }
+    .kicker {
+      margin: 0;
+      color: var(--amber);
+      font: 700 11px/1.4 var(--mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .serif { font-family: var(--serif); }
+    .muted { color: var(--fog); }
+    .fine { color: var(--mute); font-size: 12px; line-height: 1.65; }
+
+    .hero {
+      min-height: min(860px, calc(100svh - 68px));
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(420px, .96fr);
+      gap: clamp(34px, 6vw, 90px);
+      align-items: center;
+      padding: clamp(70px, 8vw, 112px) 0 clamp(60px, 8vw, 104px);
+      overflow: clip;
+    }
+    .hero-copy { position: relative; z-index: 2; }
+    .hero h1 {
+      margin: 20px 0 24px;
+      max-width: 760px;
+      font-size: clamp(58px, 7.25vw, 112px);
+      line-height: .91;
+      letter-spacing: -.065em;
+      font-weight: 780;
+    }
+    .hero h1 .soft {
+      display: inline-block;
+      margin: 4px 0;
+      color: var(--amber);
+      font-family: var(--serif);
+      font-weight: 500;
+      letter-spacing: -.055em;
+    }
+    .hero h1 .small-line {
+      display: block;
+      margin-top: 10px;
+      font-size: .58em;
+      line-height: 1.08;
+      letter-spacing: -.045em;
+    }
+    .hero-lede {
+      max-width: 590px;
+      margin: 0;
+      color: #cbd9d2;
+      font-size: clamp(17px, 1.6vw, 21px);
+      line-height: 1.65;
+    }
+    .hero-lede strong { color: var(--chalk); font-weight: 760; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+    .hero-note {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 18px;
+      color: var(--mute);
+      font: 600 11px/1.5 var(--mono);
+    }
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 5px rgba(121, 239, 189, .08);
+    }
+
+    .specimen {
+      --rx: 0px;
+      --ry: 0px;
+      position: relative;
+      min-height: 580px;
+      isolation: isolate;
+    }
+    .specimen::before {
+      content: "";
+      position: absolute;
+      inset: 12% -8% 8% 8%;
+      z-index: -2;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(241, 182, 75, .2), rgba(121, 239, 189, .04) 45%, transparent 70%);
+      filter: blur(18px);
+    }
+    .specimen-frame {
+      position: absolute;
+      inset: 0;
+      transform: translate3d(var(--rx), var(--ry), 0);
+      transition: transform .5s cubic-bezier(.2,.8,.2,1);
+    }
+    .specimen-bracket {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      z-index: 3;
+      border-color: rgba(241, 182, 75, .7);
+      border-style: solid;
+      pointer-events: none;
+    }
+    .specimen-bracket.a { left: 0; top: 0; border-width: 1px 0 0 1px; }
+    .specimen-bracket.b { right: 0; top: 0; border-width: 1px 1px 0 0; }
+    .specimen-bracket.c { left: 0; bottom: 0; border-width: 0 0 1px 1px; }
+    .specimen-bracket.d { right: 0; bottom: 0; border-width: 0 1px 1px 0; }
+    .specimen-image {
+      width: 100%;
+      height: 100%;
+      min-height: 580px;
+      object-fit: cover;
+      border-radius: 26px;
+      filter: saturate(.88) contrast(1.04);
+      box-shadow: 0 42px 100px -45px #000;
+    }
+    .specimen-tag {
+      position: absolute;
+      z-index: 4;
+      left: 20px;
+      top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 11px;
+      color: var(--chalk);
+      background: rgba(6, 21, 25, .78);
+      border: 1px solid rgba(238, 234, 222, .2);
+      backdrop-filter: blur(10px);
+      font: 700 10px/1 var(--mono);
+      letter-spacing: .11em;
+    }
+    .specimen-caption {
+      position: absolute;
+      z-index: 4;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: end;
+      padding: 18px;
+      background: linear-gradient(135deg, rgba(6, 21, 25, .94), rgba(6, 21, 25, .68));
+      border: 1px solid rgba(238, 234, 222, .18);
+      backdrop-filter: blur(12px);
+    }
+    .specimen-caption b { display: block; margin-bottom: 5px; font-size: 17px; }
+    .specimen-caption p { margin: 0; color: var(--fog); font-size: 13px; line-height: 1.5; }
+    .specimen-code { color: var(--amber); font: 650 10px/1.5 var(--mono); text-align: right; }
+    .orbit-note {
+      position: absolute;
+      right: -33px;
+      top: 43%;
+      z-index: 5;
+      writing-mode: vertical-rl;
+      color: rgba(238, 234, 222, .7);
+      font: 650 10px/1.5 var(--mono);
+      letter-spacing: .15em;
+    }
+
+    .marquee {
+      overflow: hidden;
+      border-block: 1px solid var(--line);
+      background: rgba(255, 255, 255, .018);
+    }
+    .marquee-track {
+      width: max-content;
+      display: flex;
+      animation: drift 34s linear infinite;
+    }
+    .marquee span {
+      padding: 14px 30px;
+      color: var(--fog);
+      font: 650 11px/1 var(--mono);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .marquee i { color: var(--amber); font-style: normal; padding-left: 30px; }
+    @keyframes drift { to { transform: translateX(-50%); } }
+
+    section { scroll-margin-top: 84px; }
+    .section-pad { padding: clamp(84px, 11vw, 150px) 0; }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, .42fr) minmax(0, 1fr);
+      gap: clamp(30px, 7vw, 120px);
+      align-items: start;
+      margin-bottom: clamp(38px, 6vw, 74px);
+    }
+    .section-head h2 {
+      margin: 0;
+      max-width: 850px;
+      font-size: clamp(38px, 5.2vw, 76px);
+      line-height: 1.02;
+      letter-spacing: -.055em;
+    }
+    .section-head p { margin: 14px 0 0; color: var(--fog); font-size: 16px; line-height: 1.72; }
+
+    .film-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(310px, .55fr);
+      gap: clamp(28px, 4vw, 55px);
+      align-items: end;
+    }
+    .video-shell {
+      position: relative;
+      padding: 12px;
+      background: #020b0d;
+      border: 1px solid var(--line);
+      box-shadow: 0 44px 100px -48px #000;
+    }
+    .video-shell::before {
+      content: "REC 64 SEC";
+      position: absolute;
+      z-index: 2;
+      left: 28px;
+      top: 27px;
+      color: var(--red);
+      font: 750 10px/1 var(--mono);
+      letter-spacing: .14em;
+    }
+    .video-shell video { width: 100%; aspect-ratio: 16/9; background: #000; }
+    .film-notes { display: grid; gap: 24px; }
+    .film-note {
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .film-note span { display: block; color: var(--amber); font: 700 10px/1 var(--mono); }
+    .film-note b { display: block; margin-top: 8px; font-size: 16px; }
+    .film-note p { margin: 6px 0 0; color: var(--fog); font-size: 13px; line-height: 1.65; }
+
+    .manifesto {
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(7, 23, 26, .045) 1px, transparent 1px),
+        linear-gradient(rgba(7, 23, 26, .045) 1px, transparent 1px),
+        var(--paper);
+      background-size: 48px 48px;
+    }
+    .manifesto .kicker { color: #9b6512; }
+    .manifesto-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+      gap: clamp(32px, 7vw, 110px);
+      align-items: end;
+    }
+    .manifesto blockquote {
+      margin: 18px 0 0;
+      max-width: 900px;
+      font-family: var(--serif);
+      font-size: clamp(42px, 6.1vw, 92px);
+      font-weight: 500;
+      line-height: 1.03;
+      letter-spacing: -.05em;
+    }
+    .manifesto blockquote em { color: #a9680b; font-style: normal; }
+    .manifesto-side {
+      border-left: 1px solid var(--line-dark);
+      padding-left: 28px;
+    }
+    .manifesto-side p { margin: 0 0 22px; color: #394b48; font-size: 16px; line-height: 1.75; }
+    .manifesto-side p:last-child { margin-bottom: 0; }
+    .useless-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: clamp(44px, 6vw, 80px);
+      border: 1px solid var(--line-dark);
+      background: rgba(238, 234, 222, .72);
+      backdrop-filter: blur(4px);
+    }
+    .useless-col { padding: 26px; }
+    .useless-col + .useless-col { border-left: 1px solid var(--line-dark); }
+    .useless-col small { color: #697873; font: 700 10px/1 var(--mono); letter-spacing: .12em; }
+    .useless-col h3 { margin: 14px 0 18px; font-size: 24px; letter-spacing: -.03em; }
+    .useless-col ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+    .useless-col li { display: flex; justify-content: space-between; gap: 20px; padding-top: 12px; border-top: 1px solid var(--line-dark); font-size: 14px; }
+    .useless-col li span:last-child { color: #667570; font-family: var(--mono); font-size: 11px; text-align: right; }
+    .useless-col.living { background: #092127; color: var(--chalk); }
+    .useless-col.living small { color: var(--amber); }
+    .useless-col.living li { border-color: rgba(238, 234, 222, .13); }
+    .useless-col.living li span:last-child { color: var(--fog); }
+
+    .loop-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(340px, .92fr);
+      gap: clamp(32px, 6vw, 86px);
+      align-items: center;
+    }
+    .game-shot {
+      position: relative;
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: var(--bench-2);
+    }
+    .game-shot img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+    .shot-label {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      padding: 9px 12px;
+      color: var(--chalk);
+      background: rgba(6, 21, 25, .9);
+      border: 1px solid var(--line);
+      font: 700 10px/1 var(--mono);
+      letter-spacing: .1em;
+    }
+    .loop-list { display: grid; gap: 0; }
+    .loop-step {
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      gap: 18px;
+      padding: 22px 0;
+      border-top: 1px solid var(--line);
+    }
+    .loop-step:last-child { border-bottom: 1px solid var(--line); }
+    .loop-step .num {
+      color: var(--amber);
+      font: 650 11px/1.4 var(--mono);
+    }
+    .loop-step h3 { margin: 0 0 6px; font-size: 20px; }
+    .loop-step p { margin: 0; color: var(--fog); font-size: 14px; line-height: 1.65; }
+    .loop-step em { color: var(--mint); font-style: normal; }
+
+    .audience {
+      color: var(--ink);
+      background: var(--paper);
+    }
+    .audience-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      align-items: end;
+      margin-bottom: 36px;
+    }
+    .audience-head h2 { margin: 0; max-width: 760px; font-size: clamp(38px, 5.1vw, 72px); line-height: 1.02; letter-spacing: -.05em; }
+    .audience-head p { max-width: 370px; margin: 0; color: #586964; line-height: 1.7; }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line-dark);
+      flex-wrap: wrap;
+    }
+    .tab {
+      min-height: 44px;
+      padding: 0 17px;
+      background: transparent;
+      color: #62716d;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font: 700 12px/1 var(--mono);
+    }
+    .tab[aria-selected="true"] { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+    .tab-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, .72fr);
+      gap: 50px;
+      min-height: 260px;
+      padding-top: 38px;
+    }
+    .tab-panel[hidden] { display: none; }
+    .tab-panel h3 { margin: 0 0 18px; font-size: clamp(28px, 3vw, 44px); line-height: 1.08; letter-spacing: -.035em; }
+    .tab-panel p { margin: 0; max-width: 660px; color: #435651; font-size: 17px; line-height: 1.75; }
+    .tab-quote {
+      align-self: center;
+      padding: 26px;
+      border: 1px solid var(--line-dark);
+      font-family: var(--serif);
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.3;
+    }
+    .tab-quote small { display: block; margin-top: 18px; color: #63716d; font: 700 10px/1.4 var(--mono); letter-spacing: .08em; }
+
+    .hardware-story {
+      position: relative;
+      min-height: 760px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border-block: 1px solid var(--line);
+    }
+    .hardware-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(.78) contrast(1.07);
+    }
+    .hardware-story::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(6, 21, 25, .99) 0%, rgba(6, 21, 25, .92) 35%, rgba(6, 21, 25, .44) 66%, rgba(6, 21, 25, .06) 100%),
+        linear-gradient(0deg, rgba(6, 21, 25, .64), transparent 46%);
+    }
+    .hardware-copy {
+      position: relative;
+      z-index: 2;
+      width: var(--page);
+      margin: 0 auto;
+      padding-block: 100px;
+    }
+    .hardware-copy-inner { max-width: 630px; }
+    .hardware-copy h2 {
+      margin: 16px 0 24px;
+      font-size: clamp(46px, 6vw, 86px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+    .hardware-copy p { max-width: 560px; color: #c9d8d2; font-size: 18px; line-height: 1.72; }
+    .hardware-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 28px; }
+    .hardware-tags span { padding: 9px 11px; border: 1px solid var(--line); color: var(--fog); font: 650 10px/1 var(--mono); letter-spacing: .08em; }
+    .hardware-disclaimer {
+      max-width: 570px;
+      margin-top: 28px;
+      padding: 13px 15px;
+      border-left: 2px solid var(--amber);
+      color: #9eb1ab;
+      background: rgba(6, 21, 25, .54);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .evidence {
+      position: relative;
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: var(--bench-2);
+    }
+    .evidence img { width: 100%; aspect-ratio: 16/9; object-fit: cover; opacity: .9; }
+    .evidence figcaption {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      padding: 14px 4px 4px;
+      color: var(--fog);
+      font-size: 13px;
+    }
+    .evidence figcaption span { color: var(--amber); font: 700 10px/1 var(--mono); }
+
+    .proof-band {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      margin-top: 48px;
+      border-block: 1px solid var(--line);
+    }
+    .proof-cell { padding: 26px 20px; border-right: 1px solid var(--line); }
+    .proof-cell:last-child { border-right: 0; }
+    .proof-cell b { display: block; color: var(--amber); font: 650 30px/1 var(--mono); }
+    .proof-cell span { display: block; margin-top: 9px; color: var(--fog); font-size: 12px; line-height: 1.55; }
+
+    .card-story {
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 75% 35%, rgba(241, 182, 75, .23), transparent 24rem),
+        var(--paper);
+    }
+    .card-story-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, .75fr) minmax(0, 1.25fr);
+      gap: clamp(40px, 8vw, 130px);
+      align-items: center;
+    }
+    .neural-card {
+      position: relative;
+      aspect-ratio: 1.55;
+      max-width: 520px;
+      padding: 28px;
+      color: var(--paper);
+      background:
+        linear-gradient(135deg, rgba(241, 182, 75, .18), transparent 38%),
+        #091e23;
+      border: 1px solid rgba(241, 182, 75, .48);
+      box-shadow: 0 45px 80px -42px rgba(8, 27, 30, .8);
+      transform: rotate(-3deg);
+      overflow: hidden;
+    }
+    .neural-card::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(238, 234, 222, .14);
+      pointer-events: none;
+    }
+    .neural-card .card-top { display: flex; justify-content: space-between; color: var(--amber); font: 700 10px/1 var(--mono); letter-spacing: .1em; }
+    .neural-card svg { position: absolute; inset: 17% 8% 18%; width: 84%; height: 65%; }
+    .neural-card .card-name { position: absolute; left: 28px; bottom: 26px; }
+    .neural-card .card-name b { display: block; font: 500 clamp(28px, 3vw, 40px)/1 var(--serif); }
+    .neural-card .card-name span { display: block; margin-top: 7px; color: var(--fog); font: 600 10px/1.5 var(--mono); }
+    .neural-card .card-seal { position: absolute; right: 27px; bottom: 27px; width: 46px; height: 46px; border: 1px solid var(--amber); border-radius: 50%; display: grid; place-items: center; color: var(--amber); font: 700 9px/1 var(--mono); }
+    .card-copy h2 { margin: 14px 0 22px; font-size: clamp(40px, 5vw, 70px); line-height: 1.02; letter-spacing: -.05em; }
+    .card-copy p { margin: 0 0 18px; color: #425550; font-size: 17px; line-height: 1.75; }
+    .card-facts { margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line-dark); }
+    .card-facts div { padding: 17px 12px 0 0; }
+    .card-facts b { display: block; font: 700 15px/1.3 var(--mono); }
+    .card-facts span { display: block; margin-top: 5px; color: #697671; font-size: 11px; }
+
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .offer {
+      position: relative;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      padding: 27px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(15, 50, 55, .76), rgba(7, 25, 29, .88));
+      overflow: hidden;
+    }
+    .offer::before {
+      content: "";
+      position: absolute;
+      width: 74px;
+      height: 74px;
+      right: -37px;
+      top: 50%;
+      border-radius: 50%;
+      background: var(--bench);
+      border: 1px solid var(--line);
+    }
+    .offer::after {
+      content: "";
+      position: absolute;
+      width: 74px;
+      height: 74px;
+      left: -37px;
+      top: 50%;
+      border-radius: 50%;
+      background: var(--bench);
+      border: 1px solid var(--line);
+    }
+    .offer .price { color: var(--amber); font: 750 34px/1 var(--mono); }
+    .offer .tier { margin: 8px 0 26px; color: var(--fog); font: 700 10px/1 var(--mono); letter-spacing: .1em; }
+    .offer h3 { margin: 0 0 14px; font-size: 25px; letter-spacing: -.025em; }
+    .offer p { margin: 0; color: var(--fog); font-size: 14px; line-height: 1.65; }
+    .offer ul { list-style: none; padding: 0; margin: auto 0 0; display: grid; gap: 9px; }
+    .offer li { padding-top: 9px; border-top: 1px solid var(--line); color: #cbd8d2; font-size: 12.5px; }
+    .offer li::before { content: "+"; color: var(--mint); margin-right: 8px; font-family: var(--mono); }
+    .offer-note { margin-top: 22px; color: var(--mute); font: 600 11px/1.7 var(--mono); }
+
+    .final-cta {
+      padding: clamp(86px, 11vw, 150px) 0;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(241, 182, 75, .18), transparent 26rem),
+        var(--bench);
+    }
+    .final-cta h2 {
+      max-width: 980px;
+      margin: 18px auto 24px;
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 100px);
+      line-height: .98;
+      letter-spacing: -.055em;
+      font-weight: 500;
+    }
+    .final-cta p { max-width: 690px; margin: 0 auto; color: var(--fog); font-size: 17px; line-height: 1.75; }
+    .final-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+    .final-code { margin-top: 28px; color: var(--mute); font: 650 10px/1.7 var(--mono); letter-spacing: .09em; }
+
+    footer { border-top: 1px solid var(--line); background: #041013; }
+    .footer-inner {
+      width: var(--page);
+      margin: 0 auto;
+      padding: 42px 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 30px;
+      align-items: end;
+    }
+    .footer-inner b { font: 750 14px/1 var(--mono); letter-spacing: .09em; }
+    .footer-inner p { max-width: 760px; margin: 10px 0 0; color: var(--mute); font-size: 11px; line-height: 1.7; }
+    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; justify-content: flex-end; color: var(--fog); font: 650 10px/1.6 var(--mono); }
+    .footer-links a { text-decoration: none; }
+
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s cubic-bezier(.2,.8,.2,1); }
+    .reveal.is-in { opacity: 1; transform: none; }
+
+    @media (max-width: 1050px) {
+      .topnav { display: none; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .specimen { min-height: 560px; }
+      .film-grid, .loop-grid, .manifesto-grid, .card-story-grid { grid-template-columns: 1fr; }
+      .film-notes { grid-template-columns: repeat(3, 1fr); }
+      .audience-head { flex-direction: column; align-items: flex-start; }
+      .hardware-story { min-height: 680px; }
+      .hardware-story::after { background: linear-gradient(90deg, rgba(6,21,25,.98), rgba(6,21,25,.77) 55%, rgba(6,21,25,.18)); }
+      .offer-grid { grid-template-columns: 1fr; }
+      .offer { min-height: 250px; }
+    }
+    @media (max-width: 760px) {
+      :root { --page: min(100% - 30px, 680px); }
+      .topbar-inner { min-height: 62px; }
+      .top-cta { margin-left: auto; padding: 0 12px; font-size: 11px; }
+      .hero { padding-top: 54px; }
+      .hero h1 { font-size: clamp(52px, 16vw, 78px); }
+      .hero h1 .small-line { margin-top: 16px; font-size: .52em; }
+      .hero-lede { font-size: 16px; }
+      .specimen, .specimen-image { min-height: 430px; }
+      .orbit-note { display: none; }
+      .section-head { grid-template-columns: 1fr; gap: 20px; }
+      .film-notes { grid-template-columns: 1fr; }
+      .manifesto-grid { grid-template-columns: 1fr; }
+      .manifesto-side { border-left: 0; border-top: 1px solid var(--line-dark); padding: 22px 0 0; }
+      .useless-table { grid-template-columns: 1fr; }
+      .useless-col + .useless-col { border-left: 0; border-top: 1px solid var(--line-dark); }
+      .loop-grid { gap: 32px; }
+      .tab-panel { grid-template-columns: 1fr; gap: 26px; }
+      .hardware-story { min-height: 720px; align-items: end; }
+      .hardware-bg { object-position: 58% 50%; }
+      .hardware-story::after { background: linear-gradient(0deg, rgba(6,21,25,.99) 0%, rgba(6,21,25,.86) 48%, rgba(6,21,25,.16) 100%); }
+      .hardware-copy { padding-block: 54px; }
+      .evidence-grid { grid-template-columns: 1fr; }
+      .proof-band { grid-template-columns: 1fr 1fr; }
+      .proof-cell:nth-child(2) { border-right: 0; }
+      .proof-cell:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .card-story-grid { grid-template-columns: 1fr; }
+      .neural-card { max-width: 100%; transform: none; }
+      .card-facts { grid-template-columns: 1fr; }
+      .card-facts div { padding-top: 12px; }
+      .footer-inner { grid-template-columns: 1fr; align-items: start; }
+      .footer-links { justify-content: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .hero-actions .button { width: 100%; }
+      .specimen-caption { grid-template-columns: 1fr; }
+      .specimen-code { text-align: left; }
+      .tab { flex: 1; padding-inline: 10px; }
+      .card-story { overflow: hidden; }
+      .neural-card { aspect-ratio: 1.35; padding: 20px; }
+      .neural-card .card-name { left: 20px; bottom: 20px; }
+      .neural-card .card-seal { right: 20px; bottom: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .marquee-track { animation: none; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .specimen-frame { transition: none; }
+      * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><span id="scroll-progress"></span></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="TapeFly 众筹概念页">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M16 12.2c3.4 0 5.4 2 5.4 5s-2 5-5.4 5-5.4-2-5.4-5 2-5 5.4-5Z" stroke="#F1B64B" stroke-width="1.4"/>
+            <path d="M12.2 15.2 5.4 9.7M19.8 15.2l6.8-5.5M12.4 18.4 6.3 23.7M19.6 18.4l6.1 5.3" stroke="#79EFBD" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </span>
+        TapeFly
+      </a>
+      <nav class="topnav" aria-label="页面导航">
+        <a href="#film">宣发片</a>
+        <a href="#why">为什么做</a>
+        <a href="#hardware">硬件愿景</a>
+        <a href="#rewards">支持方式</a>
+      </nav>
+      <a class="top-cta" href="https://tapefly.xyz/workshop" target="_blank" rel="noreferrer">先试玩</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-copy reveal">
+        <p class="kicker">TapeFly / Crowdfunding concept / Specimen 001</p>
+        <h1>
+          给世界做一只<br>
+          <span class="soft">没用的</span> AI。
+          <span class="small-line">它只会找糖、撞墙、偶尔学会回家。</span>
+        </h1>
+        <p class="hero-lede">
+          它不会替你写邮件，也不会替你赚钱。<br>
+          但它的脑子是你亲手接的。所以它为什么勇敢、为什么贪吃、
+          <strong>为什么总是撞同一面墙，你都能看见。</strong>
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#film">看它活一次 <span aria-hidden="true">↓</span></a>
+          <a class="button secondary" href="#why">为什么做这个</a>
+        </div>
+        <div class="hero-note"><i class="live-dot" aria-hidden="true"></i> 一个数字生命娱乐体验 · 不是生产力工具</div>
+      </div>
+
+      <div class="specimen reveal" id="specimen">
+        <div class="specimen-frame">
+          <i class="specimen-bracket a"></i>
+          <i class="specimen-bracket b"></i>
+          <i class="specimen-bracket c"></i>
+          <i class="specimen-bracket d"></i>
+          <img class="specimen-image" src="promo-v2/characters/tapefly-momo-v1.png" alt="可爱的 TapeFly AI 机械果蝇角色“倔强一号”">
+          <div class="specimen-tag"><i class="live-dot" aria-hidden="true"></i> CHARACTER 01 / FIRST LOOK</div>
+          <div class="specimen-caption">
+            <div>
+              <b>倔强一号</b>
+              <p>它有一点胆小、有一点好奇，而且总是舍不得放下那第三块糖。</p>
+            </div>
+            <span class="specimen-code">CUTE / 50 NAND<br>ONE BAD HABIT</span>
+          </div>
+        </div>
+        <span class="orbit-note">A SMALL LIFE / A VISIBLE MIND</span>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>它不是黑箱 <i>×</i> 它能犯错 <i>×</i> 它的原因可以拖出来 <i>×</i> 它因为你变聪明 <i>×</i> 它也有权保留一点毛病 <i>×</i></span>
+        <span>它不是黑箱 <i>×</i> 它能犯错 <i>×</i> 它的原因可以拖出来 <i>×</i> 它因为你变聪明 <i>×</i> 它也有权保留一点毛病 <i>×</i></span>
+      </div>
+    </div>
+
+    <section class="section-pad shell" id="film">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">01 / The 64-second film</p>
+          <p>从真实果蝇、游戏工坊，到芯片与 AI 硬件。</p>
+        </div>
+        <div>
+          <h2>先别理解技术。<br>先看它活一次。</h2>
+          <p>它会自己找路，也会自己犯错。你看到的不是一个“AI 角色动画”，而是一次可暂停、可回看的行为。</p>
+        </div>
+      </div>
+
+      <div class="film-grid reveal">
+        <div class="video-shell">
+          <video controls playsinline preload="metadata" poster="promo-v2/exports/tapefly-promo-v5-poster.jpg">
+            <source src="promo-v2/exports/tapefly-promo-v5-64s-16x9.mp4" type="video/mp4">
+            你的浏览器不支持 HTML5 视频。
+          </video>
+        </div>
+        <div class="film-notes">
+          <div class="film-note">
+            <span>00:10 — BUILD</span>
+            <b>给它一个身体</b>
+            <p>翅膀、眼睛、触角、记忆。每个零件都在改变它怎么活。</p>
+          </div>
+          <div class="film-note">
+            <span>00:23 — LIVE</span>
+            <b>让它自己飞</b>
+            <p>你不动它。它靠你接出的本能，找糖、躲墙、逃开蜘蛛。</p>
+          </div>
+          <div class="film-note">
+            <span>00:29 — REPLAY</span>
+            <b>把错误拖回来</b>
+            <p>哪根神经亮了、哪一秒做错、该改哪根线，都能看见。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="manifesto section-pad" id="why">
+      <div class="shell">
+        <div class="manifesto-grid">
+          <div class="reveal">
+            <p class="kicker">02 / An emotional product</p>
+            <blockquote>
+              泡泡玛特让你收藏一个角色。<br>
+              TapeFly 让你收藏一个<em>会犯错的小生命。</em>
+            </blockquote>
+          </div>
+          <div class="manifesto-side reveal">
+            <p>我们不是在做一个更聪明的助手。我们想做一件没用，但你会记住的东西。</p>
+            <p>它可能不够快，可能有点笨，可能每天在同一面墙上撞两次。正因为如此，它不像一段随时可替换的 AI 文本。</p>
+            <p><strong>它有一个能被你理解的性格。</strong></p>
+          </div>
+        </div>
+
+        <div class="useless-table reveal">
+          <div class="useless-col">
+            <small>USEFUL AI / 工具</small>
+            <h3>替你完成事情</h3>
+            <ul>
+              <li><span>写邮件</span><span>efficient</span></li>
+              <li><span>排日程</span><span>productive</span></li>
+              <li><span>总结会议</span><span>useful</span></li>
+              <li><span>永远正确</span><span>replaceable</span></li>
+            </ul>
+          </div>
+          <div class="useless-col living">
+            <small>TAPEFLY / 小生命</small>
+            <h3>值得你多看一眼</h3>
+            <ul>
+              <li><span>接错翅膀</span><span>it spins</span></li>
+              <li><span>看见蜘蛛</span><span>it panics</span></li>
+              <li><span>终于回家</span><span>you feel it</span></li>
+              <li><span>保留一个坏毛病</span><span>that's yours</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad shell">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">03 / Raise, don't prompt</p>
+          <p>你不是在给 AI 写一段人设。</p>
+        </div>
+        <div>
+          <h2>它的性格，<br>是一根一根接出来的。</h2>
+          <p>装身体、接神经、放飞、回放。你对它做过的每一件事，都会留在它的行为里。</p>
+        </div>
+      </div>
+
+      <div class="loop-grid reveal">
+        <figure class="game-shot">
+          <img src="promo-v2/gameplay-v4/build.png" alt="TapeFly 工坊真实搭建界面">
+          <figcaption class="shot-label">REAL GAME / WORKSHOP BUILD</figcaption>
+        </figure>
+        <div class="loop-list">
+          <div class="loop-step">
+            <span class="num">01</span>
+            <div><h3>给它一个身体</h3><p>翅膀装在哪里，它就往哪里歪。<em>身体就是它的天赋。</em></p></div>
+          </div>
+          <div class="loop-step">
+            <span class="num">02</span>
+            <div><h3>把感官接给翅膀</h3><p>看见糖要往哪转？撞到墙该停哪边？<em>接线就是它的本能。</em></p></div>
+          </div>
+          <div class="loop-step">
+            <span class="num">03</span>
+            <div><h3>放手，看它自己活一次</h3><p>你不操作它。你只能看着它用你给的本能，面对场地。</p></div>
+          </div>
+          <div class="loop-step">
+            <span class="num">04</span>
+            <div><h3>把失败拖回来</h3><p>倒回任何一刻，看哪根神经做错。<em>然后只改一根线，再养一次。</em></p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="audience section-pad">
+      <div class="shell">
+        <div class="audience-head reveal">
+          <div>
+            <p class="kicker">04 / One fly, three ways in</p>
+            <h2>同一只果蝇，<br>你可以只爱它，也可以拆开它。</h2>
+          </div>
+          <p>不需要先懂电路。你可以先当一个养它的人，再慢慢变成看懂它的人。</p>
+        </div>
+
+        <div class="tabs reveal" role="tablist" aria-label="谁会觉得 TapeFly 有趣">
+          <button class="tab" id="tab-player" type="button" role="tab" aria-selected="true" aria-controls="panel-player">养它的人</button>
+          <button class="tab" id="tab-collector" type="button" role="tab" aria-selected="false" aria-controls="panel-collector">收藏它的人</button>
+          <button class="tab" id="tab-builder" type="button" role="tab" aria-selected="false" aria-controls="panel-builder">造它的人</button>
+        </div>
+
+        <div class="tab-panel reveal" id="panel-player" role="tabpanel" aria-labelledby="tab-player">
+          <div>
+            <h3>“它怎么这么笨？”</h3>
+            <p>然后你拖回撞墙前的一秒，发现原来是左边那只翅膀没有接到触角。你改了一根线。下一次，它绕过去了。那一刻，它不是变强了，是终于有点像你养出来的。</p>
+          </div>
+          <div class="tab-quote">“你可以修好它。<br>也可以故意让它保留一点毛病。”<small>THE PLAYER</small></div>
+        </div>
+        <div class="tab-panel reveal" id="panel-collector" role="tabpanel" aria-labelledby="tab-collector" hidden>
+          <div>
+            <h3>“这不是一张皮肤。” </h3>
+            <p>每只果蝇都可以有自己的身体、名字和一段经典失败。实体 Neural Card 记录它的接线、芯片结构和二维码，扫开就能载入它、回放它、挑战它。</p>
+          </div>
+          <div class="tab-quote">“收藏的不是一张图片。<br>是一只会犯错的行为。”<small>THE COLLECTOR</small></div>
+        </div>
+        <div class="tab-panel reveal" id="panel-builder" role="tabpanel" aria-labelledby="tab-builder" hidden>
+          <div>
+            <h3>“我想看看它脑子里发生了什么。”</h3>
+            <p>每一根接线都会编译成可检查的逻辑门。你能打开芯片视图、看完整回放，甚至把行为交给 AI 智能体来设计。你看到角色，工程师看到电路，但答案是同一个。</p>
+          </div>
+          <div class="tab-quote">“不是假装有原因。<br>是把原因真的放在那里。”<small>THE BUILDER</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hardware-story" id="hardware">
+      <img class="hardware-bg" src="promo-v2/cards-v3/hardware.png" alt="同一颗 TapeFly 大脑进入 FPGA 与智能硬件的概念场景">
+      <div class="hardware-copy">
+        <div class="hardware-copy-inner reveal">
+          <p class="kicker">05 / When it leaves the screen</p>
+          <h2>如果它不只活在<br>浏览器里。</h2>
+          <p>同一套行为电路，可以进入 FPGA、桌面机器人、玩具和智能硬件。它不会突然变成什么都懂的机器人，它还是那只会找糖、会害怕、会犯同一个错的小东西。</p>
+          <div class="hardware-tags">
+            <span>FPGA</span><span>DESKTOP ROBOT</span><span>SMART DEVICE</span><span>PHYSICAL COLLECTIBLE</span>
+          </div>
+          <div class="hardware-disclaimer"><strong>诚实说明：</strong>AI 硬件果蝇是本项目的产品愿景与概念设计，不属于第一版游戏众筹的确定交付物。我们不会用概念视频冒充已经量产的硬件。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad shell">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">06 / Proof underneath the feeling</p>
+          <p>情绪在前，证据在后。</p>
+        </div>
+        <div>
+          <h2>它不是“看起来像有原因”。</h2>
+          <p>它真的有一层可以打开的行为结构。玩家看到故事，创作者看到接线，工程师看到门电路。</p>
+        </div>
+      </div>
+
+      <div class="evidence-grid reveal">
+        <figure class="evidence">
+          <img src="promo-v2/gameplay-v4/build.png" alt="TapeFly 物理搭建工坊">
+          <figcaption><span>01 / BODY</span>翅膀、配重、眼睛和身体，都会改变飞行。</figcaption>
+        </figure>
+        <figure class="evidence">
+          <img src="promo-v2/gameplay-v4/chip.png" alt="TapeFly 芯片与 NAND 电路视图">
+          <figcaption><span>02 / MIND</span>接线编译成 NAND 门电路，行为可回放、可检查。</figcaption>
+        </figure>
+      </div>
+
+      <div class="proof-band reveal">
+        <div class="proof-cell"><b>14</b><span>身体零件，让同一套本能长出不同的飞法</span></div>
+        <div class="proof-cell"><b>60 Hz</b><span>确定性物理；同一只果蝇每次得到同样的结果</span></div>
+        <div class="proof-cell"><b>TICK</b><span>飞行可以逐刻倒回，不靠“感觉像刚才”</span></div>
+        <div class="proof-cell"><b>LIVE</b><span>网页版今天就能玩，不是一张概念图</span></div>
+      </div>
+    </section>
+
+    <section class="card-story section-pad">
+      <div class="shell card-story-grid">
+        <div class="reveal">
+          <div class="neural-card" aria-label="TapeFly Neural Card 概念卡">
+            <div class="card-top"><span>TAPEFLY / NEURAL CARD</span><span>NO. 001</span></div>
+            <svg viewBox="0 0 420 210" role="img" aria-label="果蝇神经电路示意图">
+              <g fill="none" stroke="#f1b64b" stroke-width="1.1" opacity=".82">
+                <path d="M210 103 148 64 112 83 72 63M210 103 148 64 111 42M210 103 272 64 308 83 348 63M210 103 272 64 309 42"/>
+                <path d="M148 64 130 112 95 128M272 64l18 48 35 16"/>
+                <path d="M130 112 168 145 210 157 252 145 290 112"/>
+                <path d="M168 145 153 182M252 145l15 37"/>
+              </g>
+              <g fill="#79efbd">
+                <circle cx="72" cy="63" r="3"/><circle cx="111" cy="42" r="3"/><circle cx="348" cy="63" r="3"/><circle cx="309" cy="42" r="3"/>
+                <circle cx="95" cy="128" r="3"/><circle cx="325" cy="128" r="3"/><circle cx="153" cy="182" r="3"/><circle cx="267" cy="182" r="3"/>
+              </g>
+              <g fill="#061519" stroke="#eeeade" stroke-width="1.2">
+                <circle cx="210" cy="103" r="34"/><circle cx="210" cy="157" r="20"/><circle cx="130" cy="112" r="12"/><circle cx="290" cy="112" r="12"/>
+                <circle cx="148" cy="64" r="11"/><circle cx="272" cy="64" r="11"/><circle cx="168" cy="145" r="10"/><circle cx="252" cy="145" r="10"/>
+              </g>
+              <g fill="#f1b64b">
+                <circle cx="210" cy="103" r="5"/><circle cx="148" cy="64" r="3"/><circle cx="272" cy="64" r="3"/>
+              </g>
+            </svg>
+            <div class="card-name"><b>倔强一号</b><span>BODY 04 / GATES 50 / TRACE 05.0S</span></div>
+            <div class="card-seal">SEALED<br>FLY</div>
+          </div>
+        </div>
+        <div class="card-copy reveal">
+          <p class="kicker">07 / A collectible with a life</p>
+          <h2>一只潮玩不会告诉你，<br>它为什么撞墙。</h2>
+          <p>Neural Card 不是“电子证书”。它是一张能被重新载入、重新运行、重新挑战的行为卡。卡上记着它的身体、接线和最后一趟飞行。</p>
+          <p>你可以收藏一只完美的果蝇，也可以特意留下那只“总在第三关转弯太早”的怪东西。</p>
+          <div class="card-facts">
+            <div><b>可回放</b><span>不是一段剪好的动画</span></div>
+            <div><b>可比较</b><span>同一场地、同一规则</span></div>
+            <div><b>可改造</b><span>下一只从它继续长</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad shell" id="rewards">
+      <div class="section-head reveal">
+        <div>
+          <p class="kicker">08 / Crowdfunding sketch</p>
+          <p>先卖情绪，不卖收益。</p>
+        </div>
+        <div>
+          <h2>支持它，<br>从领养一只开始。</h2>
+          <p>以下是众筹奖励结构草案。数字版先交付；实体卡与小规模硬件在验证后再独立推进。</p>
+        </div>
+      </div>
+
+      <div class="offer-grid reveal">
+        <article class="offer">
+          <div class="price">$19</div>
+          <div class="tier">FIRST HATCH</div>
+          <h3>第一批孵化者</h3>
+          <p>先拥有这只还没被世界认识的小东西。</p>
+          <ul>
+            <li>完整数字版 TapeFly</li>
+            <li>首批果蝇外观</li>
+            <li>限定培养皿主题</li>
+          </ul>
+        </article>
+        <article class="offer">
+          <div class="price">$39</div>
+          <div class="tier">FLY KEEPER</div>
+          <h3>果蝇饲养员</h3>
+          <p>让它不只是“一个游戏角色”，而是你留下过名字的一只。</p>
+          <ul>
+            <li>以上全部奖励</li>
+            <li>限定零件或身体纹理</li>
+            <li>首年饲养员墙署名</li>
+          </ul>
+        </article>
+        <article class="offer">
+          <div class="price">$79</div>
+          <div class="tier">NEURAL CARD</div>
+          <h3>神经卡收藏版</h3>
+          <p>一张真正记录行为、不是只印图的实体收藏卡。</p>
+          <ul>
+            <li>以上全部奖励</li>
+            <li>实体 Neural Card</li>
+            <li>扫码载入与回放</li>
+          </ul>
+        </article>
+      </div>
+      <p class="offer-note">概念页展示的是产品与奖励方向，不构成现货销售、投资承诺或收益承诺。</p>
+    </section>
+
+    <section class="final-cta">
+      <div class="shell reveal">
+        <p class="kicker">A small life / a visible mind</p>
+        <h2>它不是来帮你的。<br>它是来被你记住的。</h2>
+        <p>如果你也厌倦了永远正确、永远会说话、永远没有性格的 AI，来养一只会犯错的小东西。</p>
+        <div class="final-actions">
+          <a class="button primary" href="https://tapefly.xyz/workshop" target="_blank" rel="noreferrer">现在去养一只</a>
+          <a class="button paper" href="#film">再看一次宣发片</a>
+        </div>
+        <div class="final-code">TAPEFLY · VERIFIABLE BEHAVIOR · X LAYER VERSION IN PROGRESS</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <b>TAPEFLY</b>
+        <p>TapeFly 是独立项目，与 TapeOut、OKX、X Layer 均无合作或背书关系。众筹价格、硬件时间表和奖励内容均为概念展示，正式发行以前页面会明确区分当前能力与未来愿景。</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://tapefly.xyz/workshop" target="_blank" rel="noreferrer">玩网页版</a>
+        <a href="https://tapefly.xyz/docs" target="_blank" rel="noreferrer">开发文档</a>
+        <a href="https://tapefly.xyz/trust" target="_blank" rel="noreferrer">信任模型</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const progress = document.getElementById("scroll-progress");
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      progress.style.width = `${max > 0 ? (scrollY / max) * 100 : 0}%`;
+    };
+    addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    const reveal = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-in");
+          reveal.unobserve(entry.target);
+        }
+      }
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach((el) => reveal.observe(el));
+
+    const specimen = document.getElementById("specimen");
+    if (specimen && matchMedia("(pointer:fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      specimen.addEventListener("pointermove", (event) => {
+        const rect = specimen.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        specimen.style.setProperty("--rx", `${x * 8}px`);
+        specimen.style.setProperty("--ry", `${y * 8}px`);
+      });
+      specimen.addEventListener("pointerleave", () => {
+        specimen.style.setProperty("--rx", "0px");
+        specimen.style.setProperty("--ry", "0px");
+      });
+    }
+
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+    const selectTab = (tab) => {
+      for (const item of tabs) item.setAttribute("aria-selected", String(item === tab));
+      for (const panel of panels) panel.hidden = panel.id !== tab.getAttribute("aria-controls");
+    };
+    for (const tab of tabs) {
+      tab.addEventListener("click", () => selectTab(tab));
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+        event.preventDefault();
+        const current = tabs.indexOf(tab);
+        const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (current + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+        tabs[next].focus();
+        selectTab(tabs[next]);
+      });
+    }
+  </script>
+</body>
+</html>

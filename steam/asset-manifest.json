@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-11-15T13:08:03.677Z",
+  "note": "Capsules and icons are deterministic composites built from the TapeFly character source. Replace screenshots/extracted frames only with verified in-game captures.",
+  "assets": {
+    "headerCapsule": "assets/header-capsule.png (920x430)",
+    "smallCapsule": "assets/small-capsule.png (462x174)",
+    "mainCapsule": "assets/main-capsule.png (1232x706)",
+    "verticalCapsule": "assets/vertical-capsule.png (748x896)",
+    "pageBackground": "assets/page-background.png (1438x810)",
+    "libraryCapsule": "assets/library-capsule.png (600x900)",
+    "libraryHero": "assets/library-hero.png (3840x1240)",
+    "libraryLogo": "assets/library-logo.png (1280x720, transparent)",
+    "shortcutIcon": "assets/shortcut-icon.png (256x256)",
+    "appIcon": "assets/app-icon.jpg (184x184)",
+    "trailerEndcard": "assets/endcard-1920x1080.png (1920x1080)"
+  }
+}

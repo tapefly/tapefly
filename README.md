@@ -8,30 +8,31 @@
   <p>
     <a href="https://tapefly.xyz"><strong>Play TapeFly</strong></a> ·
     <a href="https://tapefly.xyz/docs">Docs</a> ·
-    <a href="https://tapefly.xyz/tapeout">Circuit #1</a> ·
+    <a href="https://tapefly.xyz/tapeout">X Layer Circuit #2</a> ·
     <a href="https://tapefly.xyz/agents">Agent API</a>
   </p>
   <p>
     <a href="https://github.com/tapefly/tapefly/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/tapefly/tapefly/ci.yml?branch=main&label=CI" alt="CI"></a>
-    <a href="#verification"><img src="https://img.shields.io/badge/tests-95%2F95-2ea44f" alt="95 tests passing"></a>
+    <a href="#verification"><img src="https://img.shields.io/badge/tests-160%2F160-2ea44f" alt="160 tests passing"></a>
     <a href="package.json"><img src="https://img.shields.io/badge/node-22-339933?logo=node.js&logoColor=white" alt="Node 22"></a>
-    <a href="https://tapefly.xyz/tapeout"><img src="https://img.shields.io/badge/TapeOut-Circuit%20%231-7c5cff" alt="TapeOut circuit 1"></a>
+    <a href="https://tapefly.xyz/tapeout"><img src="https://img.shields.io/badge/X%20Layer-Circuit%20%232-7c5cff" alt="X Layer circuit 2"></a>
     <a href="https://tapefly.xyz/api/v1/health"><img src="https://img.shields.io/badge/live-API-10b981" alt="Live API"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
   </p>
 </div>
 
-> **Live status, 24 October 2026.** The official 50-gate brain is TapeOut circuit
-> `#1` on BNB Chain. Its stored bytes match the committed netlist, all `4,096`
-> possible `eval` answers match, production is HTTPS live, CI is green, and
-> `npm audit` reports zero advisories. X Layer circuit deployment is the next
-> integration milestone, not a completed claim.
+> **Status, 17 November 2026.** Everything TapeFly puts on chain runs on **X Layer**
+> (chain 196): tape-outs, lineage anchors and workshop records. The official
+> 50-gate brain is compiled, its bytes are fixed (SHA-256 below) and all `4,096`
+> answers are checked against its rules. It is **live on X Layer as Circuit #2**
+> on the external Sillu test processor, with matching bytes and a complete
+> `4,096 / 4,096` on-chain check.
 
 ## The 30-second pitch
 
 TapeFly turns a NAND circuit into a living game character. Six senses become a 12-bit input; a 50-gate brain returns a move plus an escape reflex. Because the input space is exactly 4,096 words, there is no hidden black box: every possible decision can be checked in one pass.
 
-The official brain is taped out as **Circuit #1** on BNB Chain. The processor's free read-only `eval` function returned the same answer for every one of the 4,096 inputs, and the stored netlist bytes also match. Players can watch a day unfold, design a new brain, challenge a friend, and tape their own circuit out from their wallet.
+The official brain is taped out on X Layer through TapeOut's factory. The tape-out panel asked the circuit all 4,096 questions through the free read-only `eval` and compared the stored bytes. Players can watch a day unfold, design a new brain, challenge a friend, build a fly in the workshop, and tape their own circuit out from their wallet.
 
 No database or account is needed to play or verify a day. A date is the seed, every tick is hashed, and the resulting transcript can be replayed byte for byte.
 
@@ -41,15 +42,16 @@ No database or account is needed to play or verify a day. A date is the seed, ev
 |---|---|
 | Live product | [tapefly.xyz](https://tapefly.xyz) |
 | Product documentation | [tapefly.xyz/docs](https://tapefly.xyz/docs) |
-| Demo video, 1:58, Chinese narration | [tapefly.xyz/tapefly-demo.mp4](https://tapefly.xyz/tapefly-demo.mp4) |
+| English demo video, 2:50, English narration and captions | [tapefly.xyz/tapefly-demo-en.mp4](https://tapefly.xyz/tapefly-demo-en.mp4) |
+| Chinese gameplay clip, 0:57 | [tapefly.xyz/tapefly-demo.mp4](https://tapefly.xyz/tapefly-demo.mp4) |
 | Source code | This repository, MIT licensed |
-| TapeOut processor | [`0x6Ac12D578e29D340f178E18eB2C297C7915E011C`](https://bscscan.com/address/0x6Ac12D578e29D340f178E18eB2C297C7915E011C) |
-| Transistor contract | [`0x09FD3719f7de0E6FB399279fCC890B205895b942`](https://bscscan.com/address/0x09FD3719f7de0E6FB399279fCC890B205895b942) |
-| Official brain | Circuit `#1`, 50 NAND gates, depth 9 |
-| Tape-out transaction | [`0x573cdc5e1a4bd30dddbb174c53408eea6a0da806b1154e4b0f81fc8c216cb14b`](https://bscscan.com/tx/0x573cdc5e1a4bd30dddbb174c53408eea6a0da806b1154e4b0f81fc8c216cb14b) |
-| Full on-chain check | Processor byte match + all 4,096 `eval` answers |
+| Chain | X Layer mainnet, chain 196 |
+| TapeOut factory (X Layer) | [`0x1f09daefa827f02cbb40967cc91b259763760761`](https://www.oklink.com/xlayer/address/0x1f09daefa827f02cbb40967cc91b259763760761) |
+| Official brain | 50 NAND gates, depth 9; X Layer Circuit #2, verified |
+| On-chain processor | Sillu external test processor `0x99081e1D0CE916Cd5b2c53e769DFC3B000BFE9A4` |
+| Full on-chain check | 350 stored bytes match and all 4,096 `eval` answers match (`npm run verify:onchain`) |
 | Player flow | [Play](https://tapefly.xyz) → [Build](https://tapefly.xyz/build) → [Race](https://tapefly.xyz/vs) → [Tape out](https://tapefly.xyz/tapeout) |
-| X Layer track | Existing product is live on BNB Chain; X Layer circuit deployment is the next integration milestone |
+| X Layer track | All on-chain features run on X Layer; the official brain has a real circuit and transaction |
 | One-command judge check | `npm ci && npm run judge:check` |
 
 ### Track alignment
@@ -61,7 +63,7 @@ No database or account is needed to play or verify a day. A date is the seed, ev
 | TapeOut ecosystem use | Real processor, NAND consumption, circuit NFT path, free on-chain `eval`, netlist bytes and verifiable ownership. |
 | Completeness and UX | Chinese-first interface, one-screen instinct controls, eight Brain School levels, friend challenges, season board and share links. |
 | Lower technical barrier | A player edits rules rather than gates; the compiler emits TapeOut-compatible NAND bytes automatically. |
-| Openness | MIT source, 95 tests, public CI, deterministic ledgers and reproducible on-chain checks. |
+| Openness | MIT source, 160 tests, public CI, deterministic ledgers and reproducible on-chain checks. |
 
 ## Live proof snapshot
 
@@ -73,10 +75,11 @@ No database or account is needed to play or verify a day. A date is the seed, ev
 | Circuit depth | `9` |
 | Serialized size | `350 bytes` |
 | Netlist SHA-256 | `a763117011fe4c4be7106d9b0d2c78fe79b81c15ccc2a6531c9263b4f443d4dd` |
-| On-chain circuit | TapeFly processor circuit `#1` |
+| On-chain circuit | X Layer Circuit `#2` on the external Sillu test processor |
+| Tape-out transaction | `0xa7ad0fd9b85e3290fbfe7d78dfba5c0ccc177d1723b3a9f6f18a1a87c937d5cd` |
 | Exhaustive check | `4,096 / 4,096` answers identical |
 | Stored byte check | Identical |
-| Test suite | `95 / 95` passing |
+| Test suite | `160 / 160` passing |
 
 Run the live proof yourself:
 
@@ -85,7 +88,7 @@ npm ci
 npm run verify:onchain
 ```
 
-The verifier compares the committed 350 bytes with `netlist(1)`, then asks the chain's free read-only `eval(1, input)` function all 4,096 possible inputs.
+The verifier compares the committed 350 bytes with `netlist(2)`, then asks the chain's free read-only `eval(2, input)` function all 4,096 possible inputs.
 
 `npm run judge:check` runs the full local suite and the same live circuit check in
 one command. It needs no wallet, private key, token or account.
@@ -152,7 +155,7 @@ sequenceDiagram
     participant App as TapeFly web app
     participant Sim as Deterministic simulator
     participant Wallet
-    participant Chain as TapeOut on BNB Chain
+    participant Chain as TapeOut on X Layer
 
     Player->>App: Open today's dish
     App->>Sim: date + body + brain
@@ -199,12 +202,12 @@ The committed behavioral certificate compares the official brain with `FLY-LIF/0
 | Area | State on 2026-10-24 | How to check |
 | --- | --- | --- |
 | Production site | Live over HTTPS; apex serves the app and `www` redirects to apex | [tapefly.xyz](https://tapefly.xyz) |
-| Official brain | Circuit `#1`; bytes and all 4,096 answers verified | [`/tapeout`](https://tapefly.xyz/tapeout) |
-| Source and CI | Public, MIT licensed, 95 tests, green GitHub Actions | [Actions](https://github.com/tapefly/tapefly/actions) |
+| Official brain | X Layer Circuit #2 on the external Sillu test processor; all 4,096 answers and stored bytes match | [`/tapeout`](https://tapefly.xyz/tapeout) |
+| Source and CI | Public, MIT licensed, 160 tests, green GitHub Actions | [Actions](https://github.com/tapefly/tapefly/actions) |
 | Dependency security | `npm audit`: 0 vulnerabilities | `npm audit` |
-| Daily history | 297 committed UTC days as of 2026-10-24 | [Lineage](https://tapefly.xyz/lineage) |
-| Daily BNB Chain anchor | Code and workflow exist; no transaction has been recorded yet | `anchors/anchors.json` |
-| X Layer | Not deployed yet; next hackathon integration milestone | `docs/DEMO.md` |
+| Daily history | 318 committed UTC days as of 2026-11-14 | [Lineage](https://tapefly.xyz/lineage) |
+| Daily X Layer anchor | Code and workflow exist; no transaction has been recorded yet | `anchors/anchors.json` |
+| X Layer | The chain for every on-chain feature; official Circuit #2 is live and fully verified | `config/tapeout.json` |
 | Token or financial return | No token, yield, dividend or betting mechanic is in this repository | [Docs](https://tapefly.xyz/docs) |
 
 ### What the on-chain proof does and does not establish
@@ -240,13 +243,14 @@ anchors/         optional daily lineage anchors
 | Live product | [tapefly.xyz](https://tapefly.xyz) |
 | Public source | [github.com/tapefly/tapefly](https://github.com/tapefly/tapefly) |
 | Product documentation | [tapefly.xyz/docs](https://tapefly.xyz/docs) |
-| Demo video, 1:58, Chinese narration | [tapefly.xyz/tapefly-demo.mp4](https://tapefly.xyz/tapefly-demo.mp4) |
+| English demo video, 2:50 | [tapefly.xyz/tapefly-demo-en.mp4](https://tapefly.xyz/tapefly-demo-en.mp4) |
+| Chinese gameplay clip, 0:57 | [tapefly.xyz/tapefly-demo.mp4](https://tapefly.xyz/tapefly-demo.mp4) |
 | 3-minute demo script | [docs/DEMO.md](./docs/DEMO.md) |
 | One-page pitch | [docs/PITCH.md](./docs/PITCH.md) |
 | VC investment memo | [docs/INVESTOR-MEMO.md](./docs/INVESTOR-MEMO.md) |
 | Xccelerate form copy | [docs/XCCELERATE-SUBMISSION.md](./docs/XCCELERATE-SUBMISSION.md) |
 | X launch copy | [docs/X-LAUNCH-POST.md](./docs/X-LAUNCH-POST.md) |
-| On-chain proof | [TapeOut circuit #1](https://tapefly.xyz/tapeout) |
+| On-chain proof | [X Layer circuit #2](https://tapefly.xyz/tapeout) |
 | API for agents | [tapefly.xyz/agents](https://tapefly.xyz/agents) |
 
 ## Local development
@@ -283,7 +287,7 @@ Netlist JSON and TapeOut hex are accepted as well as rule programs.
 
 ## Team
 
-Independent project by **Richard**, built for the TapeOut ecosystem. TapeFly is not an official TapeOut, Binance, OKX or X Layer product.
+Independent project by **Richard**, built for the TapeOut ecosystem. TapeFly is not an official TapeOut, OKX or X Layer product.
 
 ## Community
 

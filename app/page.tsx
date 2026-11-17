@@ -1,17 +1,17 @@
 import { SiteNav, SiteFooter } from "./components/ui/Shell";
-import HomeClient from "./HomeClient";
-import { dayString } from "@/sim/engine";
-import { boardThrough } from "@/sim/board";
+import HomeArena from "./HomeArena";
+import { BRAIN } from "@/sim/netlist";
+import config from "@/config/tapeout.json";
 
-/* One screen: four instinct switches, the TapeOut circuit they make, today's dish. */
+/* The front door: Brain Brawl, one button, a live fight. The forage experiment
+   that used to live here is at /forage. */
 export const dynamic = "force-dynamic";
 
 export default function Page() {
-  const now = new Date();
   return (
     <main>
       <SiteNav here="/" />
-      <HomeClient today={dayString(now)} through={boardThrough(now)} />
+      <HomeArena circuitId={Number(config.circuitId)} chainLive={config.status === "live"} officialGates={BRAIN.gates.length} />
       <SiteFooter />
     </main>
   );

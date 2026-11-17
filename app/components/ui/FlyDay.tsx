@@ -56,7 +56,7 @@ export default function FlyDay({ colony, index, parent }: { colony: SlimColony; 
   return (
     <div className="page flyday">
       <header className="fd-head">
-        <p className="kicker">{tr(<><Link className="link" href="/">{colony.date}</Link>，8 只中的第 {index + 1} 只</>, <><Link className="link" href="/">{colony.date}</Link>, fly {index + 1} of 8</>)}</p>
+        <p className="kicker">{tr(<><Link className="link" href="/forage">{colony.date}</Link>，8 只中的第 {index + 1} 只</>, <><Link className="link" href="/forage">{colony.date}</Link>, fly {index + 1} of 8</>)}</p>
         <h1 style={{ color: hue }}>{m.name}</h1>
         <p className="lede">
           {tr(

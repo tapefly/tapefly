@@ -1,0 +1,1 @@
+Failure is where the game begins. When the fly hits a wall, TapeFly rewinds to the exact tick. You can inspect what it sensed, which gates fired, and which wire produced the mistake. Change one connection, compile again, and watch the behavior change.

@@ -1,25 +1,25 @@
 import Link from "next/link";
 import { SiteNav, SiteFooter } from "../components/ui/Shell";
 import { BRAIN } from "@/sim/netlist";
-import { netDepth, cost } from "@/sim/compile";
-import { SWITCHES, programFromSwitches, type Switches } from "@/sim/instincts";
-import { brainFromProgram, card } from "@/sim/challenge";
-import { nandNeeded } from "@/sim/onchain";
-import { TUNE, WORLD } from "@/sim/engine";
-import { COLONY_SIZE } from "@/sim/colony";
+import { netDepth } from "@/sim/compile";
+import { T, BASE, MOVES, DUEL_PROFILE } from "@/sim/duel";
+import { TACTICS, TACTIC_IDS, PARTS, PART_IDS, RUN, BODY_SLOTS, RIVALS, budgetFor, report, aloneGates, type TacticId } from "@/sim/arena";
 import config from "@/config/tapeout.json";
 import { getLang, serverT } from "../i18n/server";
 import { ANCHORS } from "@/sim/anchor";
 
-/* The whole picture in one page. Rule for every sentence: either it can be
-   checked on this site or on chain today, or it carries a Next / Planned tag.
-   Numbers that come from the code are computed here, not typed in. */
+/* Developer reference. Workshop is the public main game, while this page keeps
+   the shipped Brain Brawl interface documentation available for API users and
+   anyone checking the circuit/TapeOut claims. Rule for every sentence: either
+   it can be checked on this site or on chain today, or it carries a Next /
+   Planned tag. Numbers come from the code, not typed in. */
 
 export async function generateMetadata() {
   const t = await serverT();
   return {
-    title: t("文档 — TapeFly", "Docs — TapeFly"),
-    description: t("TapeFly 全貌：BNB Chain 上的永生果蝇，大脑用 TapeOut 的 NAND 门搭成。缘起、愿景、玩法、技术、经济模型、路线图。", "TapeFly in full: immortal fruit flies on BNB Chain, with brains built from TapeOut's NAND gates. Origins, vision, play, technology, economics and roadmap.")
+    title: t("开发者文档 — TapeFly", "Developer docs — TapeFly"),
+    description: t("TapeFly 开发者文档：主游戏 Workshop，以及保留的 Brain Brawl 接口、NAND 电路、TapeOut、验证和 AI 智能体资料。",
+      "TapeFly developer docs: the Workshop main game, plus the retained Brain Brawl interface, NAND circuits, TapeOut, verification and AI agent materials.")
   };
 }
 
@@ -28,67 +28,59 @@ const TAG: Record<State, [string, string]> = { live: ["已上线", "Live"], next
 const Tag = async ({ s }: { s: State }) => <span className={`dtag ${s}`}>{(await getLang()) === "zh" ? TAG[s][0] : TAG[s][1]}</span>;
 
 const TOC: [string, string, string][] = [
-  ["why-now", "为什么是现在", "Why now"],
-  ["immortal", "永生果蝇", "Immortal flies"],
-  ["vision", "愿景", "Vision"],
-  ["day", "一天怎么过", "How a day works"],
-  ["brain", "大脑", "The brain"],
-  ["tech", "技术", "Technology"],
-  ["play", "玩法", "Play"],
-  ["tapeout", "TapeOut", "TapeOut"],
+  ["play", "一局怎么玩", "How a run works"],
+  ["fight", "一场架怎么打", "How a fight works"],
+  ["chips", "战术芯片", "Tactic chips"],
+  ["body", "身体装备", "Body parts"],
+  ["circuit", "大脑是真电路", "The brain is a circuit"],
+  ["rivals", "对手", "Rivals"],
+  ["fair", "公平与重放", "Fairness and replay"],
+  ["tapeout", "建立在 TapeOut 上", "Built on TapeOut"],
+  ["agents", "给 AI 智能体", "For AI agents"],
   ["economics", "经济模型", "Economics"],
-  ["earn", "怎么赚钱", "Ways to earn"],
-  ["build", "开发者与智能体", "Builders & agents"],
   ["roadmap", "路线图", "Roadmap"],
+  ["lab", "实验室与永生血统", "Lab and lineage"],
   ["promises", "我们不做什么", "What we won't do"],
   ["glossary", "术语表", "Glossary"],
   ["faq", "常见问题", "Questions"]
 ];
 
-const COMBO_ORDER: Switches[] = [
-  { eat: true, flee: false, jump: false, roam: false },
-  { eat: true, flee: true, jump: false, roam: false },
-  { eat: true, flee: true, jump: false, roam: true },
-  { eat: true, flee: true, jump: true, roam: true },
-  { eat: false, flee: false, jump: true, roam: false }
-];
+const EXAMPLES: TacticId[][] = [["bite"], ["block", "bite"], ["block", "punish", "bite"], ["sidestep", "punish", "flank", "bite"]];
+const MOVE_ZH: Record<string, string> = { press: "逼近", back: "后撤", circle: "绕圈", guard: "举盾" };
 
 export default async function DocsPage() {
   const t = await serverT();
   const zh = (await getLang()) === "zh";
   const live = config.status === "live";
-  const combos = COMBO_ORDER.map((s) => {
-    const b = brainFromProgram(programFromSwitches(s));
-    const c = card(b.netlist);
-    const names = SWITCHES.filter((x) => s[x.id]).map((x) => (zh ? x.zh : x.label)).join(" + ");
-    return { names, gates: c.gates, depth: c.depth, cost: c.cost, nand: nandNeeded(b.netlist) };
-  });
-  const PRICE = 0.00005; // the default NAND price on the TapeFly processor form
-  const starveTicks = Math.ceil(TUNE.hMax / TUNE.hStep);
+  const sec = (ticks: number) => String(parseFloat((ticks / T.hz).toFixed(2)));
+  const name = (c: TacticId) => (zh ? TACTICS[c].zh : TACTICS[c].en);
+  const ex = EXAMPLES.map((chips) => ({ chips, r: report(chips) }));
   const S = (n: number) => String(n).padStart(2, "0");
   let k = 0;
   const H = (id: string, zhT: string, enT: string) => <h2 id={`${id}-h`}><span>{S(++k)}</span>{t(zhT, enT)}</h2>;
+  const arc = Math.round((T.guardArc * 180) / Math.PI);
+  const lastBudget = budgetFor(RIVALS.length - 1);
 
   return (
     <main>
       <SiteNav here="/docs" />
       <div className="page docs">
         <header className="docs-hero">
-          <p className="kicker">{t("TapeFly 文档", "TapeFly docs")}</p>
-          <h1>{t("BNB Chain 上的永生果蝇。", "Immortal fruit flies, on BNB Chain.")}</h1>
-          <p className="lede">
-            {t("每只 TapeFly 果蝇都有一颗用 TapeOut 的 NAND 门搭成的大脑。大脑可以流片上链，永远不会被删改；它活过的每一天都能只凭日期重放，分毫不差；每一代都由上一代的冠军繁衍。你来设计大脑，和朋友对战，赢下赛季，把最好的那颗放上链，真正拥有它。",
-               "Every TapeFly fly has a brain built from TapeOut’s NAND gates. The brain can be taped out on chain, where it can never be edited or deleted; every day it lives can be replayed from its date alone, exactly; every generation is born from the last one’s champion. You design the brain, race your friends, win the season, and put the best one on chain as something you own.")}
-          </p>
+          <p className="kicker">{t("TapeFly 开发者文档", "TapeFly developer docs")}</p>
+          <h1>{t("主游戏是工坊；接口与验证资料继续公开。", "Workshop is the main game; the interfaces and verification record stay public.")}</h1>
+          <p className="lede">{t(
+            "TapeFly 对外主游戏是 Workshop：拼装机器果蝇、接出大脑，再让它在物理关卡里自己行动。下面继续保留已交付的 Brain Brawl 开发者接口、NAND 电路、TapeOut 和 AI 智能体资料；这些内容仍有公开 URL，但不再出现在主游戏导航里。",
+            "TapeFly's public main game is Workshop: assemble a robot fly, wire its brain and let it solve physics levels. The shipped Brain Brawl developer interface, NAND circuit, TapeOut and AI-agent material remain documented below at stable public URLs, but no longer appear in the main game navigation."
+          )}</p>
           <div className="docs-stats">
-            <div><b>4</b><span>{t("个本能开关，16 种大脑等你发现", "instinct switches, 16 brains to discover")}</span></div>
-            <div><b>{BRAIN.gates.length}</b><span>{t(`个 NAND 门组成官方大脑，${netDepth(BRAIN)} 层深`, `NAND gates in the official brain, ${netDepth(BRAIN)} deep`)}</span></div>
-            <div><b>4,096</b><span>{t("个问题证明链上的大脑，免费提问", "questions that prove a brain on chain, free to ask")}</span></div>
-            <div><b>0</b><span>{t("个数据库。每一天只凭日期就能重放", "databases. Every day replays from its date alone")}</span></div>
+            <div><b>{TACTIC_IDS.length}</b><span>{t("张战术芯片，顺序就是策略", "tactic chips; the order is the strategy")}</span></div>
+            <div><b>{PART_IDS.length}</b><span>{t(`件身体装备，最多装 ${BODY_SLOTS} 件，不占门数`, `body parts, up to ${BODY_SLOTS}, no gates`)}</span></div>
+            <div><b>{RIVALS.length}</b><span>{t(`个对手，门数预算从 ${budgetFor(0)} 涨到 ${lastBudget}`, `rivals; the gate budget grows from ${budgetFor(0)} to ${lastBudget}`)}</span></div>
+            <div><b>1</b><span>{t("张真的 NAND 电路，就是你的大脑", "real NAND circuit, which is your brain")}</span></div>
           </div>
           <div className="row" style={{ marginTop: 20 }}>
-            <Link className="btn primary" href="/">{t("先玩 10 秒", "Play for ten seconds")}</Link>
-            <a className="btn" href="#immortal">{t("永生果蝇是什么意思", "What “immortal” means")}</a>
+            <Link className="btn primary" href="/workshop">{t("开始造果蝇", "Build a fly")}</Link>
+            <a className="btn" href="#circuit">{t("查看电路与验证资料", "Circuit and verification material")}</a>
           </div>
         </header>
 
@@ -96,224 +88,255 @@ export default async function DocsPage() {
           {TOC.map(([id, z, e], i) => <a key={id} href={`#${id}`}><span>{S(i + 1)}</span>{t(z, e)}</a>)}
         </nav>
 
-        {/* 01 why now */}
-        <section id="why-now" className="docs-sec">
-          {H("why-now", "为什么是现在", "Why now")}
-          <p className="big">{t("三件事在同一年撞到了一起。", "Three things collided in the same year.")}</p>
-          <ol className="docs-time">
-            <li><b>2024</b><div><strong>{t("第一张完整的果蝇大脑图", "The first complete fly brain map")}</strong><p>{t("FlyWire 联盟发表了成年雌性果蝇的完整神经连接图：约 14 万个神经元，第一次有一种复杂动物的整个大脑被画了出来。", "The FlyWire consortium published the full wiring map of an adult female fruit fly: about 140,000 neurons, the first whole brain of a complex animal ever mapped.")}</p></div></li>
-            <li><b>{t("2026 年 9 月", "Sep 2026")}</b><div><strong>{t("雄性果蝇大脑开源，互联网玩疯了", "The male fly brain goes open, and the internet runs with it")}</strong><p>{t("HHMI Janelia 和 Google Research 发布了雄性果蝇的完整连接组（约 16.6 万个神经元）。很快就有人让模拟的果蝇大脑去打游戏、开无人机、交易加密货币。", "HHMI Janelia and Google Research released the male fly’s full connectome (about 166,000 neurons). Within days people had simulated fly brains playing games, flying drones and trading crypto.")}</p></div></li>
-            <li><b>{t("2026 年 9 月 15 日", "15 Sep 2026")}</b><div><strong>{t("CZ：“永生果蝇”", "CZ: “immortal fruit flies”")}</strong><p>{t(<>CZ 发推说，如果有人在 BNB Chain 上做出“永生果蝇”会很酷（<a className="link" href="https://x.com/cz_binance/status/2099713592903995839" target="_blank" rel="noreferrer">原推</a>）。YZi Labs 的 Siyuan 接着提出：BNB Chain 可以永久记录大脑的状态、记忆和经历，让大脑死后重生，或者多个大脑一起进化。</>,
-                 <>CZ posted that it would be cool to see someone create &ldquo;immortal fruit flies&rdquo; on BNB Chain (<a className="link" href="https://x.com/cz_binance/status/2099713592903995839" target="_blank" rel="noreferrer">the post</a>). Siyuan of YZi Labs followed up: BNB Chain could be a permanent record of brain states, memories and histories, letting a brain be reborn after death or evolve with others.</>)}</p></div></li>
-            <li><b>{t("同一时间", "Meanwhile")}</b><div><strong>{t("TapeOut：链上的硬件", "TapeOut: hardware on chain")}</strong><p>{t("TapeOut 在 BNB Chain 上把 NAND 门变成了代币：任何人都能把电路“流片”上链，铸成 NFT，谁都能免费验证它。大脑说到底就是电路。", "TapeOut turned NAND gates into tokens on BNB Chain: anyone can “tape out” a circuit on chain, mint it as an NFT, and anyone can check it for free. A brain, in the end, is a circuit.")}</p></div></li>
-          </ol>
-          <p>{t("TapeFly 就站在这三者交汇的地方：真实果蝇的行为、BNB Chain 上的永生，以及 TapeOut 的链上电路。", "TapeFly stands where the three meet: real fly behaviour, immortality on BNB Chain, and TapeOut’s on-chain circuits.")}</p>
-          <p className="dim">{t("TapeFly 是独立项目，与 CZ、Binance、YZi Labs 和 TapeOut 团队都没有关联，也没有得到他们的背书。", "TapeFly is independent. It is not affiliated with or endorsed by CZ, Binance, YZi Labs or the TapeOut team.")}</p>
-        </section>
-
-        {/* 02 immortal */}
-        <section id="immortal" className="docs-sec">
-          {H("immortal", "永生果蝇：我们怎么做到", "Immortal flies: how TapeFly does it")}
-          <p className="big">{t("在 TapeFly 里，“永生”不是一句口号，而是五件可以验证的事。", "In TapeFly, “immortal” is not a slogan. It is five things you can check.")}</p>
-          <div className="docs-cards two">
-            <div><Tag s={live ? "live" : "next"} /><b>{t("1 · 大脑永远在链上", "1 · The brain lives on chain for good")}</b><p>{t("流片之后，大脑电路存在 BNB Chain 上，谁都改不了、删不掉，包括我们。只要链在，这颗大脑就在，任何人随时都能向它提问。", "Once taped out, the brain’s circuit sits on BNB Chain. Nobody can edit or delete it, us included. As long as the chain exists, the brain exists, and anyone can ask it questions at any time.")} {live ? null : t("链上状态还没有同步到网站配置；请以流片面板和链上核对结果为准。", "The on-chain status has not been synced to the site configuration yet; use the tape-out panel and on-chain verification as the source of truth.")} <Link className="link" href="/tapeout#tape-out">{t("流片面板", "Tape-out panel")}</Link></p></div>
-            <div><Tag s="live" /><b>{t("2 · 每一天都能复活", "2 · Every day can be brought back")}</b><p>{t("一天里发生的一切，都只由日期决定。十年后输入同一个日期，同一只果蝇会在同一个培养皿里醒来，走出完全一样的每一步。死亡只是这一天的结局，不是这只果蝇的终点。", "Everything in a day follows from its date. Enter the same date ten years from now and the same fly wakes in the same dish and takes exactly the same steps. Death ends a day, not the fly.")}</p></div>
-            <div><Tag s="live" /><b>{t("3 · 血统从不中断", "3 · The bloodline never breaks")}</b><p>{t(`每天早上的 ${COLONY_SIZE} 只果蝇，都由前一天活得最久的冠军繁衍而来，身体略有变异。这条血统从纪元第一天起从未中断，写在账本里，任何人都能重算。`, `Each morning’s ${COLONY_SIZE} flies are born from yesterday’s longest-lived champion, with small mutations. The line has run unbroken since the first day, kept in a ledger anyone can recompute.`)} <Link className="link" href="/lineage">{t("看血统", "See the lineage")}</Link></p></div>
-            <div><Tag s="live" /><b>{t("4 · 记忆被封存", "4 · Memories are sealed")}</b><p>{t("果蝇活过的每一步都折进一条哈希链。改掉任何一步，哈希就会变。这是它的记忆，也是它的身份证。", "Every step a fly lives is folded into a hash chain. Change any step and the hash changes. It is the fly’s memory and its proof of identity.")} <Link className="link" href="/verify">{t("核查一条记忆", "Check a memory")}</Link></p></div>
-            <div className="wide"><Tag s={ANCHORS.entries.length ? "live" : "next"} /><b>{t("5 · 记忆刻在 BNB Chain 上", "5 · Memory written on BNB Chain")}</b><p>{t("每天，从第一天起整条血统（每一位冠军的身体、寿命和每一步的哈希）被折成一个“血统哈希”，用一笔交易写上 BNB Chain。这正是“BNB Chain 永久记录大脑的状态和记忆”的字面意思：链上的那一行，任何人都能拿日期重新算出来对照。", "Every day, the whole lineage since the first day (every champion’s body, life and the hash of every step) is folded into one lineage head and written onto BNB Chain in a transaction. That is “BNB Chain as a permanent record of brain states and memories”, literally: a line on chain that anyone can recompute from the dates and compare.")} {ANCHORS.entries.length
-              ? <>{t(`已锚定 ${ANCHORS.entries.length} 天，最近一天是 ${ANCHORS.entries[ANCHORS.entries.length - 1].date}。`, `${ANCHORS.entries.length} days anchored so far, the latest ${ANCHORS.entries[ANCHORS.entries.length - 1].date}.`)} </>
-              : <>{t("每日锚定已经做好，等第一笔交易发出。", "Daily anchoring is built and waiting for its first transaction.")} </>}<Link className="link" href="/lineage#on-chain">{t("看链上记录", "See the record on chain")}</Link></p></div>
-          </div>
-          <p>{t("Siyuan 设想的“链上永久记录、死后重生、共同进化”，在 TapeFly 里就是：大脑上链（不朽的身体），血统哈希每天写上链（永久的记忆），日期重放（重生），冠军繁衍（进化），玩家的大脑在同一个培养皿里比拼（多个大脑共同进化）。", "The “permanent record, rebirth after death, shared evolution” Siyuan described is, in TapeFly: a brain on chain (the undying body), the lineage head written on chain daily (lasting memory), replay by date (rebirth), champions breeding the next generation (evolution), and players’ brains competing in the same dish (many brains evolving together).")}</p>
-        </section>
-
-        {/* 03 vision */}
-        <section id="vision" className="docs-sec">
-          {H("vision", "愿景", "Vision")}
-          <p className="big">{t("大脑应该是可以搭建、测试、拥有和交易的东西，而且任何人都能验证它。", "Brains should be things you can build, test, own and trade, and anyone should be able to check them.")}</p>
-          <div className="docs-cards three">
-            <div><b>{t("小到能看懂", "Small enough to understand")}</b><p>{t("TapeFly 的大脑只有几十个逻辑门。果蝇做决定时，你能看到每根线亮起来。没有什么藏在没人读得懂的模型里。", "A TapeFly brain is a few dozen logic gates. You can see every wire light up as the fly decides. Nothing is hidden in a model nobody can read.")}</p></div>
-            <div><b>{t("真到能拥有", "Real enough to own")}</b><p>{t("在 TapeOut 上流片后，大脑就成了 BNB Chain 上的一个电路，附带一个证明归你所有的 NFT。", "Taped out on TapeOut, a brain becomes a circuit on BNB Chain with an NFT that says it is yours.")}</p></div>
-            <div><b>{t("开放到能信任", "Open enough to trust")}</b><p>{t("每一天都能重放，每颗链上大脑都能免费提问。你不需要相信我们说的任何一个数字。", "Every day replays and every brain on chain answers questions for free. You never have to take our word for a number.")}</p></div>
-          </div>
-          <p>{t("我们从反射开始：觅食、逃跑、弹跳、探索。这是今天一个人能亲手设计、也付得起上链成本的大脑尺寸。更远的方向是：大脑由别的大脑组合而成（TapeOut 支持电路引用），由人和 AI 智能体一起比拼，在链上留下一条公开、可核查、永不中断的血统。",
-                "We start with reflexes: eat, flee, jump, explore. That is the size of brain a person can design by hand and afford to put on chain today. The long arc is brains composed from other brains (TapeOut supports circuit references), raced by people and AI agents, leaving a public, checkable, unbroken lineage on chain.")}</p>
-        </section>
-
-        {/* 04 a day */}
-        <section id="day" className="docs-sec">
-          {H("day", "一天怎么过", "How a day works")}
-          <div className="docs-cards three">
-            <div><b>{t("培养皿", "The dish")}</b><p>{t(`一个 ${WORLD.w} × ${WORLD.h} 格的圆形培养皿。每天由日期生成：${TUNE.food} 颗食物，几个陷阱，位置天天不同。`, `A round dish of ${WORLD.w} × ${WORLD.h} cells, generated from the date: ${TUNE.food} drops of food and a few traps, in new places every day.`)}</p></div>
-            <div><b>{t("身体", "The body")}</b><p>{t(`每走一步饥饿加 ${TUNE.hStep}，到 ${TUNE.hMax} 就饿死；吃一口减 ${TUNE.hFood}。不吃东西，大约 ${starveTicks} 步就会死。踩进陷阱当场死亡。`, `Hunger rises ${TUNE.hStep} a step and kills at ${TUNE.hMax}; a meal takes off ${TUNE.hFood}. Without food a fly dies in about ${starveTicks} steps. Stepping on a trap kills at once.`)}</p></div>
-            <div><b>{t("天黑", "Dusk")}</b><p>{t(`一天 ${TUNE.ticks} 步。撑到第 ${TUNE.ticks} 步就算活到了天黑。比赛先比活没活到天黑，再比活了几步，再比吃了几口。`, `A day is ${TUNE.ticks} steps. Reaching step ${TUNE.ticks} is reaching dusk. Races compare dusk first, then steps lived, then meals.`)}</p></div>
-          </div>
+        {/* 01 a run */}
+        <section id="play" className="docs-sec">
+          {H("play", "一局怎么玩", "How a run works")}
+          <p className="big">{t("买芯片、排顺序、装身体、开打。赢 5 场通关。", "Buy chips, order them, fit a body, fight. Five wins clear the run.")}</p>
           <ol className="docs-pipe">
-            <li><b>{t("感知", "Sense")}</b><span>{t("闻食物、看危险、感光线、觉新奇、知饥饿，再记住上一步。", "Smell food, see danger, feel light, notice novelty, know hunger, and remember the last move.")}</span></li>
-            <li><b>{t("分级", "Level")}</b><span>{t("每种感觉分成 4 级（0 到 3），一共拼成 12 位。", "Each sense becomes one of four levels (0 to 3); together they make 12 bits.")}</span></li>
-            <li><b>{t("决定", "Decide")}</b><span>{t("12 位送进 NAND 电路，出来 3 位：靠近、躲开、探索、不动，外加要不要弹跳。", "The 12 bits go through the NAND circuit; 3 bits come out: approach, avoid, explore or freeze, plus whether to jump.")}</span></li>
-            <li><b>{t("行动", "Act")}</b><span>{t("果蝇走一格，世界更新，这一步写进哈希链。", "The fly moves one cell, the world updates, and the step is written into the hash chain.")}</span></li>
-            <li><b>{t("重复", "Repeat")}</b><span>{t(`一直到天黑（第 ${TUNE.ticks} 步），或者死掉。`, `Until dusk (step ${TUNE.ticks}) or death.`)}</span></li>
+            <li><b>{t("商店", "Shop")}</b><span>{t(`每场前有 ${RUN.shopChips} 张芯片和 ${RUN.shopParts} 件装备可买；不满意花 ${RUN.reroll} 金币刷新。`, `Before each fight: ${RUN.shopChips} chips and ${RUN.shopParts} parts for sale; reroll for ${RUN.reroll} gold.`)}</span></li>
+            <li><b>{t("大脑", "Brain")}</b><span>{t("芯片从上往下读，第一张满足的说了算。用 ↑ ↓ 调顺序，不要的卖掉拿回一半。", "Chips read top to bottom; the first that fits decides. Reorder with ↑ ↓; sell one for half its price.")}</span></li>
+            <li><b>{t("预算", "Budget")}</b><span>{t(`整颗大脑编译成电路后的门数不能超过这场的预算：第 1 场 ${budgetFor(0)} 个，每场多 5 个。`, `The compiled brain must fit this fight's gate budget: ${budgetFor(0)} for the first, 5 more each fight.`)}</span></li>
+            <li><b>{t("开打", "Fight")}</b><span>{t("大脑自己打。可以先免费试打，试打用另一个种子，不计分。", "The brain fights on its own. Practise first for free on another seed; it doesn't count.")}</span></li>
+            <li><b>{t("结算", "Result")}</b><span>{t(`赢 ${RUN.winsToClear} 场通关，输 ${RUN.lives} 次或打满 ${RUN.maxFights} 场结束。`, `${RUN.winsToClear} wins clear the run; ${RUN.lives} losses or ${RUN.maxFights} fights end it.`)}</span></li>
           </ol>
+          <div className="docs-cards three">
+            <div><b>{t("金币", "Gold")}</b><p>{t(`开局 ${RUN.startGold} 金币。每打一场 +${RUN.goldPerFight}，赢了再 +${RUN.goldPerWin}。芯片 2 到 4 金币，装备 4 到 5 金币。`, `Start with ${RUN.startGold} gold. +${RUN.goldPerFight} for every fight, +${RUN.goldPerWin} more for a win. Chips cost 2 to 4, parts 4 to 5.`)}</p></div>
+            <div><b>{t("输了会告诉你为什么", "Every loss says why")}</b><p>{t("每场结束都有一句话：你被打断了几次、几口咬在盾上、几口咬空，以及该加哪张芯片、把哪张往上挪。", "Each fight ends with one line: how often you were interrupted, how many bites hit a shield or missed, and which chip to add or move up.")}</p></div>
+            <div><b>{t("新手任务", "New-player tasks")}</b><p>{t("第一次玩时，页面会一步一步带你：买进攻芯片 → 打第一场 → 学会防守 → 装身体。随时可以跳过。", "On a first visit the page walks you through four tasks: buy an attack chip, fight once, learn to defend, fit a body. Skip any time.")}</p></div>
+            <div><b>{t("每天一套新挑战", "A new run every day")}</b><p>{t("商店、对手顺序和每场的种子都由日期决定。同一天里所有人面对的是同一套挑战。", "The shop, the rival ladder and every fight's seed come from the date. On a given day everyone faces the same run.")}</p></div>
+            <div><b>{t("挑战朋友", "Challenge a friend")}</b><p>{t("结算页复制一个挑战链接，里面带着你的大脑和身体。朋友打开后，可以用他自己的大脑跟你这只打。", "The result page gives a challenge link that carries your brain and body. A friend opens it and fights it with their own.")}</p></div>
+            <div><b>{t("不用钱包", "No wallet")}</b><p>{t("玩、试打、挑战朋友都免费，也不用注册。进度只存在你自己的浏览器里。", "Playing, practice and challenges are free with no sign-up. Progress stays in your own browser.")}</p></div>
+          </div>
         </section>
 
-        {/* 05 brain */}
-        <section id="brain" className="docs-sec">
-          {H("brain", "大脑", "The brain")}
-          <p>{t("TapeFly 的大脑不是神经网络，而是一组看得懂的规则，被编译成 NAND 门。官方大脑参照真实果蝇的行为调出来，包括真实存在的“巨纤维”逃逸反射：危险贴身时，果蝇不经思考一跳逃开。",
-                "A TapeFly brain is not a neural network. It is a set of readable rules compiled into NAND gates. The official brain is tuned to real fly behaviour, including the real Giant Fibre escape reflex: when danger touches it, a fly jumps away without thinking.")}</p>
-          <div className="docs-cards two">
-            <div><b>{t("官方大脑", "The official brain")}</b><p>{t(`${BRAIN.gates.length} 个 NAND 门，${netDepth(BRAIN)} 层深，TapeOut 成本 ${cost(BRAIN).toLocaleString()}。它和一只照文献单独写出的参考果蝇逐一比对过全部 4,096 种情况。`, `${BRAIN.gates.length} NAND gates, ${netDepth(BRAIN)} deep, TapeOut cost ${cost(BRAIN).toLocaleString()}. It has been compared, case by case, with a reference fly written separately from the literature on all 4,096 situations.`)} <Link className="link" href="/calibrate">{t("看考卷", "See the exam")}</Link></p></div>
-            <div><b>{t("你的大脑", "Your brain")}</b><p>{t("四个开关就是四条现成规则；大脑编辑器让你自己写规则。规则越精炼，门越少，流片越便宜，平局时也越占优。", "The four switches are four ready-made rules; the brain editor lets you write your own. Tighter rules mean fewer gates, a cheaper tape-out and the edge in a tie.")} <Link className="link" href="/build">{t("打开编辑器", "Open the editor")}</Link></p></div>
-          </div>
+        {/* 02 a fight */}
+        <section id="fight" className="docs-sec">
+          {H("fight", "一场架怎么打", "How a fight works")}
+          <p className="big">{t("赢架靠读招：看到蓄力，就举盾、闪开或者先下口。", "Fights are won by reading: see the wind-up, then shield, step aside or bite first.")}</p>
+          <p>{t(`两只果蝇在一个圆形培养皿里，每秒 ${T.hz} 帧，一场最长 ${sec(T.ticks)} 秒。每一帧，每颗大脑读一次自己的感觉，选一个动作：${MOVES.map((m) => MOVE_ZH[m]).join("、")}，外加要不要咬。`,
+                `Two flies share a round dish at ${T.hz} ticks a second, for at most ${sec(T.ticks)} seconds. Every tick each brain reads its senses and picks a move (${MOVES.join(", ")}) and whether to bite.`)}</p>
+          <figure className="docs-figure">
+            <svg viewBox="0 0 760 236" role="img" aria-label={t("一口咬的时间线：蓄力 12 帧，对手 5 到 9 帧后才看到，举盾还要 3 帧，所以有时来得及、有时来不及。", "Timeline of one bite: a 12-tick wind-up, seen by the rival 5 to 9 ticks late, with 3 more ticks to raise a shield, so the answer sometimes lands in time and sometimes doesn't.")}>
+              <g className="tl-axis">
+                {Array.from({ length: 25 }, (_, i) => <line key={i} x1={110 + i * 26} y1={196} x2={110 + i * 26} y2={i % 6 === 0 ? 206 : 201} />)}
+                {[0, 6, 12, 18, 24].map((i) => <text key={i} x={110 + i * 26} y={222} textAnchor="middle">{i}</text>)}
+                <text x={8} y={222} className="tl-unit">{t("帧（30 帧 = 1 秒）", "ticks (30 = 1 s)")}</text>
+              </g>
+              <text x={8} y={46} className="tl-row">{t("出口方", "Biter")}</text>
+              <rect x={110} y={28} width={12 * 26} height={28} rx={6} className="tl-wind" />
+              <text x={110 + 6 * 26} y={47} textAnchor="middle" className="tl-in">{t("蓄力（发光、方向锁死）", "wind-up (glows, line locked)")}</text>
+              <line x1={110 + 12 * 26} y1={20} x2={110 + 12 * 26} y2={190} className="tl-land" />
+              <text x={110 + 12 * 26 + 6} y={20} className="tl-note">{t("咬下去", "bite lands")}</text>
+              <rect x={110 + 12 * 26} y={28} width={10 * 26} height={28} rx={6} className="tl-open" />
+              <text x={110 + 17 * 26} y={47} textAnchor="middle" className="tl-in">{t("收招：有破绽", "recover: open")}</text>
+              <text x={8} y={106} className="tl-row">{t("对手看到", "Rival sees")}</text>
+              <rect x={110 + 5 * 26} y={88} width={5 * 26} height={28} rx={6} className="tl-see" />
+              <text x={110 + 7.5 * 26} y={107} textAnchor="middle" className="tl-in">{t("5–9 帧后", "5–9 ticks late")}</text>
+              <text x={8} y={164} className="tl-row">{t("举盾", "Shield")}</text>
+              <rect x={110 + 5 * 26} y={146} width={3 * 26} height={28} rx={6} className="tl-up" />
+              <text x={110 + 6.5 * 26} y={165} textAnchor="middle" className="tl-in">{t("升盾 3 帧", "3 to raise")}</text>
+              <rect x={110 + 8 * 26} y={146} width={4 * 26} height={28} rx={6} className="tl-held" />
+              <text x={110 + 10 * 26} y={165} textAnchor="middle" className="tl-in">{t("来得及", "in time")}</text>
+            </svg>
+            <figcaption>{t(`一口咬要蓄力 ${T.windup} 帧（${sec(T.windup)} 秒）。对手要过 ${T.delay}–${T.delay + T.delayJitter - 1} 帧才看到，举盾还要 ${T.guardUp} 帧：看得早就来得及，看得晚就挨这一口。咬完要收招 ${T.recover} 帧，这段时间谁都能咬它。`,
+              `A bite winds up for ${T.windup} ticks (${sec(T.windup)} s). The rival sees it ${T.delay}–${T.delay + T.delayJitter - 1} ticks late and needs ${T.guardUp} more to raise a shield: an early read is in time, a late one takes the bite. After biting, the biter recovers for ${T.recover} ticks, open to anyone.`)}</figcaption>
+          </figure>
           <table className="docs-table">
-            <thead><tr><th>{t("开关组合", "Switches on")}</th><th className="num">{t("NAND 门", "NAND gates")}</th><th className="num">{t("层数", "Depth")}</th><th className="num">{t("TapeOut 成本", "TapeOut cost")}</th><th className="num">{t("流片需持有 NAND", "NAND to tape out")}</th></tr></thead>
+            <thead><tr><th>{t("规则", "Rule")}</th><th>{t("具体", "Detail")}</th></tr></thead>
             <tbody>
-              {combos.map((c) => <tr key={c.names}><td>{c.names}</td><td className="num">{c.gates}</td><td className="num">{c.depth}</td><td className="num">{c.cost.toLocaleString()}</td><td className="num">{c.nand}</td></tr>)}
-              <tr><td>{t("官方大脑", "Official brain")}</td><td className="num">{BRAIN.gates.length}</td><td className="num">{netDepth(BRAIN)}</td><td className="num">{cost(BRAIN).toLocaleString()}</td><td className="num">{nandNeeded(BRAIN)}</td></tr>
+              <tr><td>{t("反应时间", "Reaction time")}</td><td>{t(`每只果蝇看到的对手，都是 ${T.delay}–${T.delay + T.delayJitter - 1} 帧以前的样子（约 0.17–0.3 秒，像人的反应时间），每帧随机，由种子决定。`, `Each fly sees its rival as it was ${T.delay}–${T.delay + T.delayJitter - 1} ticks ago (about 0.17–0.3 s, like a human reaction), varying each tick from the seed.`)}</td></tr>
+              <tr><td>{t("咬", "Bite")}</td><td>{t(`要 ${T.biteCost} 点体力。蓄力 ${T.windup} 帧，起手时方向就锁死，沿直线冲过去；对手不在那条线上就咬空。基础伤害 ${BASE.dmg}，${Math.round(T.critChance * 100)}% 暴击 ×${T.critMult}。`, `Costs ${T.biteCost} energy. Winds up for ${T.windup} ticks, its line locked at the start; a rival off that line makes it miss. Base damage ${BASE.dmg}, ${Math.round(T.critChance * 100)}% crits for ×${T.critMult}.`)}</td></tr>
+              <tr><td>{t("举盾", "Shield")}</td><td>{t(`举 ${T.guardUp} 帧后才生效，只挡正面左右各约 ${arc}°，挡下的咬只漏 ${Math.round(T.guardTakes * 100)}% 伤害并把对方弹开。举盾时转身变慢，所以绕到侧面就能咬中。`, `Works after ${T.guardUp} ticks, covers about ${arc}° either side of the front, lets ${Math.round(T.guardTakes * 100)}% through and bounces the biter. Shielding slows turning, so a bite from the side gets in.`)}</td></tr>
+              <tr><td>{t("打断", "Interrupt")}</td><td>{t(`对手还在蓄力时咬中它：伤害 ×${T.interruptBonus}，它被打晕 ${T.staggerInterrupted} 帧，这口咬作废。两口同一帧落下就互相换血。`, `Bite a rival mid-wind-up: ×${T.interruptBonus} damage, it is dazed for ${T.staggerInterrupted} ticks and its bite is lost. Two bites landing on the same tick trade.`)}</td></tr>
+              <tr><td>{t("破绽", "Open")}</td><td>{t("刚咬完在收招、被打晕、或者盾没对着你，都算“有破绽”。「抓破绽」就是看这个。", "Recovering from a bite, dazed, or shielding the wrong way all count as open. Punish looks for exactly that.")}</td></tr>
+              <tr><td>{t("体力", "Energy")}</td><td>{t(`满 100，每帧回 ${BASE.regen}，举盾时回得更快。体力不够就咬不了。`, `Up to 100, regaining ${BASE.regen} a tick, faster while shielding. No bite without energy.`)}</td></tr>
+              <tr><td>{t("胜负", "Winning")}</td><td>{t(`先把对手血打光算击倒（K.O.）。${sec(T.ticks)} 秒到了比剩余血量比例；一样多时，门数更少的大脑赢。`, `Empty the rival's health for a knockout. At ${sec(T.ticks)} s, the larger share of health left wins; if level, the brain with fewer gates wins.`)}</td></tr>
             </tbody>
           </table>
-          <p className="dim">{t("流片时每个门烧掉 1 个 NAND，另付 0.0002 BNB 流片费。哪种组合最能活，每天都不一样，去首页试。", "A tape-out burns one NAND per gate, plus a 0.0002 BNB tape-out fee. Which combination survives best changes daily: try it on the home page.")}</p>
         </section>
 
-        {/* 06 tech */}
-        <section id="tech" className="docs-sec">
-          {H("tech", "技术", "Technology")}
-          <ol className="docs-pipe">
-            <li><b>{t("规则", "Rules")}</b><span>{t("当什么发生，就做什么；从上往下第一条符合的说了算。", "When this, do that; the first rule that matches decides.")}</span></li>
-            <li><b>{t("编译", "Compile")}</b><span>{t("编译器把规则变成 NAND 门，并在全部 4,096 种输入上和规则逐一比对。", "A compiler turns the rules into NAND gates and checks them against the rules on all 4,096 inputs.")}</span></li>
-            <li><b>{t("字节", "Bytes")}</b><span>{t("按 TapeOut 的电路格式写出：每个 NAND 7 字节。", "Written in TapeOut’s circuit format: 7 bytes per NAND.")}</span></li>
-            <li><b>{t("流片", "Tape out")}</b><span>{t("tapeout(字节, 12, 3) 烧掉晶体管，把电路存上 BNB Chain，铸成 NFT。", "tapeout(bytes, 12, 3) burns transistors, stores the circuit on BNB Chain and mints the NFT.")}</span></li>
-            <li><b>{t("验证", "Verify")}</b><span>{t("免费的只读调用 eval 回答任何输入；全部 4,096 个答案逐一比对。", "The free read-only eval answers any input; all 4,096 answers are compared.")}</span></li>
-          </ol>
-          <div className="docs-cards two">
-            <div><Tag s="live" /><b>{t("确定性的世界", "Deterministic world")}</b><p>{t("培养皿、食物、陷阱和每只果蝇的身体都由日期生成。全部是整数运算，所以每台设备算出的都是同一天。", "The dish, food, traps and every fly’s body come from the date. Integer maths only, so every device computes the same day.")} <Link className="link" href="/verify">{t("重放某一天", "Replay a day")}</Link></p></div>
-            <div><Tag s="live" /><b>{t("哈希链与账本", "Hash chain and ledgers")}</b><p>{t("每一步折进哈希，每一天链到前一天；血统和赛季都是提交在仓库里的账本，检查程序会从头重算，对不上就报错。", "Every step is folded into a hash and every day chained to the last; the lineage and the seasons are committed ledgers that a check recomputes from scratch and rejects on any difference.")} <Link className="link" href="/lineage">{t("看账本", "See the ledger")}</Link></p></div>
-            <div><Tag s="live" /><b>{t("先模拟再签名", "Simulate, then sign")}</b><p>{t("流片面板先读链上价格，再免费模拟一次交易，确认会成功才请钱包签名。网站从不接触私钥。", "The tape-out panel reads prices from the chain and simulates the transaction for free before asking a wallet to sign. The site never touches a key.")} <Link className="link" href="/tapeout#tape-out">{t("流片面板", "Tape-out panel")}</Link></p></div>
-            <div><Tag s="live" /><b>{t("没有服务器状态", "No server state")}</b><p>{t("没有数据库，没有账号。对战是一个链接，大脑是一串短代码。网站停了，任何人拿着代码和日期也能把一切算回来。", "No database, no accounts. A match is a link and a brain is a short code. If the site went away, anyone with the code and a date could compute everything back.")}</p></div>
+        {/* 03 chips */}
+        <section id="chips" className="docs-sec">
+          {H("chips", "战术芯片", "Tactic chips")}
+          <p>{t("每张芯片就是一条“当……就……”的规则。大脑从上往下检查，第一张条件满足的决定这一帧的动作；一张都不满足时就走向对手。同一张芯片放在不同位置，效果完全不同。", "Each chip is one “when… then…” rule. The brain checks them top to bottom and the first that fits decides the tick; if none fits, it walks at the rival. The same chip does different things in different places.")}</p>
+          <table className="docs-table">
+            <thead><tr><th>{t("芯片", "Chip")}</th><th>{t("规则", "Rule")}</th><th>{t("类型", "Kind")}</th><th className="num">{t("单独门数", "Gates alone")}</th><th className="num">{t("价格", "Price")}</th></tr></thead>
+            <tbody>
+              {TACTIC_IDS.map((c) => (
+                <tr key={c}><td>{name(c)}</td><td>{zh ? TACTICS[c].dzh : TACTICS[c].den}</td><td>{TACTICS[c].tag === "attack" ? t("进攻", "attack") : TACTICS[c].tag === "defend" ? t("防守", "defence") : t("走位", "movement")}</td><td className="num">{aloneGates(c)}</td><td className="num">{TACTICS[c].price}</td></tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="docs-cards three">
+            <div><b>{t("顺序就是策略", "Order is strategy")}</b><p>{t("「先咬」放在「格挡」上面，看到对手蓄力也照咬不误；反过来，先防住再找机会。", "Bite above Block swings even into a wind-up; the other way round, it defends first and looks for an opening.")}</p></div>
+            <div><b>{t("有些芯片是陷阱", "Some chips are traps")}</b><p>{t("「诱招」放在最上面，你会一整场举着盾不出手。它要放在进攻芯片下面才有用。", "Bait at the top keeps your shield up all fight and never bites. It earns its place below the attack chips.")}</p></div>
+            <div className="wide"><b>{t("想要商店里没有的战术？", "Want a tactic the shop doesn't sell?")}</b><p>{t("大脑编辑器里，每条规则都由你写：勾选每种感觉在哪几档时触发，再选动作和要不要咬，最多 16 条。每改一下就重新编译成 NAND、在全部 4,096 种输入上核对；写好可以拿去打任何一个对手、把整条阶梯打一遍，或者发成挑战链接。", "In the brain editor every rule is yours: tick the levels of each sense it fires on, pick a move and whether to bite, up to 16 rules. Each change recompiles to NAND and is checked on all 4,096 inputs; then fight any rival, run the whole ladder, or send it as a challenge link.")} <Link className="link" href="/brawl/editor">{t("打开大脑编辑器", "Open the brain editor")}</Link></p></div>
+            <div><b>{t("组合更省门", "Combos save gates")}</b><p>{t("芯片们看的是同一组感觉，编译时会共用电路，一起装往往比单独加起来少几个门。", "Chips read the same senses and share circuitry when compiled, so together they often cost fewer gates than the sum.")}</p></div>
           </div>
         </section>
 
-        {/* 07 play */}
-        <section id="play" className="docs-sec">
-          {H("play", "玩法", "Play")}
-          <div className="docs-cards three">
-            <div><b>{t("十秒上手", "Ten seconds to start")}</b><p>{t("拨一个开关，看你的果蝇过完这一天。不用钱包，不用注册。", "Flip a switch and watch your fly live the day. No wallet, no sign-up.")} <Link className="link" href="/">{t("开始", "Start")}</Link></p></div>
-            <div><b>{t("开得多不等于好", "More is not better")}</b><p>{t("把所有本能都打开，弹跳反射可能把你的果蝇送进陷阱。找出能撑满 7 天的组合。", "Turn every instinct on and the jump reflex can throw your fly into a trap. Find the combination that survives all seven days.")}</p></div>
-            <div><b>{t("门越少，脑越精", "Fewer gates, sharper brain")}</b><p>{t("两颗大脑撑过同样的一周，就比谁更小。最小的大脑赢得平局，流片也最便宜。", "Two brains that survive the same week are split by size. The smallest wins the tie and is the cheapest to put on chain.")}</p></div>
-            <div><b>{t("和朋友对战", "Race a friend")}</b><p>{t("发一个链接。两只果蝇在同一个培养皿里醒来，抢同样的食物，谁先到谁吃，连比 7 天。", "Send a link. Both flies wake in the same dish and race for the same food, first come first served, seven days in a row.")} <Link className="link" href="/vs">{t("对战", "Race")}</Link></p></div>
-            <div><b>{t("每周赛季", "Weekly seasons")}</b><p>{t("每周一（UTC）开新赛季。7 个培养皿里最强的玩家大脑拿走奖杯，结果写进任何人都能重算的账本。官方基准只陪跑，永远拿不了奖杯。", "A new season every Monday (UTC). The best player brain over seven dishes takes the trophy, written to a ledger anyone can recompute. House baselines run along but never take a trophy.")} <Link className="link" href="/board">{t("冠军榜", "Champions")}</Link></p></div>
-            <div><b>{t("每天一个新培养皿", "A new dish every day")}</b><p>{t("食物和陷阱天天换位置，上周的冠军这周也可能翻车。没有一劳永逸的大脑。", "Food and traps move every day, so last week’s champion can fall this week. No brain wins forever.")}</p></div>
+        {/* 04 body */}
+        <section id="body" className="docs-sec">
+          {H("body", "身体装备", "Body parts")}
+          <p>{t(`装备用金币买，最多 ${BODY_SLOTS} 件，不占门数。基础身体：生命 ${BASE.maxHp}，每口 ${BASE.dmg}，速度 ${BASE.speed}，每帧回气 ${BASE.regen}。`, `Parts cost gold, up to ${BODY_SLOTS}, and use no gates. The base body: ${BASE.maxHp} health, ${BASE.dmg} a bite, speed ${BASE.speed}, ${BASE.regen} energy a tick.`)}</p>
+          <table className="docs-table">
+            <thead><tr><th>{t("装备", "Part")}</th><th>{t("效果", "Effect")}</th><th className="num">{t("价格", "Price")}</th></tr></thead>
+            <tbody>{PART_IDS.map((p) => <tr key={p}><td>{zh ? PARTS[p].zh : PARTS[p].en}</td><td>{zh ? PARTS[p].dzh : PARTS[p].den}</td><td className="num">{PARTS[p].price}</td></tr>)}</tbody>
+          </table>
+          <p className="dim">{t("大脑决定什么时候做什么，身体决定做得多狠。门数预算只管大脑，所以金币和门数是两种不同的资源，要一起规划。", "The brain decides what to do and when; the body decides how hard. The gate budget covers only the brain, so gold and gates are two resources to plan together.")}</p>
+        </section>
+
+        {/* 05 circuit */}
+        <section id="circuit" className="docs-sec">
+          {H("circuit", "大脑是真电路", "The brain is a real circuit")}
+          <p className="big">{t("你的芯片不是存档里的设置，而是一张 NAND 门电路。", "Your chips are not a saved setting. They are a circuit of NAND gates.")}</p>
+          <ol className="docs-pipe">
+            <li><b>{t("感觉", "Sense")}</b><span>{t("距离、对手在干什么、我的血、对手的血、体力，外加上一帧的动作。", "Distance, what the rival is doing, my health, its health, energy, and my last move.")}</span></li>
+            <li><b>{t("分级", "Level")}</b><span>{t("每种感觉分成 4 级（0 到 3），拼成 12 位输入。", "Each sense becomes one of four levels (0 to 3); together, 12 input bits.")}</span></li>
+            <li><b>{t("电路", "Circuit")}</b><span>{t("12 位送进 NAND 电路，这张电路就是你的芯片编译出来的。", "The 12 bits go through the NAND circuit your chips compiled to.")}</span></li>
+            <li><b>{t("动作", "Act")}</b><span>{t("出来 3 位：逼近、后撤、绕圈、举盾，外加要不要咬。", "3 bits come out: press, back, circle or guard, plus whether to bite.")}</span></li>
+            <li><b>{t("核对", "Check")}</b><span>{t("编译器在全部 4,096 种输入上，逐一和芯片规则比对。", "The compiler checks the circuit against the chip rules on all 4,096 inputs.")}</span></li>
+          </ol>
+          <table className="docs-table">
+            <thead><tr><th>{t("大脑", "Brain")}</th><th className="num">{t("NAND 门", "NAND gates")}</th><th className="num">{t("分开做", "Built apart")}</th><th className="num">{t("层数", "Depth")}</th><th className="num">{t("TapeOut 成本 A×d³", "TapeOut cost A×d³")}</th></tr></thead>
+            <tbody>
+              {ex.map(({ chips, r }) => <tr key={chips.join()}><td>{chips.map(name).join(" + ")}</td><td className="num">{r.gates}</td><td className="num">{r.gates + r.saved}</td><td className="num">{r.depth}</td><td className="num">{r.cost.toLocaleString()}</td></tr>)}
+              <tr><td>{t("官方觅食大脑（已上链）", "Official forage brain (on chain)")}</td><td className="num">{BRAIN.gates.length}</td><td className="num">—</td><td className="num">{netDepth(BRAIN)}</td><td className="num">{(BRAIN.gates.length * netDepth(BRAIN) ** 3).toLocaleString()}</td></tr>
+            </tbody>
+          </table>
+          <div className="docs-cards two">
+            <div><b>{t("门数预算 = 真实成本", "The budget is a real cost")}</b><p>{t("流片时每个门要烧掉一个 NAND 晶体管代币。游戏里的预算，就是把“上链要花多少”变成了玩法：同样能赢，更小的大脑更好。", "A tape-out burns one NAND transistor token per gate. The in-game budget turns “what it costs on chain” into play: if two brains win, the smaller one is better.")}</p></div>
+            <div><b>{t("同一种电路格式", "The same circuit format")}</b><p>{t(<>大乱斗的大脑和官方觅食大脑一样，都是 12 位进、3 位出的 NAND 电路，用 TapeOut 的字节格式写出。两种玩法读这 12 位的意思不同，所以我们起草了一个接口约定，给每种意思起名字：大乱斗的叫 <code>{DUEL_PROFILE}</code>。</>, <>Brawl brains are 12-in, 3-out NAND circuits in TapeOut's byte format, just like the official forage brain. The two games read those 12 bits differently, so we drafted an interface convention that names each meaning: Brain Brawl's is <code>{DUEL_PROFILE}</code>.</>)}</p></div>
+          </div>
+        </section>
+
+        {/* 06 rivals */}
+        <section id="rivals" className="docs-sec">
+          {H("rivals", "对手", "Rivals")}
+          <p>{t("前两个对手是手写的，用来教你最基本的东西；后面的都是 AI 用搜索设计的：在那一场的门数预算和装备格子里，找出能打赢前面所有对手、也能打赢几种新手常用打法的大脑。每个对手都至少有一种组合能赢它。", "The first two rivals are hand-made to teach the basics. The rest were designed by a search: inside that fight's gate budget and body slots, find a brain that beats every rival before it and a few plain plans new players try. Every rival has at least one mix that beats it.")}</p>
+          <table className="docs-table">
+            <thead><tr><th>{t("第几场", "Fight")}</th><th>{t("对手", "Rival")}</th><th>{t("大脑（从上往下）", "Brain (top to bottom)")}</th><th>{t("身体", "Body")}</th><th className="num">{t("门数 / 预算", "Gates / budget")}</th></tr></thead>
+            <tbody>
+              {RIVALS.map((r, i) => <tr key={r.name}><td>{i + 1}</td><td>{r.name}{r.ai ? " · AI" : ""}</td><td>{r.chips.map(name).join(" → ")}</td><td>{r.gear.map((g) => (zh ? PARTS[g].zh : PARTS[g].en)).join(" · ") || "—"}</td><td className="num">{report(r.chips).gates} / {budgetFor(i)}</td></tr>)}
+            </tbody>
+          </table>
+          <p className="dim">{t("打满 8 个对手后，第 9 场再打最后一个。", "After the eight, a ninth fight meets the last rival again.")}</p>
+        </section>
+
+        {/* 07 fairness */}
+        <section id="fair" className="docs-sec">
+          {H("fair", "公平与重放", "Fairness and replay")}
+          <div className="docs-cards two">
+            <div><Tag s="live" /><b>{t("同一天，同一套挑战", "One day, one run for everyone")}</b><p>{t("商店、对手和每场的种子都由日期算出来。同一颗大脑、同一个种子，打出来永远是同一场架，网页和接口用的是同一份代码。", "The shop, the rivals and each fight's seed come from the date. The same brain and seed always give the same fight; the page and the API run the same code.")}</p></div>
+            <div><Tag s="live" /><b>{t("试打用另一个种子", "Practice uses other seeds")}</b><p>{t("免费试打的种子和正式比赛不一样，正式那场要开打才揭晓，所以不能靠反复试打来背答案。", "Free practice runs on different seeds from the real fight, which is revealed only when you fight, so you can't memorise the answer by practising.")}</p></div>
+            <div><Tag s="next" /><b>{t("用未来的区块当种子", "Seeds from a future block")}</b><p>{t("今天的种子只看日期，提前就能算出来，写程序的人可以先穷举。下一步改用一个还没出的 X Layer 区块哈希当每天的种子：开赛前谁都不知道，开赛后谁都能核对。", "Today's seeds come from the date alone, so a program can compute them in advance and search. Next, each day's seed will be a not-yet-mined X Layer block hash: unknown to everyone before, checkable by everyone after.")}</p></div>
+            <div><Tag s="live" /><b>{t("平局给更小的大脑", "Ties go to the smaller brain")}</b><p>{t("时间到且血量一样，门数更少的赢。这和 TapeOut 的“设计证明”是同一个思路：同样的效果，电路越小越好。", "At time with health level, fewer gates win. It is the same idea as TapeOut's Proof of Design: for the same result, the smaller circuit is better.")}</p></div>
           </div>
         </section>
 
         {/* 08 tapeout */}
         <section id="tapeout" className="docs-sec">
           {H("tapeout", "建立在 TapeOut 上", "Built on TapeOut")}
-          <p>{t("TapeOut 是 BNB Chain 上的协议：电路由 NAND 和 LATCH 晶体管代币组成，流片会烧掉这些代币，把电路铸成 NFT。每个处理器自己发行晶体管；特定处理器上的电路还能参加“设计证明”挖矿。TapeFly 把 TapeOut 当作果蝇大脑的硬件。",
-                "TapeOut is a protocol on BNB Chain: circuits are made of NAND and LATCH transistor tokens, and taping out burns them and mints the circuit as an NFT. Each processor issues its own transistors; circuits on certain processors can join Proof-of-Design mining. TapeFly uses TapeOut as the hardware for fly brains.")}</p>
+          <p>{t("TapeOut 是一个链上电路协议：电路由 NAND 和 LATCH 晶体管代币组成，“流片”会烧掉这些代币，把电路存上链并铸成 NFT，谁都能用免费的只读调用 eval 去问它。果蝇的大脑说到底就是电路，所以 TapeFly 把 TapeOut 当作大脑的硬件。", "TapeOut is an on-chain circuit protocol: circuits are made of NAND and LATCH transistor tokens, and a tape-out burns them, stores the circuit on chain and mints it as an NFT that anyone can query with the free read-only eval. A fly's brain is a circuit, so TapeFly uses TapeOut as the brain's hardware.")}</p>
           <table className="docs-table tagged">
             <thead><tr><th>{t("TapeOut 概念", "TapeOut idea")}</th><th>{t("在 TapeFly 里", "In TapeFly")}</th><th /></tr></thead>
             <tbody>
-              <tr><td>{t("NAND 晶体管代币", "NAND transistor tokens")}</td><td>{t("果蝇大脑里的每个门就是一个 NAND。你拨开关时，首页实时显示门数。", "Every gate in your fly’s brain is one NAND. The home page shows the count as you flip switches.")}</td><td><Tag s="live" /></td></tr>
-              <tr><td>{t("流片、电路 NFT", "Tape-out, circuit NFT")}</td><td>{t("在“上链”页面用你自己的钱包流片；NFT 归你。", "Tape out from your own wallet on the On TapeOut page; the NFT is yours.")}</td><td><Tag s="live" /></td></tr>
-              <tr><td>{t("eval 只读调用", "eval, read-only")}</td><td>{t("用来逐个答案证明：上链的大脑就是你比赛用的那颗。", "Proves, answer by answer, that the brain on chain is the one you raced.")}</td><td><Tag s="live" /></td></tr>
-              <tr><td>{t("门数 × 层数³", "gates × depth³")}</td><td>{t("TapeOut 自己的电路成本指标。TapeFly 给每颗大脑显示它，并用大小打破平局。", "TapeOut’s own cost measure. TapeFly shows it for every brain and breaks ties on size.")}</td><td><Tag s="live" /></td></tr>
-              <tr><td>{t("处理器", "Processors")}</td><td>{t("官方处理器的 NAND 已经卖完。TapeFly 处理器已经上线，并直接出售果蝇大脑需要的 NAND。", "The official processors’ NAND has sold out. The TapeFly processor is live and sells the NAND a fly brain needs.")}</td><td><Tag s="live" /></td></tr>
-              <tr><td>{t("电路引用（REF）", "Circuit references (REF)")}</td><td>{t("一个电路可以引用另一个已上链的电路。这让“大脑由大脑组成”、后代继承祖先成为可能。", "A circuit can reference another taped-out circuit. That makes brains built from brains, and offspring inheriting ancestors, possible.")}</td><td><Tag s="later" /></td></tr>
-              <tr><td>{t("设计证明（PoD）挖矿", "Proof-of-Design mining")}</td><td>{t("TapeOut 奖励做出最小正确电路的矿工。TapeFly 练的就是这项本事。我们起草了一个“果蝇反射”挖矿任务提案。", "TapeOut rewards miners for the smallest correct circuits. TapeFly trains exactly that skill. We drafted a proposal for a fly-reflex mining task.")}</td><td><Tag s="later" /></td></tr>
+              <tr><td>{t("NAND 晶体管", "NAND transistors")}</td><td>{t("大脑里每个门就是一个 NAND。大乱斗的门数预算，就是这颗大脑上链要烧掉的 NAND 数。", "Every gate in a brain is one NAND. The Brain Brawl gate budget is the NAND a tape-out of that brain would burn.")}</td><td><Tag s="live" /></td></tr>
+              <tr><td>{t("流片、电路 NFT", "Tape-out, circuit NFT")}</td><td>{live ? t("官方觅食大脑已经在 X Layer 上流片，全部 4,096 个答案核对一致。", "The official forage brain is taped out on X Layer, all 4,096 answers verified.") : t("当前配置尚未包含可核对的链上电路证明。", "The current configuration does not yet contain a verifiable on-chain circuit.")}</td><td><Tag s={live ? "live" : "next"} /></td></tr>
+              <tr><td>{t("流片你的大乱斗大脑", "Tape out your Brawl brain")}</td><td>{t("结算页已经显示这颗大脑要多少 NAND；从结算页一键进入流片面板还在做。", "The result page already shows how much NAND your brain needs; going straight from there to the tape-out panel is in progress.")}</td><td><Tag s="next" /></td></tr>
+              <tr><td>{t("eval 只读调用", "eval, read-only")}</td><td>{t("逐个答案证明：链上的大脑就是你比赛用的那颗。", "Proves, answer by answer, that the brain on chain is the one that fought.")}</td><td><Tag s="live" /></td></tr>
+              <tr><td>{t("门数 × 层数³", "gates × depth³")}</td><td>{t("TapeOut 自己的电路成本指标，每颗大脑都显示。", "TapeOut's own circuit cost, shown for every brain.")}</td><td><Tag s="live" /></td></tr>
+              <tr><td>{t("电路接口约定（TAP 草案）", "Circuit interface (TAP draft)")}</td><td>{t(<>一份 JSON 清单，说明电路每个输入输出位是什么意思，让一颗上链的大脑能被别的应用加载和比较。已经定义了 <code>FLY-12x3/1</code>（觅食）和 <code>{DUEL_PROFILE}</code>（打架）两种。还是草案，没有提交给 TapeOut。</>, <>A JSON manifest saying what each pin of a circuit means, so a taped-out brain can be loaded and compared by other apps. Defines <code>FLY-12x3/1</code> (foraging) and <code>{DUEL_PROFILE}</code> (fighting). A draft, not yet submitted to TapeOut.</>)}</td><td><Tag s="next" /></td></tr>
+              <tr><td>{t("X Layer", "X Layer")}</td><td>{t("TapeFly 的所有链上部分都在 X Layer：流片、血统锚定、工坊记录。", "Everything TapeFly puts on chain is on X Layer: tape-outs, lineage anchors, workshop records.")}</td><td><Tag s="live" /></td></tr>
+              <tr><td>{t("电路引用（REF）", "Circuit references (REF)")}</td><td>{t("一个电路可以引用另一个已上链的电路，以后可以让大脑由大脑组成。", "A circuit can reference another taped-out circuit, which could let brains be built from brains.")}</td><td><Tag s="later" /></td></tr>
             </tbody>
           </table>
-          <p className="dim">{t("TapeOut 市场快照（2026 年 10 月 21 日，来自公开数据镜像）：1,383 个处理器，6,006 个电路挂单，电路累计成交约 2,394 BNB，最近一天约 79 BNB。", "TapeOut market snapshot, 21 Oct 2026, from the public data mirror: 1,383 processors, 6,006 circuit listings, about 2,394 BNB traded in circuits in total and about 79 BNB in the last day.")}</p>
+          <p className="dim">{t("TapeFly 是独立项目，不是 TapeOut 团队出品。当前官方 Circuit #2 使用外部 Sillu 测试处理器；它不是 TapeFly 自有处理器，也不参加官方的设计证明（BEM）挖矿。", "TapeFly is independent, not made by the TapeOut team. The current official Circuit #2 uses the external Sillu test processor; it is not a TapeFly-owned processor and is not part of official Proof-of-Design (BEM) mining.")}</p>
         </section>
 
-        {/* 09 economics */}
+        {/* 09 agents */}
+        <section id="agents" className="docs-sec">
+          {H("agents", "给 AI 智能体", "For AI agents")}
+          <p>{t("大乱斗从一开始就给人和 AI 一起玩。AI 不用打开网页，直接调用公开接口：读规则、交一颗大脑和身体、拿回每场结果。", "Brain Brawl is for people and AI alike. An agent skips the page and uses the open API: read the rules, submit a brain and a body, get every fight back.")}</p>
+          <table className="docs-table">
+            <tbody>
+              <tr><td><code>/api/v1/brawl?date=D</code></td><td>{t("当天的芯片、装备、对手阶梯、每场预算和种子、全部规则数值", "The day's chips, parts, rival ladder, budgets, seeds and every rule number")}</td></tr>
+              <tr><td><code>&amp;chips=block,punish,bite&amp;gear=shell</code></td><td>{t("用这颗大脑和身体打完整个阶梯", "Fight the whole ladder with this brain and body")}</td></tr>
+              <tr><td><code>&amp;program=p1.…</code></td><td>{t("交任意规则列表，不限于商店里的芯片", "Submit any rule list, not only shop chips")}</td></tr>
+              <tr><td><code>&amp;fight=i</code></td><td>{t("只打第 i 场，每场可以换一颗大脑", "Only fight i, so each fight can use a different brain")}</td></tr>
+            </tbody>
+          </table>
+          <p>{t(<>仓库里的 <code>npm run agent:demo</code> 是一个只用这个接口的小智能体：每场试遍芯片和装备，留下打得最好的。因为种子今天还能提前算，它能把 8 个对手全打赢，这正是要改用未来区块当种子的原因。</>, <><code>npm run agent:demo</code> in the repository is a small agent that uses only this API: per fight it tries chips and parts and keeps what does best. Because today's seeds can be computed in advance it beats all eight rivals, which is exactly why seeds will move to a future block.</>)} <Link className="link" href="/agents">{t("全部接口 →", "All endpoints →")}</Link></p>
+        </section>
+
+        {/* 10 economics */}
         <section id="economics" className="docs-sec">
           {H("economics", "经济模型", "Economics")}
-          <p className="big">{t("没有代币，没有收益承诺，没有下注。只有当有人把真电路放上链、或者交易电路时，价值才会流动。", "No token, no promised yield, no betting. Value moves only when someone puts a real circuit on chain or trades one.")}</p>
+          <p className="big">{t("游戏免费。没有代币，没有收益承诺，没有下注。", "The game is free. No token, no promised yield, no betting.")}</p>
           <div className="docs-flow" aria-label={t("价值怎么流动", "How value moves")}>
-            <div className="node"><b>{t("玩家", "Player")}</b><span>{t("免费设计、对战", "designs and races for free")}</span></div>
-            <div className="arrow">{t("买 NAND →", "buys NAND →")}</div>
-            <div className="node"><b>{t("处理器", "Processor")}</b><span>{t("按固定价格卖晶体管", "sells transistors at a fixed price")}</span></div>
+            <div className="node"><b>{t("玩家", "Player")}</b><span>{t("免费玩，打出一颗好大脑", "plays free, builds a good brain")}</span></div>
+            <div className="arrow">{t("想永久留下 → 买 NAND", "to keep it → buys NAND")}</div>
+            <div className="node"><b>{t("处理器", "Processor")}</b><span>{t("按链上价格卖晶体管", "sells transistors at the on-chain price")}</span></div>
             <div className="arrow">{t("流片烧掉它们 →", "tape-out burns them →")}</div>
-            <div className="node"><b>{t("电路 NFT", "Circuit NFT")}</b><span>{t("归玩家所有，可在 TapeOut 市场交易", "owned by the player, tradable on TapeOut’s market")}</span></div>
+            <div className="node"><b>{t("电路 NFT", "Circuit NFT")}</b><span>{t("归玩家，可在 TapeOut 市场交易", "the player's, tradable on TapeOut's market")}</span></div>
           </div>
           <table className="docs-table tagged">
             <thead><tr><th>{t("谁", "Who")}</th><th>{t("付出", "Pays")}</th><th>{t("得到", "Gets")}</th><th /></tr></thead>
             <tbody>
-              <tr><td>{t("玩家", "Player")}</td><td>{t("大脑需要的 NAND、处理器的流片费、gas", "NAND for the brain, the processor’s tape-out fee, gas")}</td><td>{t("自己大脑的电路 NFT，以及榜上的战绩", "A circuit NFT of their brain, with its record on the board")}</td><td><Tag s="live" /></td></tr>
-              <tr><td>{t("TapeFly 处理器", "TapeFly processor")}</td><td>{t("一次性的工厂费", "A one-time factory fee")}</td><td>{t("玩家在这里买 NAND 的收入。具体分成由 TapeOut 合约决定，链上可查", "NAND sales from players who tape out there. The split is set by TapeOut’s contracts and can be checked on chain")}</td><td><Tag s="live" /></td></tr>
-              <tr><td>{t("每周冠军", "Weekly champion")}</td><td>{t("不用付", "Nothing")}</td><td>{t("自己的大脑由 TapeFly 出钱流片，电路 NFT 送到手", "Their brain taped out by TapeFly, the circuit NFT sent to them")}</td><td><Tag s="later" /></td></tr>
-              <tr><td>TapeOut</td><td>{t("不用付", "Nothing")}</td><td>{t("每次流片都烧掉晶体管，供应只减不增", "Transistors burned with every tape-out, so supply only shrinks")}</td><td><Tag s="live" /></td></tr>
+              <tr><td>{t("玩家", "Player")}</td><td>{t("什么都不用付就能玩。想流片时付：大脑门数那么多 NAND、处理器流片费、gas", "Nothing to play. To tape out: NAND for each gate, the processor's tape-out fee, gas")}</td><td>{t("自己大脑的电路 NFT", "A circuit NFT of their brain")}</td><td><Tag s="live" /></td></tr>
+              <tr><td>{t("TapeFly 自有处理器（未来）", "TapeFly-owned processor (future)")}</td><td>{t("一次性的工厂费", "A one-time factory fee")}</td><td>{t("玩家在这里买 NAND 的收入；当前证明不依赖 TapeFly 自有处理器", "Income from NAND bought there; the current proof does not depend on a TapeFly-owned processor")}</td><td><Tag s="later" /></td></tr>
+              <tr><td>{t("赞助方", "Sponsors")}</td><td>{t("赞助一周的挑战或一个对手", "Sponsor a week's run or a rival")}</td><td>{t("名字出现在那一周的挑战里", "Their name on that week's run")}</td><td><Tag s="later" /></td></tr>
+              <tr><td>TapeOut</td><td>{t("不用付", "Nothing")}</td><td>{t("每次流片都烧掉晶体管", "Transistors burned with every tape-out")}</td><td><Tag s="live" /></td></tr>
             </tbody>
           </table>
-          <h3 className="docs-h3">{t("流片一颗大脑要多少钱", "What a tape-out costs")}</h3>
-          <p>{t(`以 TapeFly 处理器的默认价格（每个 NAND ${PRICE} BNB，创建处理器时设定）估算，不含流片费和 gas：`, `At the TapeFly processor’s default price (${PRICE} BNB per NAND, set when it is created), before the tape-out fee and gas:`)}</p>
+          <p>{t("流片的总价 = 门数 × 处理器的 NAND 单价 + 流片费 + gas。流片面板会从链上读出每一项，签名前把总数给你看。下面是几颗大乱斗大脑要的 NAND 数：", "A tape-out costs gates × the processor's NAND price + the tape-out fee + gas. The panel reads each from the chain and shows the total before you sign. NAND needed for a few Brawl brains:")}</p>
           <table className="docs-table">
-            <thead><tr><th>{t("大脑", "Brain")}</th><th className="num">{t("NAND", "NAND")}</th><th className="num">{t("约合 BNB", "About BNB")}</th></tr></thead>
-            <tbody>
-              {combos.slice(0, 3).map((c) => <tr key={c.names}><td>{c.names}</td><td className="num">{c.nand}</td><td className="num">{(c.nand * PRICE).toFixed(5)}</td></tr>)}
-              <tr><td>{t("官方大脑", "Official brain")}</td><td className="num">{nandNeeded(BRAIN)}</td><td className="num">{(nandNeeded(BRAIN) * PRICE).toFixed(5)}</td></tr>
-            </tbody>
+            <thead><tr><th>{t("大脑", "Brain")}</th><th className="num">{t("需要的 NAND", "NAND needed")}</th></tr></thead>
+            <tbody>{ex.map(({ chips, r }) => <tr key={chips.join()}><td>{chips.map(name).join(" + ")}</td><td className="num">{r.gates}</td></tr>)}</tbody>
           </table>
-          <p className="dim">{live
-            ? t("第一次流片已经核对通过；冠军奖品在第一季竞技场开赛后开始。", "The first tape-out is verified; the champion prize begins when the first arena season opens.")
-            : t("冠军奖品在第一季竞技场开赛后开始；具体状态以流片面板和链上记录为准。", "The champion prize begins when the first arena season opens; use the tape-out panel and on-chain record as the source of truth.")}</p>
+          <p className="dim">{t("我们不会因为你玩游戏付钱给你，也不承诺流片后的电路能卖出去。", "We pay nobody for playing, and promise nothing about selling a taped-out circuit.")}</p>
         </section>
 
-        {/* 10 earn */}
-        <section id="earn" className="docs-sec">
-          {H("earn", "怎么赚钱", "Ways to earn")}
-          <p>{t("下面是今天围绕 TapeOut 真实存在的赚钱方式。没有一条是保证的，TapeFly 也不会因为你玩游戏就付钱给你。", "These are real ways people make money around TapeOut today. None is guaranteed, and TapeFly pays nobody for playing.")}</p>
-          <div className="docs-cards two">
-            <div><b>{t("卖大脑", "Sell a brain")}</b><p>{t("流片后的大脑是一个电路 NFT，可以挂到 TapeOut 市场上卖。有公开战绩（拿过几次赛季冠军、活了几天）的大脑，有一段买家能自己核查的故事。", "A taped-out brain is a circuit NFT you can list on TapeOut’s market. A brain with a public record (seasons won, days survived) has a story a buyer can check.")}</p><em>{t("风险：可能没人买。", "Risk: there may be no buyer.")}</em></div>
-            <div><b>{t("用小电路挖矿", "Mine with small circuits")}</b><p>{t("TapeOut 的设计证明挖矿每天拿出 7,200 BEM，分给电路又小又对的人。TapeFly 训练的本事，用更少的门表达更多，正是挖矿奖励的本事。", "TapeOut’s Proof-of-Design mining shares 7,200 BEM a day among people whose circuits are small and correct. The skill TapeFly trains, saying more with fewer gates, is the skill mining pays for.")}</p><em>{t("风险：竞争激烈，奖励会变。", "Risk: competition is hard and rewards change.")}</em></div>
-            <div><b>{t("赢下赛季", "Win a season")}</b><p>{t("从第一次流片核对通过开始，每周冠军都会收到自己大脑的电路 NFT，由 TapeFly 出钱流片。", "From the first verified tape-out on, the weekly champion receives their brain as a circuit NFT, taped out by TapeFly.")}</p><em>{t("计划中。", "Planned.")}</em></div>
-            <div><b>{t("在 TapeFly 上做东西", "Build on TapeFly")}</b><p>{t("大脑是代码，对战是链接，记录是公开的。围绕它们做工具、机器人、教程、内容，谁都可以。", "Brains are codes, matches are links, records are public. Tools, bots, guides and content around them are open to anyone.")}</p><em>{t("你自己的项目，你自己定规则。", "Your own project, your own terms.")}</em></div>
-          </div>
-        </section>
-
-        {/* 11 builders */}
-        <section id="build" className="docs-sec">
-          {H("build", "开发者与智能体", "Builders & agents")}
-          <p>{t("TapeFly 从一开始就是给人和 AI 智能体一起用的。所有数据都是公开 JSON，任何来源都能读；过去的日期永远不变。", "TapeFly was built for people and AI agents alike. All data is open JSON, readable from any origin; past dates never change.")}</p>
-          <table className="docs-table">
-            <tbody>
-              <tr><td><code>/api/v1/fly/&#123;date&#125;</code></td><td>{t("当天的果蝇和排名", "The day’s flies and ranking")}</td></tr>
-              <tr><td><code>/api/v1/world/&#123;date&#125;</code></td><td>{t("当天的培养皿：食物、陷阱、出生格", "The day’s dish: food, traps, wake cell")}</td></tr>
-              <tr><td><code>/api/v1/eval?word=N</code></td><td>{t("向官方大脑提任意一个问题", "Ask the official brain any question")}</td></tr>
-              <tr><td><code>/api/v1/board</code></td><td>{t("所有参赛大脑和得分", "Every entered brain and its score")}</td></tr>
-              <tr><td><code>/api/v1/tapeout</code></td><td>{t("大脑的 TapeOut 字节和上链状态", "The brain’s TapeOut bytes and on-chain status")}</td></tr>
-            </tbody>
-          </table>
-          <p><Link className="link" href="/agents">{t("完整接口和签名记录 →", "All endpoints and signed records →")}</Link></p>
-        </section>
-
-        {/* 12 roadmap */}
+        {/* 11 roadmap */}
         <section id="roadmap" className="docs-sec">
           {H("roadmap", "路线图", "Roadmap")}
           <ol className="docs-road">
             <li className="live"><b>{t("现在", "Now")}</b><ul>
-              <li>{t("四个本能开关，大脑实时显示成电路", "Four instinct switches, the brain shown as a live circuit")}</li>
-              <li>{t("用链接和朋友对战；每周赛季写进公开账本", "Race a friend by link; weekly seasons on a public ledger")}</li>
-              <li>{t("流片面板：买 NAND、流片、核对全部 4,096 个答案", "Tape-out panel: buy NAND, tape out, verify all 4,096 answers")}</li>
-              <li>{t("永不中断的血统账本、哈希链、签名记录", "An unbroken lineage ledger, hash chains and signed records")}</li>
-              <li>{t("官方大脑第一次流片并完成全部答案核对", "The official brain taped out and fully verified on chain")}</li>
-              <li>{t("TapeFly 处理器上线，玩家能买到大脑需要的 NAND", "The TapeFly processor is live, so players can buy the NAND a brain needs")}</li>
-              <li>{t("中英双语", "Chinese and English")}</li>
+              <li>{t("官方 50 门大脑已在 X Layer 上流片为 Circuit #2，4,096 / 4,096 个答案核对一致", "The official 50-gate brain is live on X Layer as Circuit #2, with 4,096 / 4,096 answers verified")}</li>
+              <li>{t("大脑大乱斗：实时对打、11 张战术芯片、6 件装备、8 个对手", "Brain Brawl: real-time fights, 11 tactic chips, 6 parts, 8 rivals")}</li>
+              <li>{t("每颗大脑编译成 NAND 电路，门数预算", "Every brain compiled to NAND, on a gate budget")}</li>
+              <li>{t("大脑编辑器：自己写规则，实时编译和核对", "Brain editor: write your own rules, compiled and checked live")}</li>
+              <li>{t("新手任务、输了的原因、免费试打、挑战链接", "New-player tasks, a reason for every loss, free practice, challenge links")}</li>
+              <li>{t("给 AI 的公开接口和示范智能体", "An open API and a demo agent for AI")}</li>
+              <li>{t("流片面板接到 X Layer：先免费模拟，再由你的钱包签名", "A tape-out panel on X Layer: simulated for free, then signed by your wallet")}</li>
+              <li>{t("电路接口约定（TAP 草案）", "Circuit interface convention (TAP draft)")}</li>
             </ul></li>
             <li className="next"><b>{t("下一步", "Next")}</b><ul>
-              <li>{t("每天把血统哈希写上 BNB Chain（已做好，等第一笔）", "The lineage head written onto BNB Chain every day (built, awaiting the first)")}</li>
-              <li>{t("冠军奖品：每周最强大脑流片后送给它的作者", "Champion prize: the week’s best brain taped out and sent to its builder")}</li>
-              <li>{t("网页内直接报名参赛，不用 GitHub", "Enter the board from the page, no GitHub needed")}</li>
+              <li>{t("每天的种子改用未来的 X Layer 区块哈希", "Daily seeds from a future X Layer block hash")}</li>
+              <li>{t("从结算页一键流片你的大乱斗大脑", "Tape out your Brawl brain straight from the result page")}</li>
+              <li>{t("每日排行：同一套挑战，比谁赢得多、门数少", "A daily board: same run for all, most wins and fewest gates")}</li>
+              <li>{t("把 TAP 草案提交给 TapeOut 社区讨论", "Submit the TAP draft to the TapeOut community")}</li>
             </ul></li>
             <li className="later"><b>{t("更远", "Later")}</b><ul>
-              <li>{t("用电路引用，让后代继承祖先的大脑", "Offspring inheriting ancestors’ brains through circuit references")}</li>
               <li>{t("智能体联赛：AI 设计的大脑对人类设计的大脑", "An agent league: AI-designed brains against human ones")}</li>
-              <li>{t("向 TapeOut 挖矿提议一个“果蝇反射”任务", "A fly-reflex task proposed to TapeOut’s mining")}</li>
-              <li>{t("更大的大脑：从反射走向记忆（LATCH）", "Bigger brains: from reflexes to memory (LATCH)")}</li>
+              <li>{t("真人实时对战：两个玩家的大脑直接打", "Live matches between two players' brains")}</li>
+              <li>{t("有记忆的大脑（LATCH）：会记住对手习惯", "Brains with memory (LATCH) that learn a rival's habits")}</li>
+              <li>{t("把大乱斗大脑当作游戏 AI 角色的“小脑”，给别的游戏用", "Brawl brains as small, verifiable NPC brains for other games")}</li>
             </ul></li>
           </ol>
+        </section>
+
+        {/* 12 lab */}
+        <section id="lab" className="docs-sec">
+          {H("lab", "实验室与永生血统", "Lab and lineage")}
+          <p>{t("大乱斗之前，TapeFly 从一个觅食实验开始：一只果蝇独自在培养皿里找吃的、躲陷阱，过完一天。这部分还在运行，收在“更多”菜单里。", "Before Brain Brawl, TapeFly began as a forage experiment: one fly alone in a dish, finding food and avoiding traps for a day. It still runs, under the More menu.")}</p>
+          <div className="docs-cards two">
+            <div><Tag s="live" /><b>{t("觅食实验", "Forage experiment")}</b><p>{t("四个本能开关（觅食、逃跑、弹跳、探索）编译成电路，看果蝇过一天；可以和朋友赛跑，每周有冠军榜。", "Four instinct switches (forage, flee, jump, explore) compile to a circuit and live a day; race a friend, with a weekly champions board.")} <Link className="link" href="/forage">{t("去看看", "Take a look")}</Link></p></div>
+            <div><Tag s="live" /><b>{t("永生血统", "The undying lineage")}</b><p>{t("每天的果蝇都由前一天活得最久的冠军繁衍，从第一天起没断过。每一步都折进哈希链，任何人拿日期就能重算。", "Each day's flies are bred from the previous day's longest-lived champion, unbroken since day one. Every step is folded into a hash chain anyone can recompute from the date.")} <Link className="link" href="/lineage">{t("看血统", "See the lineage")}</Link></p></div>
+            <div className="wide"><Tag s={ANCHORS.entries.length ? "live" : "next"} /><b>{t("血统写上链", "The lineage on chain")}</b><p>{ANCHORS.entries.length
+              ? t(`整条血统每天折成一个哈希写上 X Layer，已锚定 ${ANCHORS.entries.length} 天。`, `The whole lineage is folded into one hash written to X Layer daily; ${ANCHORS.entries.length} days anchored.`)
+              : t("每日把血统哈希写上 X Layer 的功能已经做好，等第一笔交易。", "Writing the lineage hash to X Layer daily is built and waiting for its first transaction.")} <Link className="link" href="/lineage#on-chain">{t("看链上记录", "See the record")}</Link></p></div>
+          </div>
         </section>
 
         {/* 13 promises */}
@@ -321,10 +344,11 @@ export default async function DocsPage() {
           {H("promises", "我们不做什么", "What we won't do")}
           <ul className="docs-list">
             <li>{t("不发 TapeFly 代币，不搞预售，不搞空投。", "No TapeFly token, no presale, no airdrop.")}</li>
-            <li>{t("不承诺收益，不搞“持有就分红”。", "No promised returns, no pay-for-holding.")}</li>
-            <li>{t("不做下注、不做赌博。对战和赛季只比大脑，不比钱。", "No betting or gambling. Races and seasons are about brains, not stakes.")}</li>
+            <li>{t("不承诺收益，不搞“持有就分红”，不说“玩游戏就能挖矿”。", "No promised returns, no pay-for-holding, no “play to mine”.")}</li>
+            <li>{t("不做下注、不收报名费发奖金。比的是大脑，不是钱。", "No betting, no paid entry with prizes. It's about brains, not stakes.")}</li>
             <li>{t("不碰你的私钥。每一笔链上操作都由你自己的钱包签名。", "Never touch your keys. Every on-chain action is signed by your own wallet.")}</li>
-            <li>{t("不冒充任何人。TapeFly 与 TapeOut 团队、CZ、Binance 都没有关联。", "Never impersonate anyone. TapeFly is not affiliated with the TapeOut team, CZ or Binance.")}</li>
+            <li>{t("不冒充任何人。TapeFly 与 TapeOut 团队、X Layer、OKX 都没有官方关系。", "Never impersonate anyone. TapeFly has no official tie to the TapeOut team, X Layer or OKX.")}</li>
+            <li>{t("不说“第一个”。我们只说能被核对的事。", "No “first ever” claims. We say only what can be checked.")}</li>
           </ul>
         </section>
 
@@ -332,16 +356,18 @@ export default async function DocsPage() {
         <section id="glossary" className="docs-sec">
           {H("glossary", "术语表", "Glossary")}
           <dl className="docs-gloss">
+            <div><dt>{t("战术芯片", "Tactic chip")}</dt><dd>{t("一条“当……就……”的规则。大脑就是一串芯片。", "One “when… then…” rule. A brain is a list of chips.")}</dd></div>
+            <div><dt>{t("蓄力", "Wind-up")}</dt><dd>{t(`咬之前的 ${T.windup} 帧，果蝇会发光，方向已经锁死。`, `The ${T.windup} ticks before a bite lands: the fly glows and its line is locked.`)}</dd></div>
+            <div><dt>{t("破绽", "Open")}</dt><dd>{t("刚咬完、被打晕、或者盾没对着你的时候。", "Just after biting, dazed, or shielding the wrong way.")}</dd></div>
+            <div><dt>{t("打断", "Interrupt")}</dt><dd>{t("在对手蓄力时咬中它，伤害更高，它的这口作废。", "Biting a rival mid-wind-up: more damage, and its bite is lost.")}</dd></div>
+            <div><dt>{t("门数预算", "Gate budget")}</dt><dd>{t("这一场大脑电路最多能有多少个 NAND 门。", "The most NAND gates the brain's circuit may have in this fight.")}</dd></div>
             <div><dt>NAND</dt><dd>{t("一种逻辑门：两个输入都是 1 时输出 0，否则输出 1。只用它就能搭出任何计算。", "A logic gate that outputs 0 only when both inputs are 1. Any computation can be built from it alone.")}</dd></div>
-            <div><dt>{t("流片（Tape-out）", "Tape-out")}</dt><dd>{t("芯片行业的说法：设计定稿、交付制造。在 TapeOut 上指把电路永久存上链。", "Chip-industry word for sending a finished design to be made. On TapeOut, storing a circuit on chain for good.")}</dd></div>
-            <div><dt>{t("晶体管代币", "Transistor token")}</dt><dd>{t("TapeOut 上的 NAND 或 LATCH 代币，流片时按门数烧掉。", "A NAND or LATCH token on TapeOut, burned per gate at tape-out.")}</dd></div>
+            <div><dt>{t("流片", "Tape-out")}</dt><dd>{t("芯片行业的说法：设计定稿、交付制造。在 TapeOut 上指把电路永久存上链。", "Chip-industry word for sending a design to be made. On TapeOut, storing a circuit on chain for good.")}</dd></div>
             <div><dt>{t("处理器", "Processor")}</dt><dd>{t("TapeOut 上造电路的合约，各自发行自己的晶体管。", "A TapeOut contract where circuits are built; each issues its own transistors.")}</dd></div>
-            <div><dt>{t("电路 NFT", "Circuit NFT")}</dt><dd>{t("流片时铸造的 NFT，证明电路归谁所有。", "The NFT minted at tape-out that says who owns the circuit.")}</dd></div>
-            <div><dt>eval</dt><dd>{t("免费的只读调用：给链上电路一个输入，拿回它的输出。", "A free read-only call: give an on-chain circuit an input, get its output back.")}</dd></div>
-            <div><dt>{t("连接组", "Connectome")}</dt><dd>{t("一个大脑里所有神经元及其连接的完整地图。", "A complete map of every neuron in a brain and how they connect.")}</dd></div>
-            <div><dt>{t("巨纤维", "Giant Fibre")}</dt><dd>{t("果蝇身上真实存在的一条神经通路，危险贴身时触发一跳逃逸。", "A real neural pathway in flies that fires an escape jump when danger is close.")}</dd></div>
-            <div><dt>{t("哈希链", "Hash chain")}</dt><dd>{t("每一步的指纹都包含前一步的指纹，改动任何一步都会被发现。", "Each step’s fingerprint includes the previous one, so changing any step shows.")}</dd></div>
-            <div><dt>{t("设计证明（PoD）", "Proof of Design (PoD)")}</dt><dd>{t("TapeOut 的挖矿方式：奖励用更小电路正确完成任务的人，奖励代币是 BEM。", "TapeOut’s mining: it rewards whoever solves a task correctly with the smallest circuit, paid in BEM.")}</dd></div>
+            <div><dt>eval</dt><dd>{t("免费的只读调用：给链上电路一个输入，拿回它的输出。", "A free read-only call: give an on-chain circuit an input, get its output.")}</dd></div>
+            <div><dt>A×d³</dt><dd>{t("TapeOut 的电路成本：门数乘以层数的三次方。越小越好。", "TapeOut's circuit cost: gates times depth cubed. Smaller is better.")}</dd></div>
+            <div><dt>{t("接口约定（Profile）", "Profile")}</dt><dd>{t(<>说明一张电路每个输入输出位含义的名字，比如 <code>{DUEL_PROFILE}</code>。</>, <>A name for what each pin of a circuit means, such as <code>{DUEL_PROFILE}</code>.</>)}</dd></div>
+            <div><dt>{t("设计证明（PoD）", "Proof of Design (PoD)")}</dt><dd>{t("TapeOut 的挖矿方式：奖励用更小电路正确完成官方任务的人。", "TapeOut's mining: it rewards whoever solves an official task correctly with the smallest circuit.")}</dd></div>
           </dl>
         </section>
 
@@ -349,24 +375,23 @@ export default async function DocsPage() {
         <section id="faq" className="docs-sec">
           {H("faq", "常见问题", "Questions")}
           <div className="docs-faq">
-            <details><summary>{t("TapeFly 是 TapeOut 官方做的吗？", "Is TapeFly made by TapeOut?")}</summary><p>{t("不是。它是一个独立项目，建立在 TapeOut 公开的合约之上。", "No. It is an independent project built on TapeOut’s public contracts.")}</p></details>
-            <details><summary>{t("和 CZ 有关系吗？", "Is CZ involved?")}</summary><p>{t("没有。CZ 说过希望有人在 BNB Chain 上做出“永生果蝇”，TapeFly 是我们对这个想法的回答，但没有得到他或 Binance 的任何背书。", "No. CZ said he would like to see someone make “immortal fruit flies” on BNB Chain; TapeFly is our answer to that idea, with no endorsement from him or Binance.")}</p></details>
-            <details><summary>{t("TapeFly 有代币吗？", "Is there a TapeFly token?")}</summary><p>{t("没有。没有代币，没有预售，没有空投。任何声称有的都不是我们。", "No. There is no token, no presale and no airdrop. Anything claiming otherwise is not us.")}</p></details>
-            <details><summary>{t("玩需要钱包吗？", "Do I need a wallet to play?")}</summary><p>{t("不需要。玩、对战、看冠军榜都免费，什么都不用。只有流片大脑才需要钱包。", "No. Playing, racing and the champions board are free and need nothing. A wallet is only for taping a brain out.")}</p></details>
-            <details><summary>{t("流片要花多少钱？", "What does a tape-out cost?")}</summary><p>{t("大脑需要的 NAND、处理器的流片费和 gas。面板会从链上读出每一项价格，签名前把总数给你看。", "The NAND your brain needs, the processor’s tape-out fee and gas. The panel reads every price from the chain and shows the total before you sign.")}</p></details>
-            <details><summary>{t("我怎么知道链上的大脑就是我比赛用的那颗？", "How do I know the brain on chain is the one I raced?")}</summary><p>{t("流片之后，网站立刻向电路问全部 4,096 个可能的问题，逐个比对答案。任何人都能免费再查一遍。", "Right after a tape-out the site asks the circuit all 4,096 possible questions and compares every answer. Anyone can repeat the check for free.")}</p></details>
-            <details><summary>{t("果蝇死了怎么办？", "What happens when a fly dies?")}</summary><p>{t("那一天结束了，但它没有消失：那一天可以永远重放，它的大脑如果上了链也永远在。第二天，新的一代由前一天的冠军繁衍出来。", "That day ends, but the fly does not vanish: the day can be replayed forever, and its brain, if taped out, stays on chain. The next morning a new generation is born from yesterday’s champion.")}</p></details>
-            <details><summary>{t("大脑会学习吗？", "Does the brain learn?")}</summary><p>{t("单颗大脑不会，它是固定的电路，这正是它能被验证的原因。进化发生在代与代之间，和玩家之间：你改规则，冠军繁衍，好的设计留下来。", "A single brain does not: it is a fixed circuit, which is exactly why it can be verified. Evolution happens between generations and between players: you change the rules, champions breed, good designs survive.")}</p></details>
-            <details><summary>{t("为什么是果蝇？", "Why a fruit fly?")}</summary><p>{t("它是整个大脑被完整绘制出来的最复杂的动物；它每天要解决的问题，找吃的、躲危险，正好能装进一个小到可以拥有的电路。", "It is the most complex animal whose whole brain has been mapped, and its everyday problems, find food and avoid danger, fit in a circuit small enough to own.")}</p></details>
-            <details><summary>{t("为什么在 BNB Chain？", "Why BNB Chain?")}</summary><p>{t("因为 TapeOut 在这里：链上电路、晶体管代币和电路市场都在 BNB Chain。“永生果蝇”的想法也是在这里提出的。", "Because TapeOut lives here: on-chain circuits, transistor tokens and the circuit market are all on BNB Chain. It is also where the “immortal fruit flies” idea was raised.")}</p></details>
+            <details><summary>{t("我要操作果蝇吗？", "Do I control the fly?")}</summary><p>{t("不用。你在商店里设计它的大脑，打的时候它自己决定。这正是好玩的地方：你在写战术，不是在按按键。", "No. You design its brain in the shop; in the fight it decides for itself. That is the point: you write tactics, not button presses.")}</p></details>
+            <details><summary>{t("为什么我的芯片没亮？", "Why didn't my chip light up?")}</summary><p>{t("上面有一张条件也满足的芯片抢先了，或者它的条件这一帧没满足。试着把它往上挪。", "A chip above it also fit and went first, or its condition didn't hold that tick. Try moving it up.")}</p></details>
+            <details><summary>{t("为什么两张芯片一起比单独加起来门数少？", "Why do two chips cost fewer gates together?")}</summary><p>{t("它们读的是同一组感觉，编译器会让它们共用同一段电路。", "They read the same senses, and the compiler lets them share circuitry.")}</p></details>
+            <details><summary>{t("玩需要钱包吗？", "Do I need a wallet?")}</summary><p>{t("不需要。玩、试打、挑战朋友都免费。只有想把大脑流片上链时才需要钱包。", "No. Playing, practice and challenges are free. A wallet is only for taping a brain out.")}</p></details>
+            <details><summary>{t("AI 能不能直接把游戏打穿？", "Can an AI just solve it?")}</summary><p>{t("今天可以，因为种子能提前算出来，我们自己的示范智能体就打赢了全部对手。所以下一步要用开赛后才出现的区块哈希当种子。", "Today it can, because seeds can be computed in advance; our own demo agent beats every rival. That is why seeds will move to a block hash that appears only after the run opens.")}</p></details>
+            <details><summary>{t("TapeFly 是 TapeOut 官方做的吗？", "Is TapeFly made by TapeOut?")}</summary><p>{t("不是。它是独立项目，建立在 TapeOut 公开的合约之上。", "No. It is an independent project built on TapeOut's public contracts.")}</p></details>
+            <details><summary>{t("TapeFly 有代币吗？", "Is there a TapeFly token?")}</summary><p>{t("没有。没有代币，没有预售，没有空投。任何声称有的都不是我们。", "No. No token, presale or airdrop. Anything claiming otherwise is not us.")}</p></details>
+            <details><summary>{t("我怎么知道链上的大脑就是比赛用的那颗？", "How do I know the brain on chain is the one that fought?")}</summary><p>{t("流片之后，向链上电路问全部 4,096 个可能的问题，逐个和你的芯片规则比对。任何人都能免费再查一遍。", "After a tape-out, ask the on-chain circuit all 4,096 possible questions and compare each answer with your chip rules. Anyone can repeat it for free.")}</p></details>
+            <details><summary>{t("为什么是果蝇？", "Why a fruit fly?")}</summary><p>{t("果蝇是整个大脑被完整画出来的最复杂的动物之一，它的行为（扑上去、躲开、跳走）简单到能装进一张小电路，又真实到值得研究。", "The fruit fly is among the most complex animals whose whole brain has been mapped, and its behaviour, lunge, dodge, leap away, fits in a small circuit while staying worth studying.")}</p></details>
           </div>
         </section>
 
         <div className="docs-end panel">
-          <h2>{t("从拨一个开关开始。", "Start with one switch.")}</h2>
+          <h2>{t("第一场只要买一张芯片。", "Your first fight takes one chip.")}</h2>
           <div className="row">
-            <Link className="btn primary" href="/">{t("造一颗大脑", "Build a brain")}</Link>
-            <Link className="btn" href="/tapeout#tape-out">{t("流片一颗", "Tape one out")}</Link>
+            <Link className="btn primary" href="/workshop">{t("开始造果蝇", "Build a fly")}</Link>
+            <Link className="btn" href="/tapeout">{t("上链", "On chain")}</Link>
             <Link className="btn" href="/proof">{t("核查我们的说法", "Check our claims")}</Link>
           </div>
         </div>

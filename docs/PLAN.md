@@ -111,18 +111,18 @@ The owner posts them from their GitHub account.
 - /tapeout has a working tape-out panel: connect wallet, buy NAND, simulate then tape out, verify all 4,096 answers via multicall (sim/onchain.ts).
 - eval inputs are now packed bit-wise (bit 0 of byte 0 = first pin), per the public format notes; the old one-byte-per-bit guess is kept as evalInputBytesPerBit.
 - /tapeout/processor creates the TapeFly processor from the operator's wallet (factory createCPU). After it exists, put its address in config/tapeout.json → tapeflyProcessor.
-- Done: the official brain is live as circuit #1 on the TapeFly processor, with all 4,096 answers and stored bytes verified on chain.
+- X Layer tape-out is live: official 50-gate brain, external Sillu processor `0x99081e1D0CE916Cd5b2c53e769DFC3B000BFE9A4`, Circuit #2, transaction `0xa7ad0fd9b85e3290fbfe7d78dfba5c0ccc177d1723b3a9f6f18a1a87c937d5cd`, all 4,096 answers and stored bytes verified.
 - Open: read on chain where NAND sale money goes for the TapeFly processor before announcing it; champion prize.
 
 ## 2026-10-21 · Chinese by default
 
 - Every page is bilingual. Chinese is the default; the EN / 中文 button in the nav sets a `tapefly.lang` cookie (app/i18n). Server pages use `serverT()`, client components `useLang()`.
 - Lesson text lives in app/play/levels-zh.ts. Not translated yet: share-card images (/api/og need a CJK font), the official rule sentences from sim/rules shown on /calibrate, and API JSON.
-- /docs rewritten to 15 sections, opening with "Why now" (fly connectomes 2024 and Sep 2026; CZ's "immortal fruit flies" post of 15 Sep 2026) and "Immortal flies: how TapeFly does it". States plainly that TapeFly is not affiliated with or endorsed by CZ, Binance, YZi Labs or TapeOut.
+- /docs rewritten to 15 sections, opening with "Why now" (fly connectomes 2024 and Sep 2026; CZ's "immortal fruit flies" post of 15 Sep 2026) and "Immortal flies: how TapeFly does it". States plainly that TapeFly is not affiliated with or endorsed by anyone it mentions, including TapeOut.
 
-## 2026-10-21 · Memory on BNB Chain
+## 2026-10-21 · Memory on chain (X Layer)
 
-- sim/anchor.ts: the lineage head folds every day from the epoch (each champion's body, life and sealed step hash) into one hash. An anchor is a zero-value self-send on BNB Chain whose data is `TAPEFLY-ANCHOR/1 <date> <head>`.
+- sim/anchor.ts: the lineage head folds every day from the epoch (each champion's body, life and sealed step hash) into one hash. An anchor is a zero-value self-send on X Layer whose data is `TAPEFLY-ANCHOR/1 <date> <head>`.
 - anchors/anchors.json records them; `npm run anchor -- --check` recomputes every head (part of `npm run check`), `--chain` also reads the transactions.
 - Two ways to anchor: /lineage/anchor from the operator's wallet (prints the entry to add), or the daily workflow if the ANCHOR_PRIVATE_KEY repository secret is set.
 - /lineage shows the anchors with an in-browser "check on chain"; /docs counts it as the fifth point of "immortal".
@@ -130,7 +130,7 @@ The owner posts them from their GitHub account.
 ## 2026-10-21 · Economic model v2 (decided, not built)
 
 Genesis fly NFT → mining points → token, in three stages. Supersedes "no token for now".
-1. Genesis flies: 2,026, about 0.02–0.03 BNB each (NAND priced ~0.0015 BNB on the TapeFly processor); each with a random body genome; adopt = design brain → buy NAND → tape out → certificate page.
+1. Genesis flies: 2,026, price in OKB to be decided (NAND priced on the TapeFly processor on X Layer); each with a random body genome; adopt = design brain → buy NAND → tape out → certificate page.
 2. Points: daily survival and meals, weekly season ranks, fewer-gates bonus; public and replayable; not tradable.
 3. Token: points convert at launch; sinks = breeding (new NFT), brain upgrades, special tournaments.
 Rules: say "play to earn points", never yields, prices or dividends. /docs, FAQ and the promo pack still say "no token" and must change before the sale.

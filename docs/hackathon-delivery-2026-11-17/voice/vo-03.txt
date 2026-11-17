@@ -1,0 +1,1 @@
+The fly searches for sugar, avoids walls, and escapes a spider on its own. The world runs on deterministic physics, so the same design in the same world always produces the same run. If two players see the same challenge, they can reproduce exactly the same result.

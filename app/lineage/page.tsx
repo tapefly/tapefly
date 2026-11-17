@@ -74,10 +74,10 @@ export default async function LineagePage() {
         </div>
 
         <div className="panel" id="on-chain">
-          <h2>{t("刻在 BNB Chain 上的记忆", "Memory written on BNB Chain")}</h2>
+          <h2>{t("刻在 X Layer 上的记忆", "Memory written on X Layer")}</h2>
           <p>
-            {t("每天，从第一天到前一天的整条血统，所有冠军的身体、寿命和每一步的哈希，会被折成一个“血统哈希”，用一笔普通交易写上 BNB Chain。写上去就改不了。下面每一行都能在你的浏览器里核对：读出链上交易，和本页从日期算出来的哈希比对。",
-               "Every day, the whole lineage from the first day to the day before, every champion’s body, life and the hash of every step, is folded into one lineage head and written onto BNB Chain in an ordinary transaction. Once written, it cannot change. Each row below can be checked in your browser: read the transaction and compare it with the head this page computed from the dates.")}
+            {t("每天，从第一天到前一天的整条血统，所有冠军的身体、寿命和每一步的哈希，会被折成一个“血统哈希”，用一笔普通交易写上 X Layer。写上去就改不了。下面每一行都能在你的浏览器里核对：读出链上交易，和本页从日期算出来的哈希比对。",
+               "Every day, the whole lineage from the first day to the day before, every champion’s body, life and the hash of every step, is folded into one lineage head and written onto X Layer in an ordinary transaction. Once written, it cannot change. Each row below can be checked in your browser: read the transaction and compare it with the head this page computed from the dates.")}
           </p>
           <div style={{ marginTop: 12 }}>
             <AnchorList anchors={ANCHORS.entries} heads={Object.fromEntries(ANCHORS.entries.map((a) => [a.date, headOn(a.date)]))} />

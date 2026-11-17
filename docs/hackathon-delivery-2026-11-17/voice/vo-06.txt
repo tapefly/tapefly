@@ -1,0 +1,1 @@
+The official fifty gate brain is live on X Layer as Circuit number two. Its three hundred fifty bytes are stored on chain through an external TapeOut test processor. Anyone can call the free read only eval function and compare every answer. You do not need to trust our dashboard. You can verify the circuit yourself.

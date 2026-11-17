@@ -45,7 +45,8 @@ test("a window recomputes from its founding genome", () => {
   const from = addDays(through, -13);
   let founding = foundingOn(from);
   for (const date of daysBetween(from, through)) {
-    const row = LEDGER.days.find((d) => d.d === date)!;
+    const row = ledgerDay(date);
+    assert.ok(row, `${date} must be available from the committed or computed ledger`);
     const day = runDay(date, founding);
     assert.deepEqual(day, row, `${date} diverged`);
     founding = nextFounding(day);

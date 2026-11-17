@@ -1,7 +1,8 @@
 # Deploying TapeFly
 
 TapeFly is a plain Next.js app. It has no database, no accounts and no required secrets: every
-page is computed from the date and from files committed in this repository.
+page is computed from the date and from files committed in this repository, except the
+workshop gallery (see below), which keeps published designs in one append-only file.
 
 ## Run it on your machine
 
@@ -62,8 +63,21 @@ supported as an alternate host but is not the production deployment.
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | recommended in production | Public address used by share cards and the sitemap |
 | `PORT` | optional | Port for `npm start` (default 3000) |
+| `WORKSHOP_DATA_DIR` | recommended in production | Where the workshop keeps published designs and verified X Layer records (`designs.jsonl`, `chain.jsonl`). Default `./.data/workshop`. Put it outside the release folder so a redeploy keeps it, and back it up. |
+| `XLAYER_RPC` | optional | X Layer RPC the server uses to read back a player's record transaction. Default: viem's public X Layer endpoint. |
 
 No private key belongs in this repository or its environment. The tape-out step uses the
 owner's own wallet outside the app. The optional daily anchor workflow reads a dedicated
 `ANCHOR_PRIVATE_KEY` from GitHub Actions secrets; without it, the workflow still advances the
 ledger and skips the transaction.
+
+## The workshop gallery
+
+Published designs (`/workshop/gallery`, `/workshop/d/:id`) live in `$WORKSHOP_DATA_DIR/designs.jsonl`,
+one JSON line per design. The server never trusts a player's numbers: on publish it decodes the
+design, re-runs it through the level and stores only what it measured. The file is append-only
+and the app is a single process, so writes never interleave; copy the directory to back it up.
+
+A player may also record a design on X Layer from their own wallet (a zero-value transaction to
+themselves carrying `TAPEFLY-WORKSHOP/1 …`). The server reads that transaction back over
+`XLAYER_RPC`, checks it byte for byte, and only then lists it in `chain.jsonl`. No key is held here.

@@ -19,7 +19,7 @@ the implementation smaller and clearer.
 - Do not change a past day, certificate, season or lineage row to make a test pass.
 - Do not weaken exhaustive checks to accept a circuit that is wrong on one input.
 - Keep the official brain's 12-input, 3-output interface and committed bytes stable.
-- Keep X Layer and BNB Chain claims separate. A planned integration is not a live one.
+- Keep on-chain claims exact. A planned integration is not a live one.
 - Do not add betting, yield, price promises or token mechanics without an explicit product decision.
 
 ## Development
@@ -44,7 +44,7 @@ npm run build
 ```
 
 `npm run check` runs that full local sequence. `npm run judge:check` also checks
-the live Circuit #1 against all 4,096 inputs.
+the live X Layer Circuit #2 against all 4,096 inputs.
 
 ## Brain submissions
 

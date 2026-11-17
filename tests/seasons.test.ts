@@ -18,7 +18,7 @@ test("every brain hatches with a stable name of its own", () => {
 });
 
 test("a tape-out record must be well formed, and makes an entry official", () => {
-  const good = { chain: "bsc", processor: "0x" + "ab".repeat(20), circuitId: "4246" };
+  const good = { chain: "xlayer", processor: "0x" + "ab".repeat(20), circuitId: "4246" };
   assert.deepEqual(validateTapeout(good), good);
   assert.throws(() => validateTapeout({ ...good, processor: "0x12" }));
   assert.throws(() => validateTapeout({ ...good, circuitId: "abc" }));

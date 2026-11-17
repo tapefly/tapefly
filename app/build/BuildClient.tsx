@@ -110,9 +110,9 @@ export default function BuildClient({ today }: { today: string }) {
       <section className="build-left">
         <div className="build-head">
           <h1>{t("大脑编辑器", "Brain editor")}</h1>
-          <p>{t(<>首页的四个开关就是四条现成的规则。在这里你可以自己写规则：<b>当</b>果蝇感觉到什么，<b>就</b>做什么，从上往下逐条检查。你加的每条规则都会变成 NAND 门，所以更聪明的大脑往往更小，流片也更便宜。</>,
+          <p>{t(<>觅食实验的四个开关就是四条现成的规则。在这里你可以自己写规则：<b>当</b>果蝇感觉到什么，<b>就</b>做什么，从上往下逐条检查。你加的每条规则都会变成 NAND 门，所以更聪明的大脑往往更小，流片也更便宜。</>,
                 <>The four switches on the home page are four ready-made rules. Here you write the rules yourself: <b>when</b> the fly senses this, <b>do</b> that, checked top to bottom. Every rule you add becomes NAND gates, so a sharper brain is often a smaller one, and cheaper to tape out.</>)}</p>
-          <p className="dim">{t("大多数玩家用首页开关就够了。这里是给想精确控制的人，和设计大脑的 AI 用的。", "Most players never need this page. It is for people who want exact control, and for AI agents that design brains.")}</p>
+          <p className="dim">{t("大多数玩家用觅食实验的开关就够了。这里是给想精确控制的人，和设计大脑的 AI 用的。", "Most players never need this page. It is for people who want exact control, and for AI agents that design brains.")}</p>
           <div className="row">
             <input className="name-field" placeholder={t(`给果蝇起个名（现在叫：${defaultFlyName(code)}）`, `Name your fly (now: ${defaultFlyName(code)})`)} maxLength={40} value={name}
               onChange={(e) => { setName(e.target.value); try { localStorage.setItem("tapefly.name", e.target.value); } catch {} }} />

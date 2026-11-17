@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { evalInputBytes } from "../sim/tapeout";
 import { decodeAnswer, nandNeeded } from "../sim/onchain";
 import { BRAIN, evalWord } from "../sim/netlist";
+import config from "../config/tapeout.json";
 
 test("eval inputs are packed bit-wise, first pin in bit 0 of byte 0", () => {
   assert.equal(evalInputBytes(0, 12), "0x0000");
@@ -23,4 +24,14 @@ test("eval answers decode packed or one byte per output", () => {
 
 test("a tape-out burns one NAND per gate (TAP-02 §6)", () => {
   assert.equal(nandNeeded(BRAIN), BRAIN.gates.length);
+});
+
+test("the public proof config names the verified X Layer circuit", () => {
+  assert.equal(config.status, "live");
+  assert.equal(config.chain, "xlayer");
+  assert.equal(config.chainId, 196);
+  assert.equal(config.processor, "0x99081e1D0CE916Cd5b2c53e769DFC3B000BFE9A4");
+  assert.equal(config.circuitId, 2);
+  assert.equal(config.txHash, "0xa7ad0fd9b85e3290fbfe7d78dfba5c0ccc177d1723b3a9f6f18a1a87c937d5cd");
+  assert.equal(config.tapedOutAt, "2026-11-14");
 });

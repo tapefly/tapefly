@@ -1,0 +1,94 @@
+[
+  {
+    "name": "Cyd",
+    "chips": [
+      "breathe",
+      "block",
+      "flank",
+      "bite"
+    ],
+    "gear": [
+      "shell"
+    ],
+    "gates": 21,
+    "budget": 26
+  },
+  {
+    "name": "Dex",
+    "chips": [
+      "punish",
+      "block",
+      "bite",
+      "flank",
+      "kite"
+    ],
+    "gear": [
+      "lungs"
+    ],
+    "gates": 30,
+    "budget": 31
+  },
+  {
+    "name": "Eve",
+    "chips": [
+      "punish",
+      "block",
+      "bite"
+    ],
+    "gear": [
+      "lungs",
+      "shell"
+    ],
+    "gates": 22,
+    "budget": 36
+  },
+  {
+    "name": "Fox",
+    "chips": [
+      "punish",
+      "block",
+      "berserk",
+      "finisher",
+      "bite",
+      "kite"
+    ],
+    "gear": [
+      "lungs",
+      "spines"
+    ],
+    "gates": 32,
+    "budget": 41
+  },
+  {
+    "name": "Gus",
+    "chips": [
+      "breathe",
+      "block",
+      "finisher",
+      "bite"
+    ],
+    "gear": [
+      "shell",
+      "spines",
+      "jaws"
+    ],
+    "gates": 21,
+    "budget": 46
+  },
+  {
+    "name": "Hal",
+    "chips": [
+      "block",
+      "breathe",
+      "finisher",
+      "bite"
+    ],
+    "gear": [
+      "shell",
+      "jaws",
+      "venom"
+    ],
+    "gates": 21,
+    "budget": 51
+  }
+]

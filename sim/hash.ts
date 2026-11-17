@@ -19,9 +19,8 @@ const K = new Uint32Array([
 ]);
 const rotr = (x: number, n: number) => ((x >>> n) | (x << (32 - n))) >>> 0;
 
-/** SHA-256 over the UTF-8 bytes of `message`, lowercase hex. */
-export function sha256Hex(message: string): string {
-  const bytes = new TextEncoder().encode(message);
+/** SHA-256 over raw bytes, lowercase hex. */
+export function sha256BytesHex(bytes: Uint8Array): string {
   const bitLen = bytes.length * 8;
   const padded = new Uint8Array((((bytes.length + 9) >> 6) + 1) << 6);
   padded.set(bytes);
@@ -54,6 +53,11 @@ export function sha256Hex(message: string): string {
   let out = "";
   for (const word of h) out += word.toString(16).padStart(8, "0");
   return out;
+}
+
+/** SHA-256 over the UTF-8 bytes of `message`, lowercase hex. */
+export function sha256Hex(message: string): string {
+  return sha256BytesHex(new TextEncoder().encode(message));
 }
 
 /** Canonical JSON: key order cannot change a hash. */

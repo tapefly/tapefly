@@ -1,0 +1,5 @@
+37528ee80b8fc5511d8f452b60603550b48a510a6fe043578f50001f90d2adc4  media/tapefly-demo-en-3min-16x9.mp4
+f3c00530d5d023d1b842c8b4d6cb011d07d22f255d2227cefa2d7f4b8c307ccd  media/tapefly-demo-en-3min-9x16.mp4
+d9039f60458b07ad711cde5af1745b6510637b09ef7ee8564f1da29aedaee32c  media/tapefly-demo-en-3min-poster.jpg
+3e19ae8277b36c9c5d99b890b7e5d8986a3b405f040c4217115e6f7edc0ad49b  captions/tapefly-demo-en-3min.srt
+7235af5c65932040655dd3636d8729c49d15a74e1fdb5ebbf0ccdcbdd3f6d056  captions/tapefly-demo-bilingual-3min.srt

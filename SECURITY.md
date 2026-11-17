@@ -33,7 +33,7 @@ In scope:
 Out of scope:
 
 - the TapeOut contracts themselves;
-- BNB Chain, X Layer, wallets and RPC providers;
+- X Layer, wallets and RPC providers;
 - social engineering or denial-of-service attacks against third parties.
 
 ## Safe testing

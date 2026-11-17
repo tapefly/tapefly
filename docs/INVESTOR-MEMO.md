@@ -24,8 +24,8 @@ network for games, humans and AI agents.
    X Layer hackathon, then continued shipping the product after the event.
 2. **The product already exists.** The game, compiler, deterministic replay,
    complete truth table, API and on-chain verifier are built.
-3. **The central claim is live on chain.** The official brain is TapeOut circuit
-   `#1`; its bytes and all 4,096 answers match the public source.
+3. **The central claim is live on chain.** The official brain is X Layer Circuit
+   `#2`; its bytes and all 4,096 answers match the public source.
 4. **The unit is unusually small.** A 12-input, 3-output, 50-gate brain can be
    tested completely instead of sampled.
 5. **There are two entry markets.** The product gives consumers a reason to enter
@@ -47,11 +47,11 @@ them.
 | --- | --- |
 | Product | Live at [tapefly.xyz](https://tapefly.xyz) |
 | Official brain | `FFW-NAND/1`, 50 NAND gates, depth 9 |
-| Deployment | TapeOut circuit `#1` on the TapeFly processor |
+| Deployment | X Layer circuit `#2` on the external Sillu test processor |
 | Behavior | `4,096 / 4,096` on-chain answers identical |
 | Bytes | Exact match to the committed 350-byte netlist |
 | Source | MIT licensed, public GitHub repository |
-| Quality | 95 tests, green CI, green CodeQL |
+| Quality | 160 tests, green CI, green CodeQL |
 | Dependencies | Zero npm audit advisories |
 | Reproduction | `npm run judge:check` |
 
@@ -141,10 +141,10 @@ TapeFly returns value to the ecosystem through:
 - external brains, competitions and public behavior data;
 - an API through which agents enter the same world.
 
-X Layer is the next distribution and product milestone. The current product is
-already live and TapeOut-verifiable. The Xccelerate build is designed for X Layer,
-and X Layer is not claimed as live before a processor, circuit ID, transaction and
-exhaustive verification exist publicly.
+X Layer is the current on-chain deployment. The official brain is live as Circuit
+#2 with a public processor, transaction, matching bytes and exhaustive
+verification. The next product milestone is expanding distribution and the
+human/AI behavior arena on top of that live primitive.
 
 ## Business model
 
@@ -197,8 +197,8 @@ and on-chain verification.
 
 ### 2. A human/AI behavior arena
 
-Next: X Layer circuit, public block seed, external brains, champion tape-outs and
-one free competitive environment.
+Next: public X Layer block seed, external brains, champion tape-outs and one free
+competitive environment.
 
 ### 3. Composable behavior
 

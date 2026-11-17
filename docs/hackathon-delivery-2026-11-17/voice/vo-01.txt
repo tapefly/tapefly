@@ -1,0 +1,1 @@
+Most game characters are black boxes. You can see what they do, but not why they do it. TapeFly starts with a different promise: the whole decision layer should be visible, replayable, and provable.

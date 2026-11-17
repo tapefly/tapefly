@@ -1,0 +1,12 @@
+{
+  "build": "TapeFly itch.io HTML5",
+  "platform": "itch.io",
+  "verification": "Static game-only build. No site navigation, wallet, chain, publishing or telemetry routes.",
+  "files": [
+    "assets",
+    "favicon.svg",
+    "game.css",
+    "game.js",
+    "index.html"
+  ]
+}

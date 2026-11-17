@@ -1,6 +1,10 @@
 # TapeFly — 3-minute demo
 
-**Recorded demo:** <https://tapefly.xyz/tapefly-demo.mp4>
+**Recorded demo:** <https://tapefly.xyz/tapefly-demo-en.mp4>
+
+The final English cut is two minutes fifty seconds. Its voiceover, bilingual
+subtitle files and production notes are under
+`docs/hackathon-delivery-2026-11-17/`.
 
 **Duration:** 1 minute 58 seconds. The Xccelerate limit is three minutes.
 
@@ -43,14 +47,9 @@ Open `/vs` and `/board`.
 
 ### 1:25–2:00 — The proof
 
-> This is not a promise about future verification. The official brain is already taped out on TapeOut as circuit number one. The committed netlist is 350 bytes. The site asks the on-chain circuit all 4,096 possible questions, and every answer matches. Anyone can run the same free read-only check.
+> The brain is 350 bytes of NAND gates, and every one of its 4,096 possible answers is checked against its rules. Taped out on X Layer through TapeOut, the same check runs against the chain: the site asks the on-chain circuit all 4,096 questions with a free read-only call. Anyone can repeat it.
 
-Open `/tapeout`. Show:
-
-- processor `0x6Ac12D578e29D340f178E18eB2C297C7915E011C`;
-- circuit `#1`;
-- `4,096 / 4,096`;
-- tape-out transaction `0x573cdc5e1a4bd30dddbb174c53408eea6a0da806b1154e4b0f81fc8c216cb14b`.
+Open `/tapeout`. Show the X Layer panel, the 350-byte netlist and its SHA-256. After the official tape-out on X Layer, also show the processor, the circuit id, `4,096 / 4,096` and the tape-out transaction.
 
 ### 2:00–2:25 — Why TapeFly
 
@@ -60,7 +59,7 @@ Show the 64×64 exam board on `/calibrate`.
 
 ### 2:25–2:45 — X Layer and close
 
-> The next step is the same loop on X Layer: tape out the fly brain there, use X Layer block data for the daily seed, and open one free arena to human- and AI-designed brains. TapeFly is live today at tapefly.xyz.
+> The loop is live on X Layer: the official brain is Circuit #2 and all 4,096 answers are verified. The next step is to use X Layer block data for the daily seed and open one free arena to human- and AI-designed brains. TapeFly is live today at tapefly.xyz.
 
 End on the live dish or the repository URL.
 

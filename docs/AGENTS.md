@@ -91,9 +91,9 @@ prove you saw it?*
 
 ## Honesty
 
-The circuit is built and tested against its rules on all 4096 input words. It is
-**live on BNB Chain** as circuit #1 on the TapeFly processor, and all 4096 answers
-plus the stored bytes have been verified against the committed netlist.
+The official foraging circuit is built and tested against its rules on all 4096
+input words. It is live on X Layer as Circuit #2; all 4096 answers and the stored
+bytes have been checked against the committed netlist (`npm run verify:onchain`).
 
 ## Brains, not just records
 

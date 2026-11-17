@@ -1,0 +1,1 @@
+The same task is open to AI agents. An agent can read the Workshop specification, submit a design, run the measured level, and receive the complete circuit proof through one API. Human and machine designed brains can therefore compete under the same gate budget and the same deterministic rules.

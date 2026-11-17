@@ -53,8 +53,8 @@ export default async function BoardPage() {
             </p>
           </div>
           <p className="prize-state">
-            {t(<><b>即将开始。</b>官方大脑已经在电路 #1 上完成流片和全量核对；第一季竞技场开赛后开始发放冠军电路。</>,
-               <><b>Opening soon.</b> The official brain is taped out and fully verified as circuit #1; champion circuits begin with the first arena season.</>)}{" "}
+            {t(<><b>即将开始。</b>官方大脑已经在 X Layer 上流片为 Circuit #2，并完成全量核对；第一季竞技场开赛后开始发放冠军电路。</>,
+               <><b>Opening soon.</b> The official brain is live on X Layer as Circuit #2 and fully verified; champion circuits begin with the first arena season.</>)}{" "}
             <Link className="link" href="/tapeout">{t("看进度", "Status")}</Link>
           </p>
         </section>
@@ -139,11 +139,11 @@ export default async function BoardPage() {
           <div className="panel">
             <h2>{t("报名本周", "Enter this week")}</h2>
             <p>
-              {t(<>在首页拨好本能，或者在大脑编辑器里写好规则，然后在编辑器里点<b>报名参赛</b>。你会拿到一个小文件，提交到公开仓库即可。每个分数都会从头重算，所以没人能虚报成绩。</>,
+              {t(<>在觅食实验里拨好本能，或者在大脑编辑器里写好规则，然后在编辑器里点<b>报名参赛</b>。你会拿到一个小文件，提交到公开仓库即可。每个分数都会从头重算，所以没人能虚报成绩。</>,
                  <>Set your fly&rsquo;s instincts on the home page, or write exact rules in the editor, then press <b>Enter it on the board</b> in the editor. You get a small file to add to the public repository. Every score is recomputed from scratch, so an entry cannot claim a number it did not earn.</>)}
             </p>
             <div className="row" style={{ marginTop: 16 }}>
-              <Link className="btn primary" href="/">{t("造一颗大脑", "Build a brain")}</Link>
+              <Link className="btn primary" href="/forage">{t("造一颗大脑", "Build a brain")}</Link>
               <Link className="btn" href="/build">{t("打开编辑器", "Open the editor")}</Link>
             </div>
           </div>

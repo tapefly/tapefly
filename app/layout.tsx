@@ -6,8 +6,8 @@ import { SITE_URL, SITE_NAME, SITE_TITLE, SITE_DESCRIPTION } from "./site";
 import { getLang } from "./i18n/server";
 import { LangProvider } from "./i18n/client";
 
-const ZH_TITLE = "TapeFly — 用 TapeOut 门电路造一颗果蝇大脑";
-const ZH_DESCRIPTION = "拨动果蝇的本能开关，它们会编译成 NAND 门电路，就是大家在 TapeOut 上流片的那种门。和朋友对战，赢下本周。每一天都能只凭日期重放验证。";
+const ZH_TITLE = "TapeFly — 用零件搭一只会自己飞的机器果蝇";
+const ZH_DESCRIPTION = "TapeFly 工坊：拼装机器果蝇、接出它的 NAND 大脑，让它在关卡里自己找糖、避障和逃生。免费玩，不用钱包。";
 
 export async function generateMetadata(): Promise<Metadata> {
   const zh = (await getLang()) === "zh";

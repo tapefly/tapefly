@@ -125,8 +125,8 @@ The task is described by the fields that the PoD mining contract's `getTask(uint
 | `refCost` (C_ref) | 36,450: A · max(d, 1)^β with A = 50 + λ · 0 = 50, d = 9, β = 3 |
 | `refCircuits`, `refCircuitId` | the processor and circuit id under which the reference circuit is taped out (Deployments) |
 
-`refArea` and `refCost` above use λ = 6, β = 3 and λ_burn = 1, the parameters read at BNB Smart
-Chain block 128200681 (TAP-draft-pod-attributes, Test Cases). If the task is created under other
+`refArea` and `refCost` above use λ = 6, β = 3 and λ_burn = 1, the parameters given in
+TAP-draft-pod-attributes (Test Cases); re-read them on X Layer before creating the task. If the task is created under other
 parameters, the creator recomputes them from the same formula.
 
 ### Verification
