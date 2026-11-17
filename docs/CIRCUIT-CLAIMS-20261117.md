@@ -27,7 +27,7 @@ TapeFly Workshop and Brain Brawl now share one optional X Layer claim flow.
 
 ### Brain Brawl
 
-1. The player wins at least one non-practice fight in a daily run.
+1. The player wins at least three non-practice fights in a daily run.
 2. Brawl submits the order of shop purchases, sells, moves, rerolls and fights.
 3. The server reconstructs the run from `newRun(date)` and replays every action.
 4. The final brain is compiled again and its NAND bytes are hashed.

@@ -36,7 +36,7 @@ const COPY = {
       "两套战术大脑在同一盘里自动开打。红方先抢中央糖，蓝方放弃危险区域，先去边路，再把对手引向蜘蛛。",
       "Two tactical brains fight automatically in one dish. Red takes the centre sugar first. Blue yields the danger zone, farms the edge and steers its rival toward the spider.",
     ],
-    reward: ["赢下一场正式 Brawl 后即可领取「每日对战电路」", "Win one real Brawl fight to claim a Brawl circuit receipt"],
+    reward: ["Brawl 累计赢 3 场后即可领取「每日对战电路」", "Win three Brawl fights to claim a Brawl circuit receipt"],
     href: "/brawl",
     cta: ["进入 Brawl 实际对战", "Play the real Brawl"],
     options: [
@@ -102,8 +102,8 @@ export default function HomePlayModes() {
               <b>{t("两个游戏都能领纪念电路 NFT", "Both games unlock a commemorative circuit NFT")}</b>
               <small>
                 {t(
-                  "通关工坊或赢下一场正式 Brawl 后，服务器重算结果，再到 X Layer 领取。",
-                  "Clear Workshop or win a real Brawl fight, then claim the verified circuit on X Layer.",
+                  "通关工坊 3 关或累计赢下 3 场 Brawl 后，服务器重算结果，再到 X Layer 领取。",
+                  "Clear three Workshop levels or win three Brawl fights, then claim the verified circuit on X Layer.",
                 )}
               </small>
             </div>

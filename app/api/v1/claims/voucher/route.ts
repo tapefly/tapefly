@@ -198,8 +198,8 @@ export async function POST(req: Request) {
     } catch (error) {
       return bad(error instanceof Error ? error.message : "the Brawl action log does not replay", 422);
     }
-    if (run.history.length === 0 || run.wins === 0) {
-      return bad("win at least one verified Brawl fight before claiming", 422);
+    if (run.history.length === 0 || run.wins < 3) {
+      return bad("win at least three verified Brawl fights before claiming", 422);
     }
 
     const compiled = compileFighter(programOf(run.chips));

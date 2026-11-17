@@ -126,3 +126,29 @@ test("a Workshop claim verifies three cleared levels", async () => {
   assert.equal(typeof body.claim.circuitHash, "string");
 });
 
+test("a Brawl claim requires three verified wins", async () => {
+  const date = "2026-11-17";
+  let run = newRun(date);
+  const biteSlot = run.shop.findIndex((offer) => offer?.kind === "chip" && offer.id === "bite");
+  const actions: RunAction[] = [{ kind: "buy", slot: biteSlot }];
+  run = buy(run, biteSlot);
+  while (!run.over && run.wins < 2) {
+    actions.push({ kind: "fight" });
+    run = fight(run).run;
+  }
+
+  const request = new Request("http://tapefly.test/api/v1/claims/voucher", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      address: "0x2000000000000000000000000000000000000002",
+      mode: "brawl",
+      payload: { date, actions },
+    }),
+  });
+  const response = await requestVoucher(request);
+  assert.equal(response.status, 422);
+  const body = await response.json();
+  assert.match(body.error, /three verified Brawl fights/);
+});
+

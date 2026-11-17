@@ -58,8 +58,8 @@ export default function CircuitClaimButton({ payload }: { payload: ClaimPayload 
           <h3>{t("这次结果已记录，纪念 NFT 即将开放", "Result recorded. The commemorative NFT is coming.")}</h3>
           <p className="fine">
             {t(
-              "工坊累计通关 3 关或 Brawl 获胜后，服务器会重算结果。X Layer 领取合约部署后，这里会变成正式的领取按钮。",
-              "After clearing three Workshop levels or winning a Brawl fight, the server recomputes the result. This becomes a live claim button once the X Layer contract is deployed.",
+              "工坊累计通关 3 关或 Brawl 累计赢 3 场后，服务器会重算结果。X Layer 领取合约部署后，这里会变成正式的领取按钮。",
+              "After clearing three Workshop levels or winning three Brawl fights, the server recomputes the result. This becomes a live claim button once the X Layer contract is deployed.",
             )}
           </p>
         </div>
