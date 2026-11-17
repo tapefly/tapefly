@@ -50,7 +50,7 @@ Workshop is the only primary product for this submission. Brain Brawl, Evolution
 
 The November development snapshot is public:
 
-- Main commit: `7fa96b1`
+- Release-content commit: `7fa96b1`
 - Release branch: `release/tapefly-2026-11-17`
 - Tag: `v0.3.0`
 

@@ -10,17 +10,18 @@ The public repository had strong evidence for 2026-10-24, plus automated daily l
 
 Resolved on 2026-11-17:
 
-- Release commit: `7fa96b1`
+- Release-content commit: `7fa96b1`
 - Branch: `release/tapefly-2026-11-17`
 - Default branch: `main`
 - Tag: `v0.3.0`
 
-The release commit was fast-forwarded to `main` and both the branch and tag were
-pushed to the public repository.
+The release-content commit was fast-forwarded to `main` and both the branch and
+tag were pushed to the public repository. Later evidence-only commits may move
+the branch HEAD forward.
 
 ## Public main history
 
-The public `main` HEAD is now:
+The release-content commit is:
 
 ```text
 7fa96b1
@@ -117,6 +118,6 @@ npm audit --omit=dev   0 vulnerabilities
 
 The release evidence is now:
 
-- Main commit: <https://github.com/tapefly/tapefly/commit/7fa96b1>
+- Release-content commit: <https://github.com/tapefly/tapefly/commit/7fa96b1>
 - Release branch: <https://github.com/tapefly/tapefly/tree/release/tapefly-2026-11-17>
 - Tag: <https://github.com/tapefly/tapefly/releases/tag/v0.3.0>
