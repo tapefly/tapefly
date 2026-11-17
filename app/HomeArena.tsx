@@ -7,6 +7,7 @@
 import Link from "next/link";
 import { useLang } from "./i18n/client";
 import WorkshopHeroDemo from "./WorkshopHeroDemo";
+import HomePlayModes from "./HomePlayModes";
 import ContinueWorkshop from "./ContinueWorkshop";
 import { PARTS } from "@/sim/workshop/parts";
 import { WLEVELS } from "@/sim/workshop/levels";
@@ -39,6 +40,8 @@ export default function HomeArena({ circuitId, chainLive, officialGates }: { cir
           <WorkshopHeroDemo />
         </div>
       </section>
+
+      <HomePlayModes />
 
       <section id="how" className="page home2-sec">
         <h2>{t("一局怎么玩", "How a run works")}</h2>
